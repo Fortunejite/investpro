@@ -27,3 +27,8 @@ app.use(errorHandler);
 app.listen(config.port, () => {
   console.log(`Server is running on port ${config.port}`);
 });
+
+process.on("SIGINT", async () => {
+  console.log("Shutting down application...");
+  process.exit(0);
+});
