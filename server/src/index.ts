@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from './config';
-import errorHandler from './middleware/errorMiddleware';
+import errorHandler from './middlewares/errorMiddleware';
 
 if (!config.isValid) {
   console.error("Invalid configuration. Exiting...");
