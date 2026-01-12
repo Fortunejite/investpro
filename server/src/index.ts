@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from './config';
+import errorHandler from './middleware/errorMiddleware';
 
 if (!config.isValid) {
   console.error("Invalid configuration. Exiting...");
@@ -17,6 +18,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Routes
+
+// Error handling middleware
+app.use(errorHandler);
 
 app.listen(config.port, () => {
   console.log(`Server is running on port ${config.port}`);

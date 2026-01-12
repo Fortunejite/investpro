@@ -1,0 +1,28 @@
+import { Request, Response, NextFunction } from "express";
+import { tokenService } from "@/services/tokenService";
+
+export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const payload = tokenService.verifyAccessToken(token);
+
+  if (!payload) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  req.user = payload;
+  next();
+};
+
+export const authorize = (roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+    next();
+  };
+};
