@@ -2,9 +2,13 @@ import jwt from 'jsonwebtoken';
 import config from '@/config';
 
 export interface TokenPayload {
-  userId: string;
+  id: number;
   email: string;
+  name: string;
   role: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 class TokenService {

@@ -12,6 +12,7 @@ const config = {
   port: process.env.PORT || 8000,
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
+  databaseUrl: process.env.DATABASE_URL!,
   isValid: false,
 }
 
@@ -26,6 +27,11 @@ const validateConfig = () => {
       name: "JWT Secret",
       key: "jwtSecret",
       value: config.jwtSecret,
+    },
+    {
+      name: "Database URL",
+      key: "databaseUrl",
+      value: config.databaseUrl,
     }
   ];
 

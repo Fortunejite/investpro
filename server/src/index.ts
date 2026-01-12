@@ -3,6 +3,9 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from './config';
 import errorHandler from './middlewares/errorMiddleware';
+import { 
+  authRoutes,
+ } from './routes';
 
 if (!config.isValid) {
   console.error("Invalid configuration. Exiting...");
@@ -20,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
+app.use('/auth', authRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
