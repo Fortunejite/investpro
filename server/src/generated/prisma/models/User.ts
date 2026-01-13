@@ -41,6 +41,8 @@ export type UserMinAggregateOutputType = {
   hashed_password: string | null
   role: $Enums.Role | null
   status: string | null
+  forgetPasswordToken: string | null
+  resetTokenExpiry: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +54,8 @@ export type UserMaxAggregateOutputType = {
   hashed_password: string | null
   role: $Enums.Role | null
   status: string | null
+  forgetPasswordToken: string | null
+  resetTokenExpiry: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,6 +67,8 @@ export type UserCountAggregateOutputType = {
   hashed_password: number
   role: number
   status: number
+  forgetPasswordToken: number
+  resetTokenExpiry: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -84,6 +90,8 @@ export type UserMinAggregateInputType = {
   hashed_password?: true
   role?: true
   status?: true
+  forgetPasswordToken?: true
+  resetTokenExpiry?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,6 +103,8 @@ export type UserMaxAggregateInputType = {
   hashed_password?: true
   role?: true
   status?: true
+  forgetPasswordToken?: true
+  resetTokenExpiry?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +116,8 @@ export type UserCountAggregateInputType = {
   hashed_password?: true
   role?: true
   status?: true
+  forgetPasswordToken?: true
+  resetTokenExpiry?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,6 +216,8 @@ export type UserGroupByOutputType = {
   hashed_password: string
   role: $Enums.Role
   status: string
+  forgetPasswordToken: string | null
+  resetTokenExpiry: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -238,6 +252,8 @@ export type UserWhereInput = {
   hashed_password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   status?: Prisma.StringFilter<"User"> | string
+  forgetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null
+  resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -249,6 +265,8 @@ export type UserOrderByWithRelationInput = {
   hashed_password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  forgetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -256,6 +274,7 @@ export type UserOrderByWithRelationInput = {
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   email?: string
+  forgetPasswordToken?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -263,9 +282,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   hashed_password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   status?: Prisma.StringFilter<"User"> | string
+  resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-}, "id" | "email">
+}, "id" | "email" | "forgetPasswordToken">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -274,6 +294,8 @@ export type UserOrderByWithAggregationInput = {
   hashed_password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  forgetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -293,6 +315,8 @@ export type UserScalarWhereWithAggregatesInput = {
   hashed_password?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   status?: Prisma.StringWithAggregatesFilter<"User"> | string
+  forgetPasswordToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  resetTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -303,6 +327,8 @@ export type UserCreateInput = {
   hashed_password: string
   role?: $Enums.Role
   status?: string
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -314,6 +340,8 @@ export type UserUncheckedCreateInput = {
   hashed_password: string
   role?: $Enums.Role
   status?: string
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -324,6 +352,8 @@ export type UserUpdateInput = {
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -335,6 +365,8 @@ export type UserUncheckedUpdateInput = {
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -346,6 +378,8 @@ export type UserCreateManyInput = {
   hashed_password: string
   role?: $Enums.Role
   status?: string
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -356,6 +390,8 @@ export type UserUpdateManyMutationInput = {
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -367,6 +403,8 @@ export type UserUncheckedUpdateManyInput = {
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -378,6 +416,8 @@ export type UserCountOrderByAggregateInput = {
   hashed_password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  forgetPasswordToken?: Prisma.SortOrder
+  resetTokenExpiry?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -393,6 +433,8 @@ export type UserMaxOrderByAggregateInput = {
   hashed_password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  forgetPasswordToken?: Prisma.SortOrder
+  resetTokenExpiry?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -404,6 +446,8 @@ export type UserMinOrderByAggregateInput = {
   hashed_password?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  forgetPasswordToken?: Prisma.SortOrder
+  resetTokenExpiry?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -418,6 +462,14 @@ export type StringFieldUpdateOperationsInput = {
 
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -441,6 +493,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   hashed_password?: boolean
   role?: boolean
   status?: boolean
+  forgetPasswordToken?: boolean
+  resetTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -452,6 +506,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   hashed_password?: boolean
   role?: boolean
   status?: boolean
+  forgetPasswordToken?: boolean
+  resetTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -463,6 +519,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   hashed_password?: boolean
   role?: boolean
   status?: boolean
+  forgetPasswordToken?: boolean
+  resetTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -474,11 +532,13 @@ export type UserSelectScalar = {
   hashed_password?: boolean
   role?: boolean
   status?: boolean
+  forgetPasswordToken?: boolean
+  resetTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "hashed_password" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "hashed_password" | "role" | "status" | "forgetPasswordToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
@@ -490,6 +550,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     hashed_password: string
     role: $Enums.Role
     status: string
+    forgetPasswordToken: string | null
+    resetTokenExpiry: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -921,6 +983,8 @@ export interface UserFieldRefs {
   readonly hashed_password: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
   readonly status: Prisma.FieldRef<"User", 'String'>
+  readonly forgetPasswordToken: Prisma.FieldRef<"User", 'String'>
+  readonly resetTokenExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

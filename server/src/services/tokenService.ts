@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto'
 import config from '@/config';
 
 export interface TokenPayload {
@@ -22,6 +23,10 @@ class TokenService {
     } catch {
       return null;
     }
+  }
+
+  generateResetToken (): string {
+    return crypto.randomInt(100000, 999999).toString();
   }
 }
 export const tokenService = new TokenService();

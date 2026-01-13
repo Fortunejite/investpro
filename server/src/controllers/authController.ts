@@ -15,6 +15,16 @@ const loginSchema = z.object({
   password: z.string().min(6),
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.email(),
+});
+
+const resetPasswordSchema = z.object({
+  email: z.email(),
+  token: z.string().length(6),
+  newPassword: z.string().min(6),
+});
+
 class AuthController {
   registerUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -44,18 +54,18 @@ class AuthController {
 
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
-        return res.status(400).json({ message: "Invalid email or password" });
+        return res.status(400).json({ message: "Email does not exists" });
       }
 
       const { hashed_password, ...userData } = user;
 
       const isPasswordValid = await bcrypt.compare(password, hashed_password);
       if (!isPasswordValid) {
-        return res.status(400).json({ message: "Invalid email or password" });
+        return res.status(400).json({ message: "Password incorrect" });
       }
 
       if (user.status !== "active") {
-        return res.status(403).json({ message: "User is not active" });
+        return res.status(403).json({ message: "User is not active. Contact admin" });
       }
 
       const token = tokenService.generateAccessToken(userData);
@@ -86,6 +96,52 @@ class AuthController {
       res.status(200).json({ message: "Token is valid", user: payload });
     } catch (error) {
       next(error);
+    }
+  };
+
+  forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email } = forgotPasswordSchema.parse(req.body);
+
+      const user = await prisma.user.findUnique({ where: { email } });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const resetToken = tokenService.generateResetToken();
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { forgetPasswordToken: resetToken, resetTokenExpiry: new Date(Date.now() + 3600000) }, // 1 hour
+      });
+
+      // TODO: Send email with reset link (pseudo code)
+      // await emailService.sendPasswordResetEmail(email, resetToken);
+
+      res.status(200).json({ message: "Password reset email sent" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { token, newPassword } = resetPasswordSchema.parse(req.body);
+
+      const user = await prisma.user.findUnique({ where: { forgetPasswordToken: token } });
+      if (!user) {
+        return res.status(404).json({ message: "Invalid Reset Code" });
+      }
+
+      const hashed_password = await bcrypt.hash(newPassword, 10);
+
+      const updatedUser = await prisma.user.update({
+        where: { id: user.id },
+        data: { hashed_password, forgetPasswordToken: null, resetTokenExpiry: null },
+      });
+
+      res.status(200).json({ message: "Password reset successful", user: updatedUser });
+    } catch (err) {
+      next(err);
     }
   };
 }
