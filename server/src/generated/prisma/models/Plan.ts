@@ -360,7 +360,7 @@ export type PlanCreateInput = {
   duration: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  isActive: boolean
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   investments?: Prisma.InvestmentCreateNestedManyWithoutPlanInput
@@ -375,7 +375,7 @@ export type PlanUncheckedCreateInput = {
   duration: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  isActive: boolean
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   investments?: Prisma.InvestmentUncheckedCreateNestedManyWithoutPlanInput
@@ -419,7 +419,7 @@ export type PlanCreateManyInput = {
   duration: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  isActive: boolean
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -544,7 +544,7 @@ export type PlanCreateWithoutInvestmentsInput = {
   duration: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  isActive: boolean
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -558,7 +558,7 @@ export type PlanUncheckedCreateWithoutInvestmentsInput = {
   duration: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  isActive: boolean
+  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
