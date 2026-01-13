@@ -51,7 +51,10 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  WalletAccount: 'WalletAccount',
+  Plan: 'Plan',
+  Investment: 'Investment'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -84,6 +87,54 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const WalletAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chain: 'chain',
+  label: 'label',
+  availableBalance: 'availableBalance',
+  lockedBalance: 'lockedBalance',
+  updatedAt: 'updatedAt',
+  lastDepositAt: 'lastDepositAt',
+  lastWithdrawalAt: 'lastWithdrawalAt'
+} as const
+
+export type WalletAccountScalarFieldEnum = (typeof WalletAccountScalarFieldEnum)[keyof typeof WalletAccountScalarFieldEnum]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  minAmount: 'minAmount',
+  maxAmount: 'maxAmount',
+  duration: 'duration',
+  roiPercent: 'roiPercent',
+  payoutType: 'payoutType',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const InvestmentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  planId: 'planId',
+  amount: 'amount',
+  profit: 'profit',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvestmentScalarFieldEnum = (typeof InvestmentScalarFieldEnum)[keyof typeof InvestmentScalarFieldEnum]
 
 
 export const SortOrder = {

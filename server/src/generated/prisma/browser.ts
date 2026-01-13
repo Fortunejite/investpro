@@ -22,3 +22,18 @@ export * from './enums';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model WalletAccount
+ * 
+ */
+export type WalletAccount = Prisma.WalletAccountModel
+/**
+ * Model Plan
+ * 
+ */
+export type Plan = Prisma.PlanModel
+/**
+ * Model Investment
+ * 
+ */
+export type Investment = Prisma.InvestmentModel

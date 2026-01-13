@@ -40,7 +40,7 @@ export type UserMinAggregateOutputType = {
   name: string | null
   hashed_password: string | null
   role: $Enums.Role | null
-  status: string | null
+  status: $Enums.userStatus | null
   forgetPasswordToken: string | null
   resetTokenExpiry: Date | null
   createdAt: Date | null
@@ -53,7 +53,7 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   hashed_password: string | null
   role: $Enums.Role | null
-  status: string | null
+  status: $Enums.userStatus | null
   forgetPasswordToken: string | null
   resetTokenExpiry: Date | null
   createdAt: Date | null
@@ -215,7 +215,7 @@ export type UserGroupByOutputType = {
   name: string
   hashed_password: string
   role: $Enums.Role
-  status: string
+  status: $Enums.userStatus
   forgetPasswordToken: string | null
   resetTokenExpiry: Date | null
   createdAt: Date
@@ -251,11 +251,13 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   hashed_password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
-  status?: Prisma.StringFilter<"User"> | string
+  status?: Prisma.EnumuserStatusFilter<"User"> | $Enums.userStatus
   forgetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  investments?: Prisma.InvestmentListRelationFilter
+  walletAccounts?: Prisma.WalletAccountListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -269,6 +271,8 @@ export type UserOrderByWithRelationInput = {
   resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  investments?: Prisma.InvestmentOrderByRelationAggregateInput
+  walletAccounts?: Prisma.WalletAccountOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -281,10 +285,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"User"> | string
   hashed_password?: Prisma.StringFilter<"User"> | string
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
-  status?: Prisma.StringFilter<"User"> | string
+  status?: Prisma.EnumuserStatusFilter<"User"> | $Enums.userStatus
   resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  investments?: Prisma.InvestmentListRelationFilter
+  walletAccounts?: Prisma.WalletAccountListRelationFilter
 }, "id" | "email" | "forgetPasswordToken">
 
 export type UserOrderByWithAggregationInput = {
@@ -314,7 +320,7 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   hashed_password?: Prisma.StringWithAggregatesFilter<"User"> | string
   role?: Prisma.EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
-  status?: Prisma.StringWithAggregatesFilter<"User"> | string
+  status?: Prisma.EnumuserStatusWithAggregatesFilter<"User"> | $Enums.userStatus
   forgetPasswordToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -326,11 +332,13 @@ export type UserCreateInput = {
   name: string
   hashed_password: string
   role?: $Enums.Role
-  status?: string
+  status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  investments?: Prisma.InvestmentCreateNestedManyWithoutUserInput
+  walletAccounts?: Prisma.WalletAccountCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -339,11 +347,13 @@ export type UserUncheckedCreateInput = {
   name: string
   hashed_password: string
   role?: $Enums.Role
-  status?: string
+  status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  investments?: Prisma.InvestmentUncheckedCreateNestedManyWithoutUserInput
+  walletAccounts?: Prisma.WalletAccountUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -351,11 +361,13 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  investments?: Prisma.InvestmentUpdateManyWithoutUserNestedInput
+  walletAccounts?: Prisma.WalletAccountUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -364,11 +376,13 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  investments?: Prisma.InvestmentUncheckedUpdateManyWithoutUserNestedInput
+  walletAccounts?: Prisma.WalletAccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -377,7 +391,7 @@ export type UserCreateManyInput = {
   name: string
   hashed_password: string
   role?: $Enums.Role
-  status?: string
+  status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
   createdAt?: Date | string
@@ -389,7 +403,7 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,7 +416,7 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -456,12 +470,21 @@ export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
+}
+
+export type EnumuserStatusFieldUpdateOperationsInput = {
+  set?: $Enums.userStatus
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
@@ -484,6 +507,212 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UserCreateNestedOneWithoutWalletAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWalletAccountsInput, Prisma.UserUncheckedCreateWithoutWalletAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWalletAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWalletAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWalletAccountsInput, Prisma.UserUncheckedCreateWithoutWalletAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWalletAccountsInput
+  upsert?: Prisma.UserUpsertWithoutWalletAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWalletAccountsInput, Prisma.UserUpdateWithoutWalletAccountsInput>, Prisma.UserUncheckedUpdateWithoutWalletAccountsInput>
+}
+
+export type UserCreateNestedOneWithoutInvestmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvestmentsInput, Prisma.UserUncheckedCreateWithoutInvestmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvestmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInvestmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvestmentsInput, Prisma.UserUncheckedCreateWithoutInvestmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvestmentsInput
+  upsert?: Prisma.UserUpsertWithoutInvestmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvestmentsInput, Prisma.UserUpdateWithoutInvestmentsInput>, Prisma.UserUncheckedUpdateWithoutInvestmentsInput>
+}
+
+export type UserCreateWithoutWalletAccountsInput = {
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  investments?: Prisma.InvestmentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutWalletAccountsInput = {
+  id?: number
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  investments?: Prisma.InvestmentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutWalletAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWalletAccountsInput, Prisma.UserUncheckedCreateWithoutWalletAccountsInput>
+}
+
+export type UserUpsertWithoutWalletAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWalletAccountsInput, Prisma.UserUncheckedUpdateWithoutWalletAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWalletAccountsInput, Prisma.UserUncheckedCreateWithoutWalletAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWalletAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWalletAccountsInput, Prisma.UserUncheckedUpdateWithoutWalletAccountsInput>
+}
+
+export type UserUpdateWithoutWalletAccountsInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  investments?: Prisma.InvestmentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWalletAccountsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  investments?: Prisma.InvestmentUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInvestmentsInput = {
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  walletAccounts?: Prisma.WalletAccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInvestmentsInput = {
+  id?: number
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  walletAccounts?: Prisma.WalletAccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInvestmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvestmentsInput, Prisma.UserUncheckedCreateWithoutInvestmentsInput>
+}
+
+export type UserUpsertWithoutInvestmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvestmentsInput, Prisma.UserUncheckedUpdateWithoutInvestmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvestmentsInput, Prisma.UserUncheckedCreateWithoutInvestmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvestmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvestmentsInput, Prisma.UserUncheckedUpdateWithoutInvestmentsInput>
+}
+
+export type UserUpdateWithoutInvestmentsInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  walletAccounts?: Prisma.WalletAccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvestmentsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  walletAccounts?: Prisma.WalletAccountUncheckedUpdateManyWithoutUserNestedInput
+}
+
+
+/**
+ * Count Type UserCountOutputType
+ */
+
+export type UserCountOutputType = {
+  investments: number
+  walletAccounts: number
+}
+
+export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  investments?: boolean | UserCountOutputTypeCountInvestmentsArgs
+  walletAccounts?: boolean | UserCountOutputTypeCountWalletAccountsArgs
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCountOutputType
+   */
+  select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvestmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvestmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWalletAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WalletAccountWhereInput
+}
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -497,6 +726,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   resetTokenExpiry?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  investments?: boolean | Prisma.User$investmentsArgs<ExtArgs>
+  walletAccounts?: boolean | Prisma.User$walletAccountsArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -539,17 +771,27 @@ export type UserSelectScalar = {
 }
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "hashed_password" | "role" | "status" | "forgetPasswordToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  investments?: boolean | Prisma.User$investmentsArgs<ExtArgs>
+  walletAccounts?: boolean | Prisma.User$walletAccountsArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
-  objects: {}
+  objects: {
+    investments: Prisma.$InvestmentPayload<ExtArgs>[]
+    walletAccounts: Prisma.$WalletAccountPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     email: string
     name: string
     hashed_password: string
     role: $Enums.Role
-    status: string
+    status: $Enums.userStatus
     forgetPasswordToken: string | null
     resetTokenExpiry: Date | null
     createdAt: Date
@@ -948,6 +1190,8 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  investments<T extends Prisma.User$investmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$investmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvestmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  walletAccounts<T extends Prisma.User$walletAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$walletAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WalletAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -982,7 +1226,7 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly hashed_password: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'Role'>
-  readonly status: Prisma.FieldRef<"User", 'String'>
+  readonly status: Prisma.FieldRef<"User", 'userStatus'>
   readonly forgetPasswordToken: Prisma.FieldRef<"User", 'String'>
   readonly resetTokenExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -1004,6 +1248,10 @@ export type UserFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where: Prisma.UserWhereUniqueInput
@@ -1022,6 +1270,10 @@ export type UserFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where: Prisma.UserWhereUniqueInput
@@ -1039,6 +1291,10 @@ export type UserFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * Filter, which User to fetch.
    */
@@ -1088,6 +1344,10 @@ export type UserFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which User to fetch.
    */
   where?: Prisma.UserWhereInput
@@ -1136,6 +1396,10 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter, which Users to fetch.
    */
   where?: Prisma.UserWhereInput
@@ -1178,6 +1442,10 @@ export type UserCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * The data needed to create a User.
    */
@@ -1226,6 +1494,10 @@ export type UserUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
   /**
    * The data needed to update a User.
    */
@@ -1293,6 +1565,10 @@ export type UserUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * The filter to search for the User to update in case it exists.
    */
   where: Prisma.UserWhereUniqueInput
@@ -1319,6 +1595,10 @@ export type UserDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  /**
    * Filter which User to delete.
    */
   where: Prisma.UserWhereUniqueInput
@@ -1339,6 +1619,54 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * User.investments
+ */
+export type User$investmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Investment
+   */
+  select?: Prisma.InvestmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Investment
+   */
+  omit?: Prisma.InvestmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvestmentInclude<ExtArgs> | null
+  where?: Prisma.InvestmentWhereInput
+  orderBy?: Prisma.InvestmentOrderByWithRelationInput | Prisma.InvestmentOrderByWithRelationInput[]
+  cursor?: Prisma.InvestmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvestmentScalarFieldEnum | Prisma.InvestmentScalarFieldEnum[]
+}
+
+/**
+ * User.walletAccounts
+ */
+export type User$walletAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WalletAccount
+   */
+  select?: Prisma.WalletAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WalletAccount
+   */
+  omit?: Prisma.WalletAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WalletAccountInclude<ExtArgs> | null
+  where?: Prisma.WalletAccountWhereInput
+  orderBy?: Prisma.WalletAccountOrderByWithRelationInput | Prisma.WalletAccountOrderByWithRelationInput[]
+  cursor?: Prisma.WalletAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WalletAccountScalarFieldEnum | Prisma.WalletAccountScalarFieldEnum[]
+}
+
+/**
  * User without action
  */
 export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1350,4 +1678,8 @@ export type UserDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the User
    */
   omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
 }

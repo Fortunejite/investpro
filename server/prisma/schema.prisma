@@ -7,22 +7,108 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  user
+  admin
+}
+
+enum userStatus {
+  active
+  inactive
+  banned
+}
+
+enum Chain {
+  eth
+  bsc
+  polygon
+  sol
+}
+
+enum PayoutType {
+  daily
+  weekly
+  monthly
+  end_of_term
+}
+
+enum InvestmentStatus {
+  active
+  completed
+  cancelled
+}
+
 model User {
-  id                  Int       @id @default(autoincrement())
-  email               String    @unique
+  id                  Int        @id @default(autoincrement())
+  email               String     @unique
   name                String
   hashed_password     String
-  role                Role      @default(user)
-  status              String    @default("active")
-  forgetPasswordToken String?   @unique
+  role                Role       @default(user)
+  status              userStatus @default(active)
+  forgetPasswordToken String?    @unique
   resetTokenExpiry    DateTime?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  investments    Investment[]
+  walletAccounts WalletAccount[]
 
   @@map("users")
 }
 
-enum Role {
-  user
-  admin
+model WalletAccount {
+  id     String  @id @default(uuid())
+  userId Int
+  chain  Chain
+  label  String?
+
+  availableBalance Decimal @default(0) @db.Decimal(18, 8)
+  lockedBalance    Decimal @default(0) @db.Decimal(18, 8)
+
+  updatedAt        DateTime  @updatedAt
+  lastDepositAt    DateTime?
+  lastWithdrawalAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, chain])
+  @@map("wallet_accounts")
+}
+
+model Plan {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  minAmount   Int
+  maxAmount   Int
+  duration    Int
+  roiPercent  Int
+  payoutType  PayoutType
+  isActive    Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  investments Investment[]
+
+  @@map("plans")
+}
+
+model Investment {
+  id        String           @id @default(uuid())
+  userId    Int
+  planId    Int
+  amount    Decimal          @db.Decimal(18, 8)
+  profit    Decimal?         @db.Decimal(18, 8)
+  startDate DateTime
+  endDate   DateTime
+  status    InvestmentStatus @default(active)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  plan Plan @relation(fields: [planId], references: [id])
+
+  @@map("investments")
 }

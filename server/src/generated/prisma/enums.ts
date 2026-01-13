@@ -15,3 +15,41 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const userStatus = {
+  active: 'active',
+  inactive: 'inactive',
+  banned: 'banned'
+} as const
+
+export type userStatus = (typeof userStatus)[keyof typeof userStatus]
+
+
+export const Chain = {
+  eth: 'eth',
+  bsc: 'bsc',
+  polygon: 'polygon',
+  sol: 'sol'
+} as const
+
+export type Chain = (typeof Chain)[keyof typeof Chain]
+
+
+export const PayoutType = {
+  daily: 'daily',
+  weekly: 'weekly',
+  monthly: 'monthly',
+  end_of_term: 'end_of_term'
+} as const
+
+export type PayoutType = (typeof PayoutType)[keyof typeof PayoutType]
+
+
+export const InvestmentStatus = {
+  active: 'active',
+  completed: 'completed',
+  cancelled: 'cancelled'
+} as const
+
+export type InvestmentStatus = (typeof InvestmentStatus)[keyof typeof InvestmentStatus]

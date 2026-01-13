@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id                  Int       @id @default(autoincrement())\n  email               String    @unique\n  name                String\n  hashed_password     String\n  role                Role      @default(user)\n  status              String    @default(\"active\")\n  forgetPasswordToken String?   @unique\n  resetTokenExpiry    DateTime?\n  createdAt           DateTime  @default(now())\n  updatedAt           DateTime  @updatedAt\n\n  @@map(\"users\")\n}\n\nenum Role {\n  user\n  admin\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Role {\n  user\n  admin\n}\n\nenum userStatus {\n  active\n  inactive\n  banned\n}\n\nenum Chain {\n  eth\n  bsc\n  polygon\n  sol\n}\n\nenum PayoutType {\n  daily\n  weekly\n  monthly\n  end_of_term\n}\n\nenum InvestmentStatus {\n  active\n  completed\n  cancelled\n}\n\nmodel User {\n  id                  Int        @id @default(autoincrement())\n  email               String     @unique\n  name                String\n  hashed_password     String\n  role                Role       @default(user)\n  status              userStatus @default(active)\n  forgetPasswordToken String?    @unique\n  resetTokenExpiry    DateTime?\n  createdAt           DateTime   @default(now())\n  updatedAt           DateTime   @updatedAt\n\n  investments    Investment[]\n  walletAccounts WalletAccount[]\n\n  @@map(\"users\")\n}\n\nmodel WalletAccount {\n  id     String  @id @default(uuid())\n  userId Int\n  chain  Chain\n  label  String?\n\n  availableBalance Decimal @default(0) @db.Decimal(18, 8)\n  lockedBalance    Decimal @default(0) @db.Decimal(18, 8)\n\n  updatedAt        DateTime  @updatedAt\n  lastDepositAt    DateTime?\n  lastWithdrawalAt DateTime?\n\n  user User @relation(fields: [userId], references: [id])\n\n  @@unique([userId, chain])\n  @@map(\"wallet_accounts\")\n}\n\nmodel Plan {\n  id          Int        @id @default(autoincrement())\n  name        String\n  description String?\n  minAmount   Int\n  maxAmount   Int\n  duration    Int\n  roiPercent  Int\n  payoutType  PayoutType\n  isActive    Boolean\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  investments Investment[]\n\n  @@map(\"plans\")\n}\n\nmodel Investment {\n  id        String           @id @default(uuid())\n  userId    Int\n  planId    Int\n  amount    Decimal          @db.Decimal(18, 8)\n  profit    Decimal?         @db.Decimal(18, 8)\n  startDate DateTime\n  endDate   DateTime\n  status    InvestmentStatus @default(active)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [userId], references: [id])\n  plan Plan @relation(fields: [planId], references: [id])\n\n  @@map(\"investments\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hashed_password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"forgetPasswordToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resetTokenExpiry\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"users\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"hashed_password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"userStatus\"},{\"name\":\"forgetPasswordToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"resetTokenExpiry\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"investments\",\"kind\":\"object\",\"type\":\"Investment\",\"relationName\":\"InvestmentToUser\"},{\"name\":\"walletAccounts\",\"kind\":\"object\",\"type\":\"WalletAccount\",\"relationName\":\"UserToWalletAccount\"}],\"dbName\":\"users\"},\"WalletAccount\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"chain\",\"kind\":\"enum\",\"type\":\"Chain\"},{\"name\":\"label\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"availableBalance\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"lockedBalance\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastDepositAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"lastWithdrawalAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToWalletAccount\"}],\"dbName\":\"wallet_accounts\"},\"Plan\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"minAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"maxAmount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"duration\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"roiPercent\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"payoutType\",\"kind\":\"enum\",\"type\":\"PayoutType\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"investments\",\"kind\":\"object\",\"type\":\"Investment\",\"relationName\":\"InvestmentToPlan\"}],\"dbName\":\"plans\"},\"Investment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"planId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"profit\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"InvestmentStatus\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"InvestmentToUser\"},{\"name\":\"plan\",\"kind\":\"object\",\"type\":\"Plan\",\"relationName\":\"InvestmentToPlan\"}],\"dbName\":\"investments\"}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -183,6 +183,36 @@ export interface PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.walletAccount`: Exposes CRUD operations for the **WalletAccount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WalletAccounts
+    * const walletAccounts = await prisma.walletAccount.findMany()
+    * ```
+    */
+  get walletAccount(): Prisma.WalletAccountDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.plan`: Exposes CRUD operations for the **Plan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Plans
+    * const plans = await prisma.plan.findMany()
+    * ```
+    */
+  get plan(): Prisma.PlanDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.investment`: Exposes CRUD operations for the **Investment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Investments
+    * const investments = await prisma.investment.findMany()
+    * ```
+    */
+  get investment(): Prisma.InvestmentDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
