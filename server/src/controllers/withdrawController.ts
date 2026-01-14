@@ -122,41 +122,45 @@ class WithdrawalController {
   };
 
   cancelWithdrawal = async (req: Request, res: Response, next: NextFunction) => {
-    const withdrawalId = req.params.id as string;
-
-    const withdrawal = await prisma.withdrawal.findUnique({
-      where: { id: withdrawalId },
-    });
-
-    if (!withdrawal) {
-      throw Object.assign(new Error('Withdrawal not found'), {
-        statusCode: 404,
-      });
-    }
-
-    if (withdrawal.status !== 'pending') {
-      throw Object.assign(
-        new Error('Only pending withdrawals can be cancelled'),
-        { statusCode: 400 },
-      );
-    }
-
-    await prisma.$transaction(async (prisma) => {
-      await prisma.walletAccount.update({
-        where: { id: withdrawal.walletAccountId },
-        data: {
-          availableBalance: { increment: withdrawal.amount },
-          lockedBalance: { decrement: withdrawal.amount },
-        },
-      });
-      await prisma.withdrawal.update({
+    try {
+      const withdrawalId = req.params.id as string;
+  
+      const withdrawal = await prisma.withdrawal.findUnique({
         where: { id: withdrawalId },
-        data: { status: 'cancelled' },
       });
-    });
-
-
-    res.status(200).json({ message: 'Deposit cancelled successfully' });
+  
+      if (!withdrawal) {
+        throw Object.assign(new Error('Withdrawal not found'), {
+          statusCode: 404,
+        });
+      }
+  
+      if (withdrawal.status !== 'pending') {
+        throw Object.assign(
+          new Error('Only pending withdrawals can be cancelled'),
+          { statusCode: 400 },
+        );
+      }
+  
+      await prisma.$transaction(async (prisma) => {
+        await prisma.walletAccount.update({
+          where: { id: withdrawal.walletAccountId },
+          data: {
+            availableBalance: { increment: withdrawal.amount },
+            lockedBalance: { decrement: withdrawal.amount },
+          },
+        });
+        await prisma.withdrawal.update({
+          where: { id: withdrawalId },
+          data: { status: 'cancelled' },
+        });
+      });
+  
+  
+      res.status(200).json({ message: 'Deposit cancelled successfully' });
+    } catch (err) {
+      next(err);
+    }
   };
 
   // Admin Actions
@@ -252,19 +256,8 @@ class WithdrawalController {
           );
         }
 
-        // Update user's balance
-        const walletAccount = await prisma.walletAccount.findUnique({
-          where: { id: withdrawal.walletAccountId },
-        });
-
-        if (!walletAccount) {
-          throw Object.assign(new Error('Wallet account not found'), {
-            statusCode: 404,
-          });
-        }
-
         await prisma.walletAccount.update({
-          where: { id: walletAccount.id },
+          where: { id: withdrawal.walletAccountId },
           data: {
             lockedBalance: {
               decrement: withdrawal.amount,
@@ -279,7 +272,7 @@ class WithdrawalController {
 
         await prisma.transaction.create({
           data: {
-            walletAccountId: walletAccount.id,
+            walletAccountId: withdrawal.walletAccountId,
             type: 'withdrawal',
             amount: withdrawal.amount,
             actionId: withdrawal.id,
@@ -316,6 +309,13 @@ class WithdrawalController {
             { statusCode: 400 },
           );
         }
+        await prisma.walletAccount.update({
+          where: { id: withdrawal.walletAccountId },
+          data: {
+            availableBalance: { increment: withdrawal.amount },
+            lockedBalance: { decrement: withdrawal.amount },
+          },
+        });
 
         await prisma.withdrawal.update({
           where: { id: withdrawalId },
