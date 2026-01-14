@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from './config';
-import errorHandler from './middlewares/errorMiddleware';
+import errorHandler from './middlewares/error.middleware';
 import { 
   authRoutes,
   depositRoutes,
@@ -12,7 +12,7 @@ import {
   walletRoutes,
   withdrawalRoutes,
  } from './routes';
-import { authenticate } from './middlewares/authMiddleware';
+import { authenticate } from './middlewares/auth.middleware';
 import startJobs from './cron';
 
 if (!config.isValid) {

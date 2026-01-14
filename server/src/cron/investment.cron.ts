@@ -1,4 +1,4 @@
-import investmentController from '@/controllers/investmentController';
+import investmentController from '@/controllers/investment.controller';
 import cron from 'node-cron';
 
 export const startInvestmentCron = () => {

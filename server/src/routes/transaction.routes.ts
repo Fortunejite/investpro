@@ -1,6 +1,6 @@
 import { Router } from "express";
-import TransactionController from "@/controllers/transactionController";
-import { authorize } from "@/middlewares/authMiddleware";
+import TransactionController from "@/controllers/transaction.controller";
+import { authorize } from "@/middlewares/auth.middleware";
 
 const routes = Router();
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import plansController from "@/controllers/plansController";
-import { authorize } from "@/middlewares/authMiddleware";
+import plansController from "@/controllers/plans.controller";
+import { authorize } from "@/middlewares/auth.middleware";
 
 const routes = Router();
 

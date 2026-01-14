@@ -1,6 +1,6 @@
 import { Router } from "express";
-import WithdrawalController from "@/controllers/withdrawController";
-import { authorize } from "@/middlewares/authMiddleware";
+import WithdrawalController from "@/controllers/withdrawal.controller";
+import { authorize } from "@/middlewares/auth.middleware";
 
 const routes = Router();
 

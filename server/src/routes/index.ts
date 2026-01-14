@@ -1,7 +1,7 @@
-export { default as authRoutes } from './authRoutes';
-export { default as depositRoutes } from './depositRoutes';
-export { default as planRoutes } from './planRoutes';
-export { default as investmentRoutes } from './investmentRoutes';
-export { default as transactionRoutes } from './transactionRoutes';
-export { default as withdrawalRoutes } from './withdrawalRoutes';
-export { default as walletRoutes } from './walletRoutes';
+export { default as authRoutes } from './auth.routes';
+export { default as depositRoutes } from './deposit.routes';
+export { default as planRoutes } from './plan.routes';
+export { default as investmentRoutes } from './investment.routes';
+export { default as transactionRoutes } from './transaction.routes';
+export { default as withdrawalRoutes } from './withdrawal.routes';
+export { default as walletRoutes } from './wallet.routes';

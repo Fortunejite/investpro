@@ -1,6 +1,6 @@
 import { Router } from "express";
-import InvestmentController from "@/controllers/investmentController";
-import { authorize } from "@/middlewares/authMiddleware";
+import InvestmentController from "@/controllers/investment.controller";
+import { authorize } from "@/middlewares/auth.middleware";
 
 const routes = Router();
 

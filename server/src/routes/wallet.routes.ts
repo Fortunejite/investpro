@@ -1,5 +1,5 @@
 import { Router } from "express";
-import walletAccountController from "@/controllers/walletAccountController";
+import walletAccountController from "@/controllers/walletAccount.controller";
 
 const routes = Router();
 
