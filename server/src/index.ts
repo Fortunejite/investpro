@@ -7,6 +7,7 @@ import {
   authRoutes,
   depositRoutes,
   planRoutes,
+  walletRoutes,
   withdrawalRoutes,
  } from './routes';
 import { authenticate } from './middlewares/authMiddleware';
@@ -31,6 +32,7 @@ app.use('/auth', authRoutes);
 app.use('/plans', authenticate, planRoutes);
 app.use('/deposits', authenticate, depositRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
+app.use('/wallets', authenticate, walletRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });
