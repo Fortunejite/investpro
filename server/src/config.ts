@@ -15,6 +15,7 @@ const config = {
   databaseUrl: process.env.DATABASE_URL!,
   chains: ["eth", "bsc", "polygon", "sol"] as const,
   transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
+  transactionTypes: ["deposit", "withdrawal", "investment", "profit_payout"] as const,
   isValid: false,
 }
 

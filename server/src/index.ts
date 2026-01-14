@@ -7,6 +7,7 @@ import {
   authRoutes,
   depositRoutes,
   planRoutes,
+  transactionRoutes,
   walletRoutes,
   withdrawalRoutes,
  } from './routes';
@@ -31,6 +32,7 @@ app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/plans', authenticate, planRoutes);
 app.use('/deposits', authenticate, depositRoutes);
+app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
 app.use('/wallets', authenticate, walletRoutes);
 
