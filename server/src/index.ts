@@ -5,7 +5,9 @@ import config from './config';
 import errorHandler from './middlewares/errorMiddleware';
 import { 
   authRoutes,
+  planRoutes,
  } from './routes';
+import { authenticate } from './middlewares/authMiddleware';
 
 if (!config.isValid) {
   console.error("Invalid configuration. Exiting...");
@@ -24,6 +26,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/auth', authRoutes);
+app.use('/plans', authenticate, planRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

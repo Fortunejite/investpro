@@ -1,16 +1,9 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto'
 import config from '@/config';
+import { User } from '@/generated/prisma/client';
 
-export interface TokenPayload {
-  id: number;
-  email: string;
-  name: string;
-  role: string;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type TokenPayload = Omit<User, 'hashed_password'>;
 
 class TokenService {
   generateAccessToken(payload: TokenPayload): string {
