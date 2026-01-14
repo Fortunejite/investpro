@@ -1059,7 +1059,7 @@ export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof Plan
 
 export const InvestmentScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
+  walletAccountId: 'walletAccountId',
   planId: 'planId',
   amount: 'amount',
   profit: 'profit',

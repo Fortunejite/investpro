@@ -27,14 +27,12 @@ export type AggregateInvestment = {
 }
 
 export type InvestmentAvgAggregateOutputType = {
-  userId: number | null
   planId: number | null
   amount: runtime.Decimal | null
   profit: runtime.Decimal | null
 }
 
 export type InvestmentSumAggregateOutputType = {
-  userId: number | null
   planId: number | null
   amount: runtime.Decimal | null
   profit: runtime.Decimal | null
@@ -42,7 +40,7 @@ export type InvestmentSumAggregateOutputType = {
 
 export type InvestmentMinAggregateOutputType = {
   id: string | null
-  userId: number | null
+  walletAccountId: string | null
   planId: number | null
   amount: runtime.Decimal | null
   profit: runtime.Decimal | null
@@ -55,7 +53,7 @@ export type InvestmentMinAggregateOutputType = {
 
 export type InvestmentMaxAggregateOutputType = {
   id: string | null
-  userId: number | null
+  walletAccountId: string | null
   planId: number | null
   amount: runtime.Decimal | null
   profit: runtime.Decimal | null
@@ -68,7 +66,7 @@ export type InvestmentMaxAggregateOutputType = {
 
 export type InvestmentCountAggregateOutputType = {
   id: number
-  userId: number
+  walletAccountId: number
   planId: number
   amount: number
   profit: number
@@ -82,14 +80,12 @@ export type InvestmentCountAggregateOutputType = {
 
 
 export type InvestmentAvgAggregateInputType = {
-  userId?: true
   planId?: true
   amount?: true
   profit?: true
 }
 
 export type InvestmentSumAggregateInputType = {
-  userId?: true
   planId?: true
   amount?: true
   profit?: true
@@ -97,7 +93,7 @@ export type InvestmentSumAggregateInputType = {
 
 export type InvestmentMinAggregateInputType = {
   id?: true
-  userId?: true
+  walletAccountId?: true
   planId?: true
   amount?: true
   profit?: true
@@ -110,7 +106,7 @@ export type InvestmentMinAggregateInputType = {
 
 export type InvestmentMaxAggregateInputType = {
   id?: true
-  userId?: true
+  walletAccountId?: true
   planId?: true
   amount?: true
   profit?: true
@@ -123,7 +119,7 @@ export type InvestmentMaxAggregateInputType = {
 
 export type InvestmentCountAggregateInputType = {
   id?: true
-  userId?: true
+  walletAccountId?: true
   planId?: true
   amount?: true
   profit?: true
@@ -223,7 +219,7 @@ export type InvestmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 
 export type InvestmentGroupByOutputType = {
   id: string
-  userId: number
+  walletAccountId: string
   planId: number
   amount: runtime.Decimal
   profit: runtime.Decimal | null
@@ -259,7 +255,7 @@ export type InvestmentWhereInput = {
   OR?: Prisma.InvestmentWhereInput[]
   NOT?: Prisma.InvestmentWhereInput | Prisma.InvestmentWhereInput[]
   id?: Prisma.StringFilter<"Investment"> | string
-  userId?: Prisma.IntFilter<"Investment"> | number
+  walletAccountId?: Prisma.StringFilter<"Investment"> | string
   planId?: Prisma.IntFilter<"Investment"> | number
   amount?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.DecimalNullableFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -268,13 +264,13 @@ export type InvestmentWhereInput = {
   status?: Prisma.EnumInvestmentStatusFilter<"Investment"> | $Enums.InvestmentStatus
   createdAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  wallet?: Prisma.XOR<Prisma.WalletAccountScalarRelationFilter, Prisma.WalletAccountWhereInput>
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
 }
 
 export type InvestmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -283,7 +279,7 @@ export type InvestmentOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  wallet?: Prisma.WalletAccountOrderByWithRelationInput
   plan?: Prisma.PlanOrderByWithRelationInput
 }
 
@@ -292,7 +288,7 @@ export type InvestmentWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.InvestmentWhereInput | Prisma.InvestmentWhereInput[]
   OR?: Prisma.InvestmentWhereInput[]
   NOT?: Prisma.InvestmentWhereInput | Prisma.InvestmentWhereInput[]
-  userId?: Prisma.IntFilter<"Investment"> | number
+  walletAccountId?: Prisma.StringFilter<"Investment"> | string
   planId?: Prisma.IntFilter<"Investment"> | number
   amount?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.DecimalNullableFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -301,13 +297,13 @@ export type InvestmentWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumInvestmentStatusFilter<"Investment"> | $Enums.InvestmentStatus
   createdAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Investment"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  wallet?: Prisma.XOR<Prisma.WalletAccountScalarRelationFilter, Prisma.WalletAccountWhereInput>
   plan?: Prisma.XOR<Prisma.PlanScalarRelationFilter, Prisma.PlanWhereInput>
 }, "id">
 
 export type InvestmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -328,7 +324,7 @@ export type InvestmentScalarWhereWithAggregatesInput = {
   OR?: Prisma.InvestmentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.InvestmentScalarWhereWithAggregatesInput | Prisma.InvestmentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Investment"> | string
-  userId?: Prisma.IntWithAggregatesFilter<"Investment"> | number
+  walletAccountId?: Prisma.StringWithAggregatesFilter<"Investment"> | string
   planId?: Prisma.IntWithAggregatesFilter<"Investment"> | number
   amount?: Prisma.DecimalWithAggregatesFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.DecimalNullableWithAggregatesFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -348,13 +344,13 @@ export type InvestmentCreateInput = {
   status?: $Enums.InvestmentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutInvestmentsInput
+  wallet: Prisma.WalletAccountCreateNestedOneWithoutInvestmentsInput
   plan: Prisma.PlanCreateNestedOneWithoutInvestmentsInput
 }
 
 export type InvestmentUncheckedCreateInput = {
   id?: string
-  userId: number
+  walletAccountId: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -374,13 +370,13 @@ export type InvestmentUpdateInput = {
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutInvestmentsNestedInput
+  wallet?: Prisma.WalletAccountUpdateOneRequiredWithoutInvestmentsNestedInput
   plan?: Prisma.PlanUpdateOneRequiredWithoutInvestmentsNestedInput
 }
 
 export type InvestmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -393,7 +389,7 @@ export type InvestmentUncheckedUpdateInput = {
 
 export type InvestmentCreateManyInput = {
   id?: string
-  userId: number
+  walletAccountId: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -417,7 +413,7 @@ export type InvestmentUpdateManyMutationInput = {
 
 export type InvestmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -440,7 +436,7 @@ export type InvestmentOrderByRelationAggregateInput = {
 
 export type InvestmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrder
@@ -452,7 +448,6 @@ export type InvestmentCountOrderByAggregateInput = {
 }
 
 export type InvestmentAvgOrderByAggregateInput = {
-  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrder
@@ -460,7 +455,7 @@ export type InvestmentAvgOrderByAggregateInput = {
 
 export type InvestmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrder
@@ -473,7 +468,7 @@ export type InvestmentMaxOrderByAggregateInput = {
 
 export type InvestmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrder
@@ -485,51 +480,50 @@ export type InvestmentMinOrderByAggregateInput = {
 }
 
 export type InvestmentSumOrderByAggregateInput = {
-  userId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   profit?: Prisma.SortOrder
 }
 
-export type InvestmentCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutUserInput, Prisma.InvestmentUncheckedCreateWithoutUserInput> | Prisma.InvestmentCreateWithoutUserInput[] | Prisma.InvestmentUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutUserInput | Prisma.InvestmentCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.InvestmentCreateManyUserInputEnvelope
+export type InvestmentCreateNestedManyWithoutWalletInput = {
+  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutWalletInput, Prisma.InvestmentUncheckedCreateWithoutWalletInput> | Prisma.InvestmentCreateWithoutWalletInput[] | Prisma.InvestmentUncheckedCreateWithoutWalletInput[]
+  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutWalletInput | Prisma.InvestmentCreateOrConnectWithoutWalletInput[]
+  createMany?: Prisma.InvestmentCreateManyWalletInputEnvelope
   connect?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
 }
 
-export type InvestmentUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutUserInput, Prisma.InvestmentUncheckedCreateWithoutUserInput> | Prisma.InvestmentCreateWithoutUserInput[] | Prisma.InvestmentUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutUserInput | Prisma.InvestmentCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.InvestmentCreateManyUserInputEnvelope
+export type InvestmentUncheckedCreateNestedManyWithoutWalletInput = {
+  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutWalletInput, Prisma.InvestmentUncheckedCreateWithoutWalletInput> | Prisma.InvestmentCreateWithoutWalletInput[] | Prisma.InvestmentUncheckedCreateWithoutWalletInput[]
+  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutWalletInput | Prisma.InvestmentCreateOrConnectWithoutWalletInput[]
+  createMany?: Prisma.InvestmentCreateManyWalletInputEnvelope
   connect?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
 }
 
-export type InvestmentUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutUserInput, Prisma.InvestmentUncheckedCreateWithoutUserInput> | Prisma.InvestmentCreateWithoutUserInput[] | Prisma.InvestmentUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutUserInput | Prisma.InvestmentCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.InvestmentUpsertWithWhereUniqueWithoutUserInput | Prisma.InvestmentUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.InvestmentCreateManyUserInputEnvelope
+export type InvestmentUpdateManyWithoutWalletNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutWalletInput, Prisma.InvestmentUncheckedCreateWithoutWalletInput> | Prisma.InvestmentCreateWithoutWalletInput[] | Prisma.InvestmentUncheckedCreateWithoutWalletInput[]
+  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutWalletInput | Prisma.InvestmentCreateOrConnectWithoutWalletInput[]
+  upsert?: Prisma.InvestmentUpsertWithWhereUniqueWithoutWalletInput | Prisma.InvestmentUpsertWithWhereUniqueWithoutWalletInput[]
+  createMany?: Prisma.InvestmentCreateManyWalletInputEnvelope
   set?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
   disconnect?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
   delete?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
   connect?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
-  update?: Prisma.InvestmentUpdateWithWhereUniqueWithoutUserInput | Prisma.InvestmentUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.InvestmentUpdateManyWithWhereWithoutUserInput | Prisma.InvestmentUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.InvestmentUpdateWithWhereUniqueWithoutWalletInput | Prisma.InvestmentUpdateWithWhereUniqueWithoutWalletInput[]
+  updateMany?: Prisma.InvestmentUpdateManyWithWhereWithoutWalletInput | Prisma.InvestmentUpdateManyWithWhereWithoutWalletInput[]
   deleteMany?: Prisma.InvestmentScalarWhereInput | Prisma.InvestmentScalarWhereInput[]
 }
 
-export type InvestmentUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutUserInput, Prisma.InvestmentUncheckedCreateWithoutUserInput> | Prisma.InvestmentCreateWithoutUserInput[] | Prisma.InvestmentUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutUserInput | Prisma.InvestmentCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.InvestmentUpsertWithWhereUniqueWithoutUserInput | Prisma.InvestmentUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.InvestmentCreateManyUserInputEnvelope
+export type InvestmentUncheckedUpdateManyWithoutWalletNestedInput = {
+  create?: Prisma.XOR<Prisma.InvestmentCreateWithoutWalletInput, Prisma.InvestmentUncheckedCreateWithoutWalletInput> | Prisma.InvestmentCreateWithoutWalletInput[] | Prisma.InvestmentUncheckedCreateWithoutWalletInput[]
+  connectOrCreate?: Prisma.InvestmentCreateOrConnectWithoutWalletInput | Prisma.InvestmentCreateOrConnectWithoutWalletInput[]
+  upsert?: Prisma.InvestmentUpsertWithWhereUniqueWithoutWalletInput | Prisma.InvestmentUpsertWithWhereUniqueWithoutWalletInput[]
+  createMany?: Prisma.InvestmentCreateManyWalletInputEnvelope
   set?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
   disconnect?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
   delete?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
   connect?: Prisma.InvestmentWhereUniqueInput | Prisma.InvestmentWhereUniqueInput[]
-  update?: Prisma.InvestmentUpdateWithWhereUniqueWithoutUserInput | Prisma.InvestmentUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.InvestmentUpdateManyWithWhereWithoutUserInput | Prisma.InvestmentUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.InvestmentUpdateWithWhereUniqueWithoutWalletInput | Prisma.InvestmentUpdateWithWhereUniqueWithoutWalletInput[]
+  updateMany?: Prisma.InvestmentUpdateManyWithWhereWithoutWalletInput | Prisma.InvestmentUpdateManyWithWhereWithoutWalletInput[]
   deleteMany?: Prisma.InvestmentScalarWhereInput | Prisma.InvestmentScalarWhereInput[]
 }
 
@@ -587,7 +581,7 @@ export type EnumInvestmentStatusFieldUpdateOperationsInput = {
   set?: $Enums.InvestmentStatus
 }
 
-export type InvestmentCreateWithoutUserInput = {
+export type InvestmentCreateWithoutWalletInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -599,7 +593,7 @@ export type InvestmentCreateWithoutUserInput = {
   plan: Prisma.PlanCreateNestedOneWithoutInvestmentsInput
 }
 
-export type InvestmentUncheckedCreateWithoutUserInput = {
+export type InvestmentUncheckedCreateWithoutWalletInput = {
   id?: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -611,30 +605,30 @@ export type InvestmentUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
 }
 
-export type InvestmentCreateOrConnectWithoutUserInput = {
+export type InvestmentCreateOrConnectWithoutWalletInput = {
   where: Prisma.InvestmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.InvestmentCreateWithoutUserInput, Prisma.InvestmentUncheckedCreateWithoutUserInput>
+  create: Prisma.XOR<Prisma.InvestmentCreateWithoutWalletInput, Prisma.InvestmentUncheckedCreateWithoutWalletInput>
 }
 
-export type InvestmentCreateManyUserInputEnvelope = {
-  data: Prisma.InvestmentCreateManyUserInput | Prisma.InvestmentCreateManyUserInput[]
+export type InvestmentCreateManyWalletInputEnvelope = {
+  data: Prisma.InvestmentCreateManyWalletInput | Prisma.InvestmentCreateManyWalletInput[]
   skipDuplicates?: boolean
 }
 
-export type InvestmentUpsertWithWhereUniqueWithoutUserInput = {
+export type InvestmentUpsertWithWhereUniqueWithoutWalletInput = {
   where: Prisma.InvestmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.InvestmentUpdateWithoutUserInput, Prisma.InvestmentUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.InvestmentCreateWithoutUserInput, Prisma.InvestmentUncheckedCreateWithoutUserInput>
+  update: Prisma.XOR<Prisma.InvestmentUpdateWithoutWalletInput, Prisma.InvestmentUncheckedUpdateWithoutWalletInput>
+  create: Prisma.XOR<Prisma.InvestmentCreateWithoutWalletInput, Prisma.InvestmentUncheckedCreateWithoutWalletInput>
 }
 
-export type InvestmentUpdateWithWhereUniqueWithoutUserInput = {
+export type InvestmentUpdateWithWhereUniqueWithoutWalletInput = {
   where: Prisma.InvestmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.InvestmentUpdateWithoutUserInput, Prisma.InvestmentUncheckedUpdateWithoutUserInput>
+  data: Prisma.XOR<Prisma.InvestmentUpdateWithoutWalletInput, Prisma.InvestmentUncheckedUpdateWithoutWalletInput>
 }
 
-export type InvestmentUpdateManyWithWhereWithoutUserInput = {
+export type InvestmentUpdateManyWithWhereWithoutWalletInput = {
   where: Prisma.InvestmentScalarWhereInput
-  data: Prisma.XOR<Prisma.InvestmentUpdateManyMutationInput, Prisma.InvestmentUncheckedUpdateManyWithoutUserInput>
+  data: Prisma.XOR<Prisma.InvestmentUpdateManyMutationInput, Prisma.InvestmentUncheckedUpdateManyWithoutWalletInput>
 }
 
 export type InvestmentScalarWhereInput = {
@@ -642,7 +636,7 @@ export type InvestmentScalarWhereInput = {
   OR?: Prisma.InvestmentScalarWhereInput[]
   NOT?: Prisma.InvestmentScalarWhereInput | Prisma.InvestmentScalarWhereInput[]
   id?: Prisma.StringFilter<"Investment"> | string
-  userId?: Prisma.IntFilter<"Investment"> | number
+  walletAccountId?: Prisma.StringFilter<"Investment"> | string
   planId?: Prisma.IntFilter<"Investment"> | number
   amount?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.DecimalNullableFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -662,12 +656,12 @@ export type InvestmentCreateWithoutPlanInput = {
   status?: $Enums.InvestmentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutInvestmentsInput
+  wallet: Prisma.WalletAccountCreateNestedOneWithoutInvestmentsInput
 }
 
 export type InvestmentUncheckedCreateWithoutPlanInput = {
   id?: string
-  userId: number
+  walletAccountId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   startDate: Date | string
@@ -703,7 +697,7 @@ export type InvestmentUpdateManyWithWhereWithoutPlanInput = {
   data: Prisma.XOR<Prisma.InvestmentUpdateManyMutationInput, Prisma.InvestmentUncheckedUpdateManyWithoutPlanInput>
 }
 
-export type InvestmentCreateManyUserInput = {
+export type InvestmentCreateManyWalletInput = {
   id?: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -715,7 +709,7 @@ export type InvestmentCreateManyUserInput = {
   updatedAt?: Date | string
 }
 
-export type InvestmentUpdateWithoutUserInput = {
+export type InvestmentUpdateWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -727,7 +721,7 @@ export type InvestmentUpdateWithoutUserInput = {
   plan?: Prisma.PlanUpdateOneRequiredWithoutInvestmentsNestedInput
 }
 
-export type InvestmentUncheckedUpdateWithoutUserInput = {
+export type InvestmentUncheckedUpdateWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -739,7 +733,7 @@ export type InvestmentUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type InvestmentUncheckedUpdateManyWithoutUserInput = {
+export type InvestmentUncheckedUpdateManyWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -753,7 +747,7 @@ export type InvestmentUncheckedUpdateManyWithoutUserInput = {
 
 export type InvestmentCreateManyPlanInput = {
   id?: string
-  userId: number
+  walletAccountId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   startDate: Date | string
@@ -772,12 +766,12 @@ export type InvestmentUpdateWithoutPlanInput = {
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutInvestmentsNestedInput
+  wallet?: Prisma.WalletAccountUpdateOneRequiredWithoutInvestmentsNestedInput
 }
 
 export type InvestmentUncheckedUpdateWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -789,7 +783,7 @@ export type InvestmentUncheckedUpdateWithoutPlanInput = {
 
 export type InvestmentUncheckedUpdateManyWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -803,7 +797,7 @@ export type InvestmentUncheckedUpdateManyWithoutPlanInput = {
 
 export type InvestmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  walletAccountId?: boolean
   planId?: boolean
   amount?: boolean
   profit?: boolean
@@ -812,13 +806,13 @@ export type InvestmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  wallet?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["investment"]>
 
 export type InvestmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  walletAccountId?: boolean
   planId?: boolean
   amount?: boolean
   profit?: boolean
@@ -827,13 +821,13 @@ export type InvestmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  wallet?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["investment"]>
 
 export type InvestmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  walletAccountId?: boolean
   planId?: boolean
   amount?: boolean
   profit?: boolean
@@ -842,13 +836,13 @@ export type InvestmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  wallet?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["investment"]>
 
 export type InvestmentSelectScalar = {
   id?: boolean
-  userId?: boolean
+  walletAccountId?: boolean
   planId?: boolean
   amount?: boolean
   profit?: boolean
@@ -859,29 +853,29 @@ export type InvestmentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type InvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "planId" | "amount" | "profit" | "startDate" | "endDate" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["investment"]>
+export type InvestmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "walletAccountId" | "planId" | "amount" | "profit" | "startDate" | "endDate" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["investment"]>
 export type InvestmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  wallet?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }
 export type InvestmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  wallet?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }
 export type InvestmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  wallet?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }
 
 export type $InvestmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Investment"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    wallet: Prisma.$WalletAccountPayload<ExtArgs>
     plan: Prisma.$PlanPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: number
+    walletAccountId: string
     planId: number
     amount: runtime.Decimal
     profit: runtime.Decimal | null
@@ -1284,7 +1278,7 @@ readonly fields: InvestmentFieldRefs;
  */
 export interface Prisma__InvestmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  wallet<T extends Prisma.WalletAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WalletAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__WalletAccountClient<runtime.Types.Result.GetResult<Prisma.$WalletAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   plan<T extends Prisma.PlanDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PlanDefaultArgs<ExtArgs>>): Prisma.Prisma__PlanClient<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1316,7 +1310,7 @@ export interface Prisma__InvestmentClient<T, Null = never, ExtArgs extends runti
  */
 export interface InvestmentFieldRefs {
   readonly id: Prisma.FieldRef<"Investment", 'String'>
-  readonly userId: Prisma.FieldRef<"Investment", 'Int'>
+  readonly walletAccountId: Prisma.FieldRef<"Investment", 'String'>
   readonly planId: Prisma.FieldRef<"Investment", 'Int'>
   readonly amount: Prisma.FieldRef<"Investment", 'Decimal'>
   readonly profit: Prisma.FieldRef<"Investment", 'Decimal'>
