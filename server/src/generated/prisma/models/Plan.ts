@@ -31,8 +31,6 @@ export type PlanAvgAggregateOutputType = {
   minAmount: number | null
   durationInDays: number | null
   roiPercent: number | null
-  minReturnPercent: number | null
-  maxReturnPercent: number | null
 }
 
 export type PlanSumAggregateOutputType = {
@@ -40,8 +38,6 @@ export type PlanSumAggregateOutputType = {
   minAmount: number | null
   durationInDays: number | null
   roiPercent: number | null
-  minReturnPercent: number | null
-  maxReturnPercent: number | null
 }
 
 export type PlanMinAggregateOutputType = {
@@ -52,8 +48,6 @@ export type PlanMinAggregateOutputType = {
   durationInDays: number | null
   roiPercent: number | null
   payoutType: $Enums.PayoutType | null
-  minReturnPercent: number | null
-  maxReturnPercent: number | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,8 +61,6 @@ export type PlanMaxAggregateOutputType = {
   durationInDays: number | null
   roiPercent: number | null
   payoutType: $Enums.PayoutType | null
-  minReturnPercent: number | null
-  maxReturnPercent: number | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -82,8 +74,6 @@ export type PlanCountAggregateOutputType = {
   durationInDays: number
   roiPercent: number
   payoutType: number
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -96,8 +86,6 @@ export type PlanAvgAggregateInputType = {
   minAmount?: true
   durationInDays?: true
   roiPercent?: true
-  minReturnPercent?: true
-  maxReturnPercent?: true
 }
 
 export type PlanSumAggregateInputType = {
@@ -105,8 +93,6 @@ export type PlanSumAggregateInputType = {
   minAmount?: true
   durationInDays?: true
   roiPercent?: true
-  minReturnPercent?: true
-  maxReturnPercent?: true
 }
 
 export type PlanMinAggregateInputType = {
@@ -117,8 +103,6 @@ export type PlanMinAggregateInputType = {
   durationInDays?: true
   roiPercent?: true
   payoutType?: true
-  minReturnPercent?: true
-  maxReturnPercent?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -132,8 +116,6 @@ export type PlanMaxAggregateInputType = {
   durationInDays?: true
   roiPercent?: true
   payoutType?: true
-  minReturnPercent?: true
-  maxReturnPercent?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -147,8 +129,6 @@ export type PlanCountAggregateInputType = {
   durationInDays?: true
   roiPercent?: true
   payoutType?: true
-  minReturnPercent?: true
-  maxReturnPercent?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -249,8 +229,6 @@ export type PlanGroupByOutputType = {
   durationInDays: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -287,8 +265,6 @@ export type PlanWhereInput = {
   durationInDays?: Prisma.IntFilter<"Plan"> | number
   roiPercent?: Prisma.IntFilter<"Plan"> | number
   payoutType?: Prisma.EnumPayoutTypeFilter<"Plan"> | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFilter<"Plan"> | number
-  maxReturnPercent?: Prisma.IntFilter<"Plan"> | number
   isActive?: Prisma.BoolFilter<"Plan"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
@@ -303,8 +279,6 @@ export type PlanOrderByWithRelationInput = {
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
   payoutType?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -322,8 +296,6 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   durationInDays?: Prisma.IntFilter<"Plan"> | number
   roiPercent?: Prisma.IntFilter<"Plan"> | number
   payoutType?: Prisma.EnumPayoutTypeFilter<"Plan"> | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFilter<"Plan"> | number
-  maxReturnPercent?: Prisma.IntFilter<"Plan"> | number
   isActive?: Prisma.BoolFilter<"Plan"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
@@ -338,8 +310,6 @@ export type PlanOrderByWithAggregationInput = {
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
   payoutType?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -361,8 +331,6 @@ export type PlanScalarWhereWithAggregatesInput = {
   durationInDays?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   roiPercent?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   payoutType?: Prisma.EnumPayoutTypeWithAggregatesFilter<"Plan"> | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntWithAggregatesFilter<"Plan"> | number
-  maxReturnPercent?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"Plan"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
@@ -375,8 +343,6 @@ export type PlanCreateInput = {
   durationInDays: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -391,8 +357,6 @@ export type PlanUncheckedCreateInput = {
   durationInDays: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -406,8 +370,6 @@ export type PlanUpdateInput = {
   durationInDays?: Prisma.IntFieldUpdateOperationsInput | number
   roiPercent?: Prisma.IntFieldUpdateOperationsInput | number
   payoutType?: Prisma.EnumPayoutTypeFieldUpdateOperationsInput | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
-  maxReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -422,8 +384,6 @@ export type PlanUncheckedUpdateInput = {
   durationInDays?: Prisma.IntFieldUpdateOperationsInput | number
   roiPercent?: Prisma.IntFieldUpdateOperationsInput | number
   payoutType?: Prisma.EnumPayoutTypeFieldUpdateOperationsInput | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
-  maxReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -438,8 +398,6 @@ export type PlanCreateManyInput = {
   durationInDays: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -452,8 +410,6 @@ export type PlanUpdateManyMutationInput = {
   durationInDays?: Prisma.IntFieldUpdateOperationsInput | number
   roiPercent?: Prisma.IntFieldUpdateOperationsInput | number
   payoutType?: Prisma.EnumPayoutTypeFieldUpdateOperationsInput | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
-  maxReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -467,8 +423,6 @@ export type PlanUncheckedUpdateManyInput = {
   durationInDays?: Prisma.IntFieldUpdateOperationsInput | number
   roiPercent?: Prisma.IntFieldUpdateOperationsInput | number
   payoutType?: Prisma.EnumPayoutTypeFieldUpdateOperationsInput | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
-  maxReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -482,8 +436,6 @@ export type PlanCountOrderByAggregateInput = {
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
   payoutType?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -494,8 +446,6 @@ export type PlanAvgOrderByAggregateInput = {
   minAmount?: Prisma.SortOrder
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
 }
 
 export type PlanMaxOrderByAggregateInput = {
@@ -506,8 +456,6 @@ export type PlanMaxOrderByAggregateInput = {
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
   payoutType?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -521,8 +469,6 @@ export type PlanMinOrderByAggregateInput = {
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
   payoutType?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -533,8 +479,6 @@ export type PlanSumOrderByAggregateInput = {
   minAmount?: Prisma.SortOrder
   durationInDays?: Prisma.SortOrder
   roiPercent?: Prisma.SortOrder
-  minReturnPercent?: Prisma.SortOrder
-  maxReturnPercent?: Prisma.SortOrder
 }
 
 export type PlanScalarRelationFilter = {
@@ -571,8 +515,6 @@ export type PlanCreateWithoutInvestmentsInput = {
   durationInDays: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -586,8 +528,6 @@ export type PlanUncheckedCreateWithoutInvestmentsInput = {
   durationInDays: number
   roiPercent: number
   payoutType: $Enums.PayoutType
-  minReturnPercent: number
-  maxReturnPercent: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -616,8 +556,6 @@ export type PlanUpdateWithoutInvestmentsInput = {
   durationInDays?: Prisma.IntFieldUpdateOperationsInput | number
   roiPercent?: Prisma.IntFieldUpdateOperationsInput | number
   payoutType?: Prisma.EnumPayoutTypeFieldUpdateOperationsInput | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
-  maxReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -631,8 +569,6 @@ export type PlanUncheckedUpdateWithoutInvestmentsInput = {
   durationInDays?: Prisma.IntFieldUpdateOperationsInput | number
   roiPercent?: Prisma.IntFieldUpdateOperationsInput | number
   payoutType?: Prisma.EnumPayoutTypeFieldUpdateOperationsInput | $Enums.PayoutType
-  minReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
-  maxReturnPercent?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -677,8 +613,6 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   durationInDays?: boolean
   roiPercent?: boolean
   payoutType?: boolean
-  minReturnPercent?: boolean
-  maxReturnPercent?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -694,8 +628,6 @@ export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   durationInDays?: boolean
   roiPercent?: boolean
   payoutType?: boolean
-  minReturnPercent?: boolean
-  maxReturnPercent?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -709,8 +641,6 @@ export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   durationInDays?: boolean
   roiPercent?: boolean
   payoutType?: boolean
-  minReturnPercent?: boolean
-  maxReturnPercent?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -724,14 +654,12 @@ export type PlanSelectScalar = {
   durationInDays?: boolean
   roiPercent?: boolean
   payoutType?: boolean
-  minReturnPercent?: boolean
-  maxReturnPercent?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "minAmount" | "durationInDays" | "roiPercent" | "payoutType" | "minReturnPercent" | "maxReturnPercent" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
+export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "minAmount" | "durationInDays" | "roiPercent" | "payoutType" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   investments?: boolean | Prisma.Plan$investmentsArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -752,8 +680,6 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     durationInDays: number
     roiPercent: number
     payoutType: $Enums.PayoutType
-    minReturnPercent: number
-    maxReturnPercent: number
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1188,8 +1114,6 @@ export interface PlanFieldRefs {
   readonly durationInDays: Prisma.FieldRef<"Plan", 'Int'>
   readonly roiPercent: Prisma.FieldRef<"Plan", 'Int'>
   readonly payoutType: Prisma.FieldRef<"Plan", 'PayoutType'>
-  readonly minReturnPercent: Prisma.FieldRef<"Plan", 'Int'>
-  readonly maxReturnPercent: Prisma.FieldRef<"Plan", 'Int'>
   readonly isActive: Prisma.FieldRef<"Plan", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Plan", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Plan", 'DateTime'>

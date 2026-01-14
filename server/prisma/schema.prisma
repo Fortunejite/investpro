@@ -138,16 +138,14 @@ model Transaction {
 }
 
 model Plan {
-  id               Int        @id @default(autoincrement())
-  name             String
-  description      String?
-  minAmount        Int
-  durationInDays   Int
-  roiPercent       Int
-  payoutType       PayoutType
-  minReturnPercent Int
-  maxReturnPercent Int
-  isActive         Boolean    @default(true)
+  id             Int        @id @default(autoincrement())
+  name           String
+  description    String?
+  minAmount      Int
+  durationInDays Int
+  roiPercent     Int
+  payoutType     PayoutType
+  isActive       Boolean    @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -9,8 +9,6 @@ const createPlanSchema = z.object({
   durationInDays: z.number().int().positive(),
   roiPercent: z.number().positive(),
   payoutType: z.enum(['daily', 'weekly', 'monthly', 'end_of_term']),
-  minReturnPercent: z.number().positive(),
-  maxReturnPercent: z.number().positive(),
 });
 
 const updatePlanSchema = z.object({
@@ -20,8 +18,6 @@ const updatePlanSchema = z.object({
   durationInDays: z.number().int().positive().optional(),
   roiPercent: z.number().positive().optional(),
   payoutType: z.enum(['daily', 'weekly', 'monthly', 'end_of_term']).optional(),
-  minReturnPercent: z.number().positive().optional(),
-  maxReturnPercent: z.number().positive().optional(),
   isActive: z.boolean().optional(),
 });
 

@@ -156,8 +156,6 @@ export const PlanScalarFieldEnum = {
   durationInDays: 'durationInDays',
   roiPercent: 'roiPercent',
   payoutType: 'payoutType',
-  minReturnPercent: 'minReturnPercent',
-  maxReturnPercent: 'maxReturnPercent',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
