@@ -85,6 +85,7 @@ model WalletAccount {
 
   user         User          @relation(fields: [userId], references: [id])
   deposits     Deposit[]
+  withdrawals  Withdrawal[]
   transactions Transaction[]
 
   @@unique([userId, chain])
@@ -106,14 +107,29 @@ model Deposit {
   @@map("deposits")
 }
 
+model Withdrawal {
+  id                  String            @id @default(uuid())
+  walletAccountId     String
+  amount              Decimal           @db.Decimal(18, 8)
+  destinationAddress String
+  status              TransactionStatus @default(pending)
+  adminNote           String?
+  createdAt           DateTime          @default(now())
+
+  walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
+
+  @@map("withdrawals")
+}
+
 model Transaction {
-  id              String          @id @default(uuid())
-  walletAccountId String
-  type            TransactionType
-  amount          Decimal         @db.Decimal(18, 8)
-  actionId        String
-  txHash          String?         @unique
-  createdAt       DateTime        @default(now())
+  id                 String          @id @default(uuid())
+  walletAccountId    String
+  type               TransactionType
+  amount             Decimal         @db.Decimal(18, 8)
+  actionId           String
+  txHash             String?         @unique
+  destinationAddress String?
+  createdAt          DateTime        @default(now())
 
   walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
 

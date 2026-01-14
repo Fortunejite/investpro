@@ -2,16 +2,16 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
+import { Withdrawal } from '@/generated/prisma/client';
 
-const createDepositSchema = z.object({
+const createWithdrawalSchema = z.object({
   chain: z.enum(config.chains),
   amount: z.number().positive(),
-  txHash: z.string().min(10).max(100).optional(),
-  proofUrl: z.url().optional(),
+  destinationAddress: z.string().min(10).max(100),
 });
 
-class DepositController {
-  getUserDeposits = async (req: Request, res: Response, next: NextFunction) => {
+class WithdrawalController {
+  getUserWithdrawals = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user.id;
       const queryParams = req.query;
@@ -40,7 +40,7 @@ class DepositController {
       });
       const walletAccountIds = walletAccounts.map((account) => account.id);
 
-      const deposits = await prisma.deposit.findMany({
+      const withdrawals = await prisma.withdrawal.findMany({
         where: {
           walletAccountId: { in: walletAccountIds },
           ...(status ? { status } : {}),
@@ -49,93 +49,118 @@ class DepositController {
         take: limit,
         orderBy: { createdAt: 'desc' },
       });
-      res.status(200).json({ data: deposits, pagination: { page, limit } });
+      res.status(200).json({ data: withdrawals, pagination: { page, limit } });
     } catch (err) {
       next(err);
     }
   };
 
-  getUserDepositById = async (req: Request, res: Response, next: NextFunction) => {
+  getUserWithdrawalById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user.id;
-      const depositId = req.params.id as string;
+      const withdrawalId = req.params.id as string;
 
-      const deposit = await prisma.deposit.findUnique({
-        where: { id: depositId },
+      const withdrawal = await prisma.withdrawal.findUnique({
+        where: { id: withdrawalId },
         include: {
           walletAccount: true,
         },
       });
 
-      if (!deposit || deposit.walletAccount.userId !== userId) {
-        return res.status(404).json({ message: 'Deposit not found' });
+      if (!withdrawal || withdrawal.walletAccount.userId !== userId) {
+        return res.status(404).json({ message: 'Withdrawal not found' });
       }
 
-      res.status(200).json(deposit);
+      res.status(200).json(withdrawal);
     } catch (err) {
       next(err);
     }
   };
 
-  createDeposit = async (req: Request, res: Response, next: NextFunction) => {
+  createWithdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user.id;
-      const validatedData = createDepositSchema.parse(req.body);
+      const validatedData = createWithdrawalSchema.parse(req.body);
 
       const walletAccount = await prisma.walletAccount.findFirst({
         where: { chain: validatedData.chain, userId },
-        select: { id: true },
+        select: { id: true, availableBalance: true },
       });
 
       if (!walletAccount) {
         return res.status(404).json({ message: 'Wallet not Found' });
       }
 
-      const newDeposit = await prisma.deposit.create({
-        data: {
-          walletAccountId: walletAccount.id,
-          amount: validatedData.amount,
-          txHash: validatedData.txHash,
-          proofUrl: validatedData.proofUrl,
-        },
+      if (walletAccount.availableBalance.lessThan(validatedData.amount)) {
+        return res.status(400).json({ message: 'Insufficient funds' });
+      }
+
+      let newWithdrawal: Withdrawal | null = null;
+      await prisma.$transaction(async (prisma) => {
+        await prisma.walletAccount.update({
+          where: { id: walletAccount.id },
+          data: {
+            availableBalance: { decrement: validatedData.amount },
+            lockedBalance: { increment: validatedData.amount },
+          },
+        });
+
+        newWithdrawal = await prisma.withdrawal.create({
+          data: {
+            walletAccountId: walletAccount.id,
+            amount: validatedData.amount,
+            destinationAddress: validatedData.destinationAddress,
+          },
+        });
       });
 
-      res.status(201).json(newDeposit);
+
+      res.status(201).json(newWithdrawal);
     } catch (err) {
       next(err);
     }
   };
 
-  cancelDeposit = async (req: Request, res: Response, next: NextFunction) => {
-    const depositId = req.params.id as string;
+  cancelWithdrawal = async (req: Request, res: Response, next: NextFunction) => {
+    const withdrawalId = req.params.id as string;
 
-    const deposit = await prisma.deposit.findUnique({
-      where: { id: depositId },
+    const withdrawal = await prisma.withdrawal.findUnique({
+      where: { id: withdrawalId },
     });
 
-    if (!deposit) {
-      throw Object.assign(new Error('Deposit not found'), {
+    if (!withdrawal) {
+      throw Object.assign(new Error('Withdrawal not found'), {
         statusCode: 404,
       });
     }
 
-    if (deposit.status !== 'pending') {
+    if (withdrawal.status !== 'pending') {
       throw Object.assign(
-        new Error('Only pending deposits can be cancelled'),
+        new Error('Only pending withdrawals can be cancelled'),
         { statusCode: 400 },
       );
     }
 
-    await prisma.deposit.update({
-      where: { id: depositId },
-      data: { status: 'cancelled' },
+    await prisma.$transaction(async (prisma) => {
+      await prisma.walletAccount.update({
+        where: { id: withdrawal.walletAccountId },
+        data: {
+          availableBalance: { increment: withdrawal.amount },
+          lockedBalance: { decrement: withdrawal.amount },
+        },
+      });
+      await prisma.withdrawal.update({
+        where: { id: withdrawalId },
+        data: { status: 'cancelled' },
+      });
     });
+
 
     res.status(200).json({ message: 'Deposit cancelled successfully' });
   };
 
   // Admin Actions
-  getAllDeposits = async (req: Request, res: Response, next: NextFunction) => {
+  getAllWithdrawals = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const queryParams = req.query;
 
@@ -169,7 +194,7 @@ class DepositController {
         ? walletAccounts.map((account) => account.id)
         : undefined;
 
-      const deposits = await prisma.deposit.findMany({
+      const withdrawals = await prisma.withdrawal.findMany({
         where: {
           walletAccountId: { in: walletAccountIds },
           status,
@@ -178,58 +203,58 @@ class DepositController {
         take: limit,
         orderBy: { createdAt: 'desc' },
       });
-      res.status(200).json({ data: deposits, pagination: { page, limit } });
+      res.status(200).json({ data: withdrawals, pagination: { page, limit } });
     } catch (err) {
       next(err);
     }
   };
 
-  getDepositById = async (req: Request, res: Response, next: NextFunction) => {
+  getWithdrawalById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const depositId = req.params.id as string;
+      const withdrawalId = req.params.id as string;
 
-      const deposit = await prisma.deposit.findUnique({
-        where: { id: depositId },
+      const withdrawal = await prisma.withdrawal.findUnique({
+        where: { id: withdrawalId },
         include: {
           walletAccount: true,
         },
       });
 
-      if (!deposit) {
-        return res.status(404).json({ message: 'Deposit not found' });
+      if (!withdrawal) {
+        return res.status(404).json({ message: 'Withdrawal not found' });
       }
 
-      res.status(200).json(deposit);
+      res.status(200).json(withdrawal);
     } catch (err) {
       next(err);
     }
   };
 
-  approveDeposit = async (req: Request, res: Response, next: NextFunction) => {
+  approveWithdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const depositId = req.params.id as string;
+      const withdrawalId = req.params.id as string;
 
       await prisma.$transaction(async (prisma) => {
-        const deposit = await prisma.deposit.findUnique({
-          where: { id: depositId },
+        const withdrawal = await prisma.withdrawal.findUnique({
+          where: { id: withdrawalId },
         });
 
-        if (!deposit) {
-          throw Object.assign(new Error('Deposit not found'), {
+        if (!withdrawal) {
+          throw Object.assign(new Error('Withdrawal not found'), {
             statusCode: 404,
           });
         }
 
-        if (deposit.status !== 'pending') {
+        if (withdrawal.status !== 'pending') {
           throw Object.assign(
-            new Error('Only pending deposits can be approved'),
+            new Error('Only pending withdrawals can be approved'),
             { statusCode: 400 },
           );
         }
 
         // Update user's balance
         const walletAccount = await prisma.walletAccount.findUnique({
-          where: { id: deposit.walletAccountId },
+          where: { id: withdrawal.walletAccountId },
         });
 
         if (!walletAccount) {
@@ -241,68 +266,68 @@ class DepositController {
         await prisma.walletAccount.update({
           where: { id: walletAccount.id },
           data: {
-            availableBalance: {
-              increment: deposit.amount,
+            lockedBalance: {
+              decrement: withdrawal.amount,
             },
           },
         });
 
-        await prisma.deposit.update({
-          where: { id: depositId },
+        await prisma.withdrawal.update({
+          where: { id: withdrawalId },
           data: { status: 'approved' },
         });
 
         await prisma.transaction.create({
           data: {
             walletAccountId: walletAccount.id,
-            type: 'deposit',
-            amount: deposit.amount,
-            actionId: deposit.id,
-            txHash: deposit.txHash,
+            type: 'withdrawal',
+            amount: withdrawal.amount,
+            actionId: withdrawal.id,
+            destinationAddress: withdrawal.destinationAddress,
           },
         });
       });
 
-      res.status(200).json({ message: 'Deposit approved successfully' });
+      res.status(200).json({ message: 'Withdrawal approved successfully' });
     } catch (err) {
       next(err);
     }
   };
 
-  rejectDeposit = async (req: Request, res: Response, next: NextFunction) => {
+  rejectWithdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const depositId = req.params.id as string;
+      const withdrawalId = req.params.id as string;
       const adminNote = req.body.adminNote as string | undefined;
 
       await prisma.$transaction(async (prisma) => {
-        const deposit = await prisma.deposit.findUnique({
-          where: { id: depositId },
+        const withdrawal = await prisma.withdrawal.findUnique({
+          where: { id: withdrawalId },
         });
 
-        if (!deposit) {
-          throw Object.assign(new Error('Deposit not found'), {
+        if (!withdrawal) {
+          throw Object.assign(new Error('Withdrawal not found'), {
             statusCode: 404,
           });
         }
 
-        if (deposit.status !== 'pending') {
+        if (withdrawal.status !== 'pending') {
           throw Object.assign(
-            new Error('Only pending deposits can be rejected'),
+            new Error('Only pending withdrawals can be rejected'),
             { statusCode: 400 },
           );
         }
 
-        await prisma.deposit.update({
-          where: { id: depositId },
+        await prisma.withdrawal.update({
+          where: { id: withdrawalId },
           data: { status: 'rejected', adminNote },
         });
       });
 
-      res.status(200).json({ message: 'Deposit rejected successfully' });
+      res.status(200).json({ message: 'Withdrawal rejected successfully' });
     } catch (err) {
       next(err);
     }
   };
 }
 
-export default new DepositController();
+export default new WithdrawalController();

@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   WalletAccount: 'WalletAccount',
   Deposit: 'Deposit',
+  Withdrawal: 'Withdrawal',
   Transaction: 'Transaction',
   Plan: 'Plan',
   Investment: 'Investment'
@@ -120,6 +121,19 @@ export const DepositScalarFieldEnum = {
 export type DepositScalarFieldEnum = (typeof DepositScalarFieldEnum)[keyof typeof DepositScalarFieldEnum]
 
 
+export const WithdrawalScalarFieldEnum = {
+  id: 'id',
+  walletAccountId: 'walletAccountId',
+  amount: 'amount',
+  destinationAddress: 'destinationAddress',
+  status: 'status',
+  adminNote: 'adminNote',
+  createdAt: 'createdAt'
+} as const
+
+export type WithdrawalScalarFieldEnum = (typeof WithdrawalScalarFieldEnum)[keyof typeof WithdrawalScalarFieldEnum]
+
+
 export const TransactionScalarFieldEnum = {
   id: 'id',
   walletAccountId: 'walletAccountId',
@@ -127,6 +141,7 @@ export const TransactionScalarFieldEnum = {
   amount: 'amount',
   actionId: 'actionId',
   txHash: 'txHash',
+  destinationAddress: 'destinationAddress',
   createdAt: 'createdAt'
 } as const
 

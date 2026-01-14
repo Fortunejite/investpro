@@ -33,6 +33,11 @@ export type WalletAccount = Prisma.WalletAccountModel
  */
 export type Deposit = Prisma.DepositModel
 /**
+ * Model Withdrawal
+ * 
+ */
+export type Withdrawal = Prisma.WithdrawalModel
+/**
  * Model Transaction
  * 
  */

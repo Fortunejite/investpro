@@ -7,6 +7,7 @@ import {
   authRoutes,
   depositRoutes,
   planRoutes,
+  withdrawalRoutes,
  } from './routes';
 import { authenticate } from './middlewares/authMiddleware';
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/plans', authenticate, planRoutes);
 app.use('/deposits', authenticate, depositRoutes);
+app.use('/withdrawals', authenticate, withdrawalRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
