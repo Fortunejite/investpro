@@ -32,6 +32,10 @@ app.use('/plans', authenticate, planRoutes);
 app.use('/deposits', authenticate, depositRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
 
+app.use((req, res) => {
+  res.status(404).json({ message: "Not Found" });
+});
+
 // Error handling middleware
 app.use(errorHandler);
 
