@@ -48,7 +48,8 @@ enum PayoutType {
 
 enum InvestmentStatus {
   active
-  completed
+  inactive
+  expired
   cancelled
 }
 
@@ -108,13 +109,13 @@ model Deposit {
 }
 
 model Withdrawal {
-  id                  String            @id @default(uuid())
-  walletAccountId     String
-  amount              Decimal           @db.Decimal(18, 8)
+  id                 String            @id @default(uuid())
+  walletAccountId    String
+  amount             Decimal           @db.Decimal(18, 8)
   destinationAddress String
-  status              TransactionStatus @default(pending)
-  adminNote           String?
-  createdAt           DateTime          @default(now())
+  status             TransactionStatus @default(pending)
+  adminNote          String?
+  createdAt          DateTime          @default(now())
 
   walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
 
@@ -137,15 +138,16 @@ model Transaction {
 }
 
 model Plan {
-  id          Int        @id @default(autoincrement())
-  name        String
-  description String?
-  minAmount   Int
-  maxAmount   Int
-  duration    Int
-  roiPercent  Int
-  payoutType  PayoutType
-  isActive    Boolean    @default(true)
+  id               Int        @id @default(autoincrement())
+  name             String
+  description      String?
+  minAmount        Int
+  durationInDays   Int
+  roiPercent       Int
+  payoutType       PayoutType
+  minReturnPercent Int
+  maxReturnPercent Int
+  isActive         Boolean    @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

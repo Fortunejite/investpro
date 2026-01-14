@@ -6,20 +6,22 @@ const createPlanSchema = z.object({
   name: z.string().min(3).max(100),
   description: z.string().max(500).optional(),
   minAmount: z.number().positive(),
-  maxAmount: z.number().positive(),
-  duration: z.number().int().positive(),
+  durationInDays: z.number().int().positive(),
   roiPercent: z.number().positive(),
   payoutType: z.enum(['daily', 'weekly', 'monthly', 'end_of_term']),
+  minReturnPercent: z.number().positive(),
+  maxReturnPercent: z.number().positive(),
 });
 
 const updatePlanSchema = z.object({
   name: z.string().min(3).max(100).optional(),
   description: z.string().max(500).optional(),
   minAmount: z.number().positive().optional(),
-  maxAmount: z.number().positive().optional(),
-  duration: z.number().int().positive().optional(),
+  durationInDays: z.number().int().positive().optional(),
   roiPercent: z.number().positive().optional(),
   payoutType: z.enum(['daily', 'weekly', 'monthly', 'end_of_term']).optional(),
+  minReturnPercent: z.number().positive().optional(),
+  maxReturnPercent: z.number().positive().optional(),
   isActive: z.boolean().optional(),
 });
 

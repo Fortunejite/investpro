@@ -68,7 +68,8 @@ export type PayoutType = (typeof PayoutType)[keyof typeof PayoutType]
 
 export const InvestmentStatus = {
   active: 'active',
-  completed: 'completed',
+  inactive: 'inactive',
+  expired: 'expired',
   cancelled: 'cancelled'
 } as const
 
