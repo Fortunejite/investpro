@@ -42,6 +42,17 @@ class PlansController {
 
   getPlans = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const plans = await prisma.plan.findMany({
+        where: { isActive: true },
+      });
+      res.status(200).json({ data: plans });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getPlansByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
       const queryParams = req.query;
 
       const isActive =
