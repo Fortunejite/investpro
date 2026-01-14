@@ -222,7 +222,7 @@ export type InvestmentGroupByOutputType = {
   walletAccountId: string
   planId: number
   amount: runtime.Decimal
-  profit: runtime.Decimal | null
+  profit: runtime.Decimal
   startDate: Date
   endDate: Date
   status: $Enums.InvestmentStatus
@@ -258,7 +258,7 @@ export type InvestmentWhereInput = {
   walletAccountId?: Prisma.StringFilter<"Investment"> | string
   planId?: Prisma.IntFilter<"Investment"> | number
   amount?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.DecimalNullableFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"Investment"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Investment"> | Date | string
   status?: Prisma.EnumInvestmentStatusFilter<"Investment"> | $Enums.InvestmentStatus
@@ -273,7 +273,7 @@ export type InvestmentOrderByWithRelationInput = {
   walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  profit?: Prisma.SortOrderInput | Prisma.SortOrder
+  profit?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -291,7 +291,7 @@ export type InvestmentWhereUniqueInput = Prisma.AtLeast<{
   walletAccountId?: Prisma.StringFilter<"Investment"> | string
   planId?: Prisma.IntFilter<"Investment"> | number
   amount?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.DecimalNullableFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"Investment"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Investment"> | Date | string
   status?: Prisma.EnumInvestmentStatusFilter<"Investment"> | $Enums.InvestmentStatus
@@ -306,7 +306,7 @@ export type InvestmentOrderByWithAggregationInput = {
   walletAccountId?: Prisma.SortOrder
   planId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
-  profit?: Prisma.SortOrderInput | Prisma.SortOrder
+  profit?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -327,7 +327,7 @@ export type InvestmentScalarWhereWithAggregatesInput = {
   walletAccountId?: Prisma.StringWithAggregatesFilter<"Investment"> | string
   planId?: Prisma.IntWithAggregatesFilter<"Investment"> | number
   amount?: Prisma.DecimalWithAggregatesFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.DecimalNullableWithAggregatesFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalWithAggregatesFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Investment"> | Date | string
   endDate?: Prisma.DateTimeWithAggregatesFilter<"Investment"> | Date | string
   status?: Prisma.EnumInvestmentStatusWithAggregatesFilter<"Investment"> | $Enums.InvestmentStatus
@@ -338,7 +338,7 @@ export type InvestmentScalarWhereWithAggregatesInput = {
 export type InvestmentCreateInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -353,7 +353,7 @@ export type InvestmentUncheckedCreateInput = {
   walletAccountId: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -364,7 +364,7 @@ export type InvestmentUncheckedCreateInput = {
 export type InvestmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -379,7 +379,7 @@ export type InvestmentUncheckedUpdateInput = {
   walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -392,7 +392,7 @@ export type InvestmentCreateManyInput = {
   walletAccountId: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -403,7 +403,7 @@ export type InvestmentCreateManyInput = {
 export type InvestmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -416,7 +416,7 @@ export type InvestmentUncheckedUpdateManyInput = {
   walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -569,14 +569,6 @@ export type InvestmentUncheckedUpdateManyWithoutPlanNestedInput = {
   deleteMany?: Prisma.InvestmentScalarWhereInput | Prisma.InvestmentScalarWhereInput[]
 }
 
-export type NullableDecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type EnumInvestmentStatusFieldUpdateOperationsInput = {
   set?: $Enums.InvestmentStatus
 }
@@ -584,7 +576,7 @@ export type EnumInvestmentStatusFieldUpdateOperationsInput = {
 export type InvestmentCreateWithoutWalletInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -597,7 +589,7 @@ export type InvestmentUncheckedCreateWithoutWalletInput = {
   id?: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -639,7 +631,7 @@ export type InvestmentScalarWhereInput = {
   walletAccountId?: Prisma.StringFilter<"Investment"> | string
   planId?: Prisma.IntFilter<"Investment"> | number
   amount?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.DecimalNullableFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFilter<"Investment"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFilter<"Investment"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Investment"> | Date | string
   status?: Prisma.EnumInvestmentStatusFilter<"Investment"> | $Enums.InvestmentStatus
@@ -650,7 +642,7 @@ export type InvestmentScalarWhereInput = {
 export type InvestmentCreateWithoutPlanInput = {
   id?: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -663,7 +655,7 @@ export type InvestmentUncheckedCreateWithoutPlanInput = {
   id?: string
   walletAccountId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -701,7 +693,7 @@ export type InvestmentCreateManyWalletInput = {
   id?: string
   planId: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -712,7 +704,7 @@ export type InvestmentCreateManyWalletInput = {
 export type InvestmentUpdateWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -725,7 +717,7 @@ export type InvestmentUncheckedUpdateWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -737,7 +729,7 @@ export type InvestmentUncheckedUpdateManyWithoutWalletInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   planId?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -749,7 +741,7 @@ export type InvestmentCreateManyPlanInput = {
   id?: string
   walletAccountId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit: runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate: Date | string
   endDate: Date | string
   status?: $Enums.InvestmentStatus
@@ -760,7 +752,7 @@ export type InvestmentCreateManyPlanInput = {
 export type InvestmentUpdateWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -773,7 +765,7 @@ export type InvestmentUncheckedUpdateWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -785,7 +777,7 @@ export type InvestmentUncheckedUpdateManyWithoutPlanInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  profit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  profit?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumInvestmentStatusFieldUpdateOperationsInput | $Enums.InvestmentStatus
@@ -878,7 +870,7 @@ export type $InvestmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     walletAccountId: string
     planId: number
     amount: runtime.Decimal
-    profit: runtime.Decimal | null
+    profit: runtime.Decimal
     startDate: Date
     endDate: Date
     status: $Enums.InvestmentStatus

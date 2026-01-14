@@ -160,7 +160,7 @@ model Investment {
   walletAccountId String
   planId          Int
   amount          Decimal          @db.Decimal(18, 8)
-  profit          Decimal?         @db.Decimal(18, 8)
+  profit          Decimal          @db.Decimal(18, 8)
   startDate       DateTime
   endDate         DateTime
   status          InvestmentStatus @default(active)
