@@ -5,6 +5,7 @@ import { authorize } from "@/middlewares/authMiddleware";
 const routes = Router();
 
 routes.get("/", plansController.getPlans);
+routes.get("/:id", plansController.getPlanById);
 routes.post("/", authorize(["admin"]), plansController.createPlan);
 routes.put("/:id", authorize(["admin"]), plansController.updatePlan);
 routes.delete("/:id", authorize(["admin"]), plansController.deletePlan);

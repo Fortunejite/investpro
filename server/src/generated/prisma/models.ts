@@ -10,6 +10,8 @@
  */
 export type * from './models/User'
 export type * from './models/WalletAccount'
+export type * from './models/Deposit'
+export type * from './models/Transaction'
 export type * from './models/Plan'
 export type * from './models/Investment'
 export type * from './commonInputTypes'

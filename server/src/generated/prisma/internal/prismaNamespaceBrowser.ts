@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   WalletAccount: 'WalletAccount',
+  Deposit: 'Deposit',
+  Transaction: 'Transaction',
   Plan: 'Plan',
   Investment: 'Investment'
 } as const
@@ -102,6 +104,33 @@ export const WalletAccountScalarFieldEnum = {
 } as const
 
 export type WalletAccountScalarFieldEnum = (typeof WalletAccountScalarFieldEnum)[keyof typeof WalletAccountScalarFieldEnum]
+
+
+export const DepositScalarFieldEnum = {
+  id: 'id',
+  walletAccountId: 'walletAccountId',
+  amount: 'amount',
+  txHash: 'txHash',
+  proofUrl: 'proofUrl',
+  status: 'status',
+  adminNote: 'adminNote',
+  createdAt: 'createdAt'
+} as const
+
+export type DepositScalarFieldEnum = (typeof DepositScalarFieldEnum)[keyof typeof DepositScalarFieldEnum]
+
+
+export const TransactionScalarFieldEnum = {
+  id: 'id',
+  walletAccountId: 'walletAccountId',
+  type: 'type',
+  amount: 'amount',
+  actionId: 'actionId',
+  txHash: 'txHash',
+  createdAt: 'createdAt'
+} as const
+
+export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
 
 
 export const PlanScalarFieldEnum = {

@@ -36,6 +36,26 @@ export const Chain = {
 export type Chain = (typeof Chain)[keyof typeof Chain]
 
 
+export const TransactionType = {
+  deposit: 'deposit',
+  withdrawal: 'withdrawal',
+  investment: 'investment',
+  profit_payout: 'profit_payout'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const TransactionStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  cancelled: 'cancelled'
+} as const
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+
 export const PayoutType = {
   daily: 'daily',
   weekly: 'weekly',

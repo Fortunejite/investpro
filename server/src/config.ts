@@ -13,6 +13,8 @@ const config = {
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   databaseUrl: process.env.DATABASE_URL!,
+  chains: ["eth", "bsc", "polygon", "sol"] as const,
+  transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
   isValid: false,
 }
 

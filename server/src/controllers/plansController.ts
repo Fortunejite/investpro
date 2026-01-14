@@ -52,7 +52,25 @@ class PlansController {
       const plans = await prisma.plan.findMany({
         where: { isActive },
       });
-      res.status(200).json(plans);
+      res.status(200).json({ data: plans });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getPlanById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const planId = parseInt(req.params.id as string, 10);
+
+      const plan = await prisma.plan.findUnique({
+        where: { id: planId },
+      });
+
+      if (!plan) {
+        return res.status(404).json({ message: 'Plan not found' });
+      }
+
+      res.status(200).json(plan);
     } catch (err) {
       next(err);
     }

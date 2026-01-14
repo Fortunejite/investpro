@@ -25,6 +25,20 @@ enum Chain {
   sol
 }
 
+enum TransactionType {
+  deposit
+  withdrawal
+  investment
+  profit_payout
+}
+
+enum TransactionStatus {
+  pending
+  approved
+  rejected
+  cancelled
+}
+
 enum PayoutType {
   daily
   weekly
@@ -69,10 +83,41 @@ model WalletAccount {
   lastDepositAt    DateTime?
   lastWithdrawalAt DateTime?
 
-  user User @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
+  deposits     Deposit[]
+  transactions Transaction[]
 
   @@unique([userId, chain])
   @@map("wallet_accounts")
+}
+
+model Deposit {
+  id              String            @id @default(uuid())
+  walletAccountId String
+  amount          Decimal           @db.Decimal(18, 8)
+  txHash          String?           @unique
+  proofUrl        String?
+  status          TransactionStatus @default(pending)
+  adminNote       String?
+  createdAt       DateTime          @default(now())
+
+  walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
+
+  @@map("deposits")
+}
+
+model Transaction {
+  id              String          @id @default(uuid())
+  walletAccountId String
+  type            TransactionType
+  amount          Decimal         @db.Decimal(18, 8)
+  actionId        String
+  txHash          String?         @unique
+  createdAt       DateTime        @default(now())
+
+  walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
+
+  @@map("transactions")
 }
 
 model Plan {
@@ -84,7 +129,7 @@ model Plan {
   duration    Int
   roiPercent  Int
   payoutType  PayoutType
-  isActive    Boolean @default(true)
+  isActive    Boolean    @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

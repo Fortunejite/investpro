@@ -5,6 +5,7 @@ import config from './config';
 import errorHandler from './middlewares/errorMiddleware';
 import { 
   authRoutes,
+  depositRoutes,
   planRoutes,
  } from './routes';
 import { authenticate } from './middlewares/authMiddleware';
@@ -27,6 +28,7 @@ app.use(cookieParser());
 // Routes
 app.use('/auth', authRoutes);
 app.use('/plans', authenticate, planRoutes);
+app.use('/deposits', authenticate, depositRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
