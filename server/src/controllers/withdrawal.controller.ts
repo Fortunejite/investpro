@@ -34,15 +34,10 @@ class WithdrawalController {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
 
-      const walletAccounts = await prisma.walletAccount.findMany({
-        where: { userId, chain },
-        select: { id: true },
-      });
-      const walletAccountIds = walletAccounts.map((account) => account.id);
-
       const withdrawals = await prisma.withdrawal.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
+          chain,
           ...(status ? { status } : {}),
         },
         skip,
@@ -63,11 +58,11 @@ class WithdrawalController {
       const withdrawal = await prisma.withdrawal.findUnique({
         where: { id: withdrawalId },
         include: {
-          walletAccount: true,
+          account: true,
         },
       });
 
-      if (!withdrawal || withdrawal.walletAccount.userId !== userId) {
+      if (!withdrawal || withdrawal.account.id !== userId) {
         return res.status(404).json({ message: 'Withdrawal not found' });
       }
 
@@ -82,23 +77,27 @@ class WithdrawalController {
       const userId = req.user.id;
       const validatedData = createWithdrawalSchema.parse(req.body);
 
-      const walletAccount = await prisma.walletAccount.findFirst({
-        where: { chain: validatedData.chain, userId },
+      const account = await prisma.account.findUnique({
+        where: { id: userId },
         select: { id: true, availableBalance: true },
       });
 
-      if (!walletAccount) {
+      if (!account) {
         return res.status(404).json({ message: 'Wallet not Found' });
       }
 
-      if (walletAccount.availableBalance.lessThan(validatedData.amount)) {
+      if (account.availableBalance.lessThan(validatedData.amount)) {
         return res.status(400).json({ message: 'Insufficient funds' });
       }
 
       let newWithdrawal: Withdrawal | null = null;
+
+      // TODO: Fetch actual perUsdRate from a reliable source
+      const perUsdRate = 1; // Placeholder for actual price fetching logic
+
       await prisma.$transaction(async (prisma) => {
-        await prisma.walletAccount.update({
-          where: { id: walletAccount.id },
+        await prisma.account.update({
+          where: { id: account.id },
           data: {
             availableBalance: { decrement: validatedData.amount },
             lockedBalance: { increment: validatedData.amount },
@@ -107,9 +106,11 @@ class WithdrawalController {
 
         newWithdrawal = await prisma.withdrawal.create({
           data: {
-            walletAccountId: walletAccount.id,
+            accountId: account.id,
             amount: validatedData.amount,
             destinationAddress: validatedData.destinationAddress,
+            perUsdRate,
+            chain: validatedData.chain,
           },
         });
       });
@@ -123,28 +124,29 @@ class WithdrawalController {
 
   cancelWithdrawal = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const userId = req.user.id;
       const withdrawalId = req.params.id as string;
   
       const withdrawal = await prisma.withdrawal.findUnique({
         where: { id: withdrawalId },
       });
-  
-      if (!withdrawal) {
+
+      if (!withdrawal || withdrawal.accountId !== userId) {
         throw Object.assign(new Error('Withdrawal not found'), {
-          statusCode: 404,
+          status: 404,
         });
       }
   
       if (withdrawal.status !== 'pending') {
         throw Object.assign(
           new Error('Only pending withdrawals can be cancelled'),
-          { statusCode: 400 },
+          { status: 400 },
         );
       }
   
       await prisma.$transaction(async (prisma) => {
-        await prisma.walletAccount.update({
-          where: { id: withdrawal.walletAccountId },
+        await prisma.account.update({
+          where: { id: withdrawal.accountId },
           data: {
             availableBalance: { increment: withdrawal.amount },
             lockedBalance: { decrement: withdrawal.amount },
@@ -155,9 +157,8 @@ class WithdrawalController {
           data: { status: 'cancelled' },
         });
       });
-  
-  
-      res.status(200).json({ message: 'Deposit cancelled successfully' });
+
+      res.status(200).json({ message: 'Withdrawal cancelled successfully' });
     } catch (err) {
       next(err);
     }
@@ -187,21 +188,11 @@ class WithdrawalController {
       }
       const userId = parseInt(queryParams.userId as string) || undefined;
 
-      const walletAccounts =
-        chain || userId
-          ? await prisma.walletAccount.findMany({
-              where: { chain, userId },
-              select: { id: true },
-            })
-          : null;
-      const walletAccountIds = walletAccounts
-        ? walletAccounts.map((account) => account.id)
-        : undefined;
-
       const withdrawals = await prisma.withdrawal.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
           status,
+          ...(chain ? { chain } : {}),
         },
         skip,
         take: limit,
@@ -220,7 +211,7 @@ class WithdrawalController {
       const withdrawal = await prisma.withdrawal.findUnique({
         where: { id: withdrawalId },
         include: {
-          walletAccount: true,
+          account: true,
         },
       });
 
@@ -256,8 +247,8 @@ class WithdrawalController {
           );
         }
 
-        await prisma.walletAccount.update({
-          where: { id: withdrawal.walletAccountId },
+        await prisma.account.update({
+          where: { id: withdrawal.accountId },
           data: {
             lockedBalance: {
               decrement: withdrawal.amount,
@@ -272,7 +263,7 @@ class WithdrawalController {
 
         await prisma.transaction.create({
           data: {
-            walletAccountId: withdrawal.walletAccountId,
+            accountId: withdrawal.accountId,
             type: 'withdrawal',
             amount: withdrawal.amount,
             actionId: withdrawal.id,
@@ -309,8 +300,8 @@ class WithdrawalController {
             { statusCode: 400 },
           );
         }
-        await prisma.walletAccount.update({
-          where: { id: withdrawal.walletAccountId },
+        await prisma.account.update({
+          where: { id: withdrawal.accountId },
           data: {
             availableBalance: { increment: withdrawal.amount },
             lockedBalance: { decrement: withdrawal.amount },

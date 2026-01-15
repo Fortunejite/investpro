@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { tokenService } from "@/services/tokenService";
-import config from "@/config";
-import { createWalletAccount } from "@/lib/walletAccounts";
+import { createAccount } from "@/lib/account";
 
 const registerSchema = z.object({
   email: z.email(),
@@ -44,7 +43,7 @@ class AuthController {
         data: { email, name, hashed_password: hashPassword },
       });
 
-      await Promise.all(config.chains.map((chain) => createWalletAccount(newUser.id, { chain })));
+      await createAccount(newUser.id);
 
       res.status(201).json({ message: "User registered successfully", userId: newUser.id });
     } catch (error) {

@@ -22,11 +22,6 @@ class DepositController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const status =
-        queryParams.status === 'all'
-          ? undefined
-          : (queryParams.status as (typeof config.transactionStatuses)[number]);
-
       const chain = queryParams.chain as
         | (typeof config.chains)[number]
         | undefined;
@@ -34,16 +29,16 @@ class DepositController {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
 
-      const walletAccounts = await prisma.walletAccount.findMany({
-        where: { userId, chain },
-        select: { id: true },
-      });
-      const walletAccountIds = walletAccounts.map((account) => account.id);
+      const status =
+        queryParams.status === 'all'
+          ? undefined
+          : (queryParams.status as (typeof config.transactionStatuses)[number]);
 
       const deposits = await prisma.deposit.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
           ...(status ? { status } : {}),
+          ...(chain ? { chain } : {}),
         },
         skip,
         take: limit,
@@ -63,11 +58,11 @@ class DepositController {
       const deposit = await prisma.deposit.findUnique({
         where: { id: depositId },
         include: {
-          walletAccount: true,
+          account: true,
         },
       });
 
-      if (!deposit || deposit.walletAccount.userId !== userId) {
+      if (!deposit || deposit.account.id !== userId) {
         return res.status(404).json({ message: 'Deposit not found' });
       }
 
@@ -82,19 +77,15 @@ class DepositController {
       const userId = req.user.id;
       const validatedData = createDepositSchema.parse(req.body);
 
-      const walletAccount = await prisma.walletAccount.findFirst({
-        where: { chain: validatedData.chain, userId },
-        select: { id: true },
-      });
-
-      if (!walletAccount) {
-        return res.status(404).json({ message: 'Wallet not Found' });
-      }
-
+      // TODO: Compute actual perUsdRate value based on chain and current market rates
+      const perUsdRate = 1; // Placeholder value
+      
       const newDeposit = await prisma.deposit.create({
         data: {
-          walletAccountId: walletAccount.id,
+          accountId: userId,
           amount: validatedData.amount,
+          perUsdRate,
+          chain: validatedData.chain,
           txHash: validatedData.txHash,
           proofUrl: validatedData.proofUrl,
         },
@@ -107,31 +98,36 @@ class DepositController {
   };
 
   cancelDeposit = async (req: Request, res: Response, next: NextFunction) => {
-    const depositId = req.params.id as string;
-
-    const deposit = await prisma.deposit.findUnique({
-      where: { id: depositId },
-    });
-
-    if (!deposit) {
-      throw Object.assign(new Error('Deposit not found'), {
-        statusCode: 404,
+    try {
+      const userId = req.user.id;
+      const depositId = req.params.id as string;
+  
+      const deposit = await prisma.deposit.findUnique({
+        where: { id: depositId },
       });
+  
+      if (!deposit || deposit.accountId !== userId) {
+        throw Object.assign(new Error('Deposit not found'), {
+          statusCode: 404,
+        });
+      }
+  
+      if (deposit.status !== 'pending') {
+        throw Object.assign(
+          new Error('Only pending deposits can be cancelled'),
+          { statusCode: 400 },
+        );
+      }
+  
+      await prisma.deposit.update({
+        where: { id: depositId },
+        data: { status: 'cancelled' },
+      });
+  
+      res.status(200).json({ message: 'Deposit cancelled successfully' });
+    } catch (err) {
+      next(err);
     }
-
-    if (deposit.status !== 'pending') {
-      throw Object.assign(
-        new Error('Only pending deposits can be cancelled'),
-        { statusCode: 400 },
-      );
-    }
-
-    await prisma.deposit.update({
-      where: { id: depositId },
-      data: { status: 'cancelled' },
-    });
-
-    res.status(200).json({ message: 'Deposit cancelled successfully' });
   };
 
   // Admin Actions
@@ -145,34 +141,23 @@ class DepositController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const status =
-        queryParams.status === 'all'
-          ? undefined
-          : (queryParams.status as (typeof config.transactionStatuses)[number]);
-
       const chain = queryParams.chain as
         | (typeof config.chains)[number]
         | undefined;
       if (chain && !config.chains.includes(chain)) {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
+      const status =
+        queryParams.status === 'all'
+          ? undefined
+          : (queryParams.status as (typeof config.transactionStatuses)[number]);
+
       const userId = parseInt(queryParams.userId as string) || undefined;
-
-      const walletAccounts =
-        chain || userId
-          ? await prisma.walletAccount.findMany({
-              where: { chain, userId },
-              select: { id: true },
-            })
-          : null;
-      const walletAccountIds = walletAccounts
-        ? walletAccounts.map((account) => account.id)
-        : undefined;
-
       const deposits = await prisma.deposit.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
           status,
+          ...(chain ? { chain } : {}),
         },
         skip,
         take: limit,
@@ -191,7 +176,7 @@ class DepositController {
       const deposit = await prisma.deposit.findUnique({
         where: { id: depositId },
         include: {
-          walletAccount: true,
+          account: true,
         },
       });
 
@@ -212,6 +197,9 @@ class DepositController {
       await prisma.$transaction(async (prisma) => {
         const deposit = await prisma.deposit.findUnique({
           where: { id: depositId },
+          include: {
+            account: true,
+          },
         });
 
         if (!deposit) {
@@ -227,22 +215,11 @@ class DepositController {
           );
         }
 
-        // Update user's balance
-        const walletAccount = await prisma.walletAccount.findUnique({
-          where: { id: deposit.walletAccountId },
-        });
-
-        if (!walletAccount) {
-          throw Object.assign(new Error('Wallet account not found'), {
-            statusCode: 404,
-          });
-        }
-
-        await prisma.walletAccount.update({
-          where: { id: walletAccount.id },
+        await prisma.account.update({
+          where: { id: deposit.account.id },
           data: {
             availableBalance: {
-              increment: deposit.amount,
+              increment: deposit.amount.mul(deposit.perUsdRate),
             },
           },
         });
@@ -254,9 +231,9 @@ class DepositController {
 
         await prisma.transaction.create({
           data: {
-            walletAccountId: walletAccount.id,
+            accountId: deposit.account.id,
             type: 'deposit',
-            amount: deposit.amount,
+            amount: deposit.amount.mul(deposit.perUsdRate),
             actionId: deposit.id,
             txHash: deposit.txHash,
           },

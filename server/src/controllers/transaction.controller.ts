@@ -18,23 +18,12 @@ class TransactionController {
         queryParams.type === 'all'
           ? undefined
           : (queryParams.type as (typeof config.transactionTypes)[number]);
-
-      const chain = queryParams.chain as
-        | (typeof config.chains)[number]
-        | undefined;
-      if (chain && !config.chains.includes(chain)) {
-        return res.status(400).json({ message: 'Invalid chain parameter' });
+      if (type && !config.transactionTypes.includes(type)) {
+        return res.status(400).json({ message: 'Invalid type parameter' });
       }
-
-      const walletAccounts = await prisma.walletAccount.findMany({
-        where: { userId, chain },
-        select: { id: true },
-      });
-      const walletAccountIds = walletAccounts.map((account) => account.id);
-
       const transactions = await prisma.transaction.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
           ...(type ? { type } : {}),
         },
         skip,
@@ -55,11 +44,11 @@ class TransactionController {
       const transaction = await prisma.transaction.findUnique({
         where: { id: transactionId },
         include: {
-          walletAccount: true,
+          account: true,
         },
       });
 
-      if (!transaction || transaction.walletAccount.userId !== userId) {
+      if (!transaction || transaction.account.id !== userId) {
         return res.status(404).json({ message: 'Transaction not found' });
       }
 
@@ -85,28 +74,14 @@ class TransactionController {
           ? undefined
           : (queryParams.type as (typeof config.transactionTypes)[number]);
 
-      const chain = queryParams.chain as
-        | (typeof config.chains)[number]
-        | undefined;
-      if (chain && !config.chains.includes(chain)) {
-        return res.status(400).json({ message: 'Invalid chain parameter' });
+      if (type && !config.transactionTypes.includes(type)) {
+        return res.status(400).json({ message: 'Invalid type parameter' });
       }
+
       const userId = parseInt(queryParams.userId as string) || undefined;
-
-      const walletAccounts =
-        chain || userId
-          ? await prisma.walletAccount.findMany({
-              where: { chain, userId },
-              select: { id: true },
-            })
-          : null;
-      const walletAccountIds = walletAccounts
-        ? walletAccounts.map((account) => account.id)
-        : undefined;
-
       const transactions = await prisma.transaction.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
           type,
         },
         skip,
@@ -126,7 +101,7 @@ class TransactionController {
       const transaction = await prisma.transaction.findUnique({
         where: { id: transactionId },
         include: {
-          walletAccount: true,
+          account: true,
         },
       });
 

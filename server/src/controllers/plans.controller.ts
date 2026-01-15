@@ -26,7 +26,7 @@ class PlansController {
     try {
       const validatedData = createPlanSchema.parse(req.body);
 
-      const newPlan = await prisma.plan.create({
+      const newPlan = await prisma.investmentPlan.create({
         data: validatedData,
       });
 
@@ -38,7 +38,7 @@ class PlansController {
 
   getPlans = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const plans = await prisma.plan.findMany({
+      const plans = await prisma.investmentPlan.findMany({
         where: { isActive: true },
       });
       res.status(200).json({ data: plans });
@@ -58,7 +58,7 @@ class PlansController {
           ? false
           : undefined;
 
-      const plans = await prisma.plan.findMany({
+      const plans = await prisma.investmentPlan.findMany({
         where: { isActive },
       });
       res.status(200).json({ data: plans });
@@ -71,7 +71,7 @@ class PlansController {
     try {
       const planId = parseInt(req.params.id as string, 10);
 
-      const plan = await prisma.plan.findUnique({
+      const plan = await prisma.investmentPlan.findUnique({
         where: { id: planId },
       });
 
@@ -90,7 +90,7 @@ class PlansController {
       const planId = parseInt(req.params.id as string, 10);
       const validatedData = updatePlanSchema.parse(req.body);
 
-      const updatedPlan = await prisma.plan.update({
+      const updatedPlan = await prisma.investmentPlan.update({
         where: { id: planId },
         data: validatedData,
       });
@@ -105,7 +105,7 @@ class PlansController {
     try {
       const planId = parseInt(req.params.id as string, 10);
 
-      await prisma.plan.delete({
+      await prisma.investmentPlan.delete({
         where: { id: planId },
       });
 

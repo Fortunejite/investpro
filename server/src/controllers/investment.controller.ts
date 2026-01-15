@@ -5,7 +5,6 @@ import config from '@/config';
 import { Investment } from '@/generated/prisma/client';
 
 const createInvestmentSchema = z.object({
-  chain: z.enum(config.chains),
   planId: z.number(),
   amount: z.number().positive(),
 });
@@ -26,26 +25,12 @@ class InvestmentController {
         queryParams.status as
           | (typeof config.investmentStatuses)[number]
           | undefined;
-      const chain =
-        queryParams.chain as
-          | (typeof config.chains)[number]
-          | undefined;
-      if (chain && !config.chains.includes(chain)) {
-        return res.status(400).json({ message: 'Invalid chain parameter' });
-      }
       if (status && !config.investmentStatuses.includes(status)) {
         return res.status(400).json({ message: 'Invalid status parameter' });
       }
-
-      const walletAccounts = await prisma.walletAccount.findMany({
-        where: { userId, chain },
-        select: { id: true },
-      });
-      const walletAccountIds = walletAccounts.map((account) => account.id);
-
       const investments = await prisma.investment.findMany({
         where: {
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
           ...(status ? { status } : {}),
         },
         skip,
@@ -66,12 +51,12 @@ class InvestmentController {
       const investment = await prisma.investment.findUnique({
         where: { id: investmentId },
         include: {
-          wallet: true,
+          account: true,
           plan: true,
         },
       });
 
-      if (!investment || investment.wallet.userId !== userId) {
+      if (!investment || investment.account.id !== userId) {
         return res.status(404).json({ message: 'Investment not found' });
       }
 
@@ -87,7 +72,7 @@ class InvestmentController {
 
       let newInvestment: Investment | null = null;
       await prisma.$transaction(async (prisma) => {
-        const plan = await prisma.plan.findUnique({
+        const plan = await prisma.investmentPlan.findUnique({
           where: { id: validatedData.planId },
         });
 
@@ -97,8 +82,8 @@ class InvestmentController {
           });
         }
 
-        const userWallet = await prisma.walletAccount.findFirst({
-          where: { userId: req.user.id, chain: validatedData.chain },
+        const userWallet = await prisma.account.findUnique({
+          where: { id: req.user.id },
         });
 
         if (!userWallet || userWallet.availableBalance.lessThan(validatedData.amount)) {
@@ -113,7 +98,7 @@ class InvestmentController {
           });
         }
 
-        await prisma.walletAccount.update({
+        await prisma.account.update({
           where: { id: userWallet.id },
           data: {
             availableBalance: { decrement: validatedData.amount },
@@ -123,7 +108,7 @@ class InvestmentController {
 
         newInvestment = await prisma.investment.create({
           data: {
-            walletAccountId: userWallet.id,
+            accountId: userWallet.id,
             planId: validatedData.planId,
             amount: validatedData.amount,
             profit: (validatedData.amount * plan.roiPercent) / 100,
@@ -134,7 +119,7 @@ class InvestmentController {
 
         await prisma.transaction.create({
           data: {
-            walletAccountId: userWallet.id,
+            accountId: userWallet.id,
             type: 'investment',
             amount: validatedData.amount,
             actionId: newInvestment.id,
@@ -156,7 +141,7 @@ class InvestmentController {
 
       const investment = await prisma.investment.findUnique({
         where: { id: investmentId },
-        include: { wallet: true },
+        include: { account: true },
       });
 
       if (!investment) {
@@ -168,8 +153,8 @@ class InvestmentController {
       }
 
       await prisma.$transaction(async (prisma) => {
-        await prisma.walletAccount.update({
-          where: { id: investment.walletAccountId },
+        await prisma.account.update({
+          where: { id: investment.accountId },
           data: {
             availableBalance: {
               increment: investment.amount.plus(investment.profit),
@@ -187,7 +172,7 @@ class InvestmentController {
 
         await prisma.transaction.create({
           data: {
-            walletAccountId: investment.walletAccountId,
+            accountId: investment.accountId,
             type: 'profit_payout',
             amount: investment.profit.plus(investment.amount),
             actionId: investment.id,
@@ -212,8 +197,8 @@ class InvestmentController {
 
       for (const investment of maturedInvestments) {
         await prisma.$transaction(async (prisma) => {
-          await prisma.walletAccount.update({
-            where: { id: investment.walletAccountId },
+          await prisma.account.update({
+            where: { id: investment.accountId },
             data: {
               availableBalance: {
                 increment: investment.amount.plus(investment.profit),
@@ -231,7 +216,7 @@ class InvestmentController {
 
           await prisma.transaction.create({
             data: {
-              walletAccountId: investment.walletAccountId,
+              accountId: investment.accountId,
               type: 'profit_payout',
               amount: investment.profit.plus(investment.amount),
               actionId: investment.id,
@@ -260,42 +245,21 @@ class InvestmentController {
         queryParams.status as
           | (typeof config.investmentStatuses)[number]
           | undefined;
-      const chain =
-        queryParams.chain as
-          | (typeof config.chains)[number]
-          | undefined;
-
       const userId = parseInt(queryParams.userId as string) || undefined;
-
-      if (chain && !config.chains.includes(chain)) {
-        return res.status(400).json({ message: 'Invalid chain parameter' });
-      }
       if (status && !config.investmentStatuses.includes(status)) {
         return res.status(400).json({ message: 'Invalid status parameter' });
       }
 
-      const walletAccounts =
-        chain || userId
-          ? await prisma.walletAccount.findMany({
-              where: { chain, userId },
-              select: { id: true },
-            })
-          : null;
-
-      const walletAccountIds = walletAccounts
-        ? walletAccounts.map((account) => account.id)
-        : undefined;
-
       const investments = await prisma.investment.findMany({
         where: {
           ...(status ? { status } : {}),
-          walletAccountId: { in: walletAccountIds },
+          accountId: userId,
         },
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          wallet: true,
+          account: true,
           plan: true,
         },
       });

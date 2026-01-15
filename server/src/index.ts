@@ -4,12 +4,12 @@ import cors from 'cors';
 import config from './config';
 import errorHandler from './middlewares/error.middleware';
 import { 
+  accountRoutes,
   authRoutes,
   depositRoutes,
+  investmentPlanRoutes,
   investmentRoutes,
-  planRoutes,
   transactionRoutes,
-  walletRoutes,
   withdrawalRoutes,
  } from './routes';
 import { authenticate } from './middlewares/auth.middleware';
@@ -31,13 +31,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
+app.use('/accounts', authenticate, accountRoutes);
 app.use('/auth', authRoutes);
-app.use('/plans', authenticate, planRoutes);
+app.use('/investment-plans', authenticate, investmentPlanRoutes);
 app.use('/investments', authenticate, investmentRoutes);
 app.use('/deposits', authenticate, depositRoutes);
 app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
-app.use('/wallets', authenticate, walletRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });
