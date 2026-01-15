@@ -52,11 +52,12 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  WalletAccount: 'WalletAccount',
+  Account: 'Account',
+  Assets: 'Assets',
   Deposit: 'Deposit',
   Withdrawal: 'Withdrawal',
   Transaction: 'Transaction',
-  Plan: 'Plan',
+  InvestmentPlan: 'InvestmentPlan',
   Investment: 'Investment'
 } as const
 
@@ -92,11 +93,8 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const WalletAccountScalarFieldEnum = {
+export const AccountScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  chain: 'chain',
-  label: 'label',
   availableBalance: 'availableBalance',
   lockedBalance: 'lockedBalance',
   updatedAt: 'updatedAt',
@@ -104,12 +102,27 @@ export const WalletAccountScalarFieldEnum = {
   lastWithdrawalAt: 'lastWithdrawalAt'
 } as const
 
-export type WalletAccountScalarFieldEnum = (typeof WalletAccountScalarFieldEnum)[keyof typeof WalletAccountScalarFieldEnum]
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const AssetsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chain: 'chain',
+  label: 'label',
+  availableBalance: 'availableBalance',
+  lockedBalance: 'lockedBalance',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AssetsScalarFieldEnum = (typeof AssetsScalarFieldEnum)[keyof typeof AssetsScalarFieldEnum]
 
 
 export const DepositScalarFieldEnum = {
   id: 'id',
-  walletAccountId: 'walletAccountId',
+  accountId: 'accountId',
+  chain: 'chain',
+  perUsdRate: 'perUsdRate',
   amount: 'amount',
   txHash: 'txHash',
   proofUrl: 'proofUrl',
@@ -123,7 +136,9 @@ export type DepositScalarFieldEnum = (typeof DepositScalarFieldEnum)[keyof typeo
 
 export const WithdrawalScalarFieldEnum = {
   id: 'id',
-  walletAccountId: 'walletAccountId',
+  accountId: 'accountId',
+  chain: 'chain',
+  perUsdRate: 'perUsdRate',
   amount: 'amount',
   destinationAddress: 'destinationAddress',
   status: 'status',
@@ -136,7 +151,7 @@ export type WithdrawalScalarFieldEnum = (typeof WithdrawalScalarFieldEnum)[keyof
 
 export const TransactionScalarFieldEnum = {
   id: 'id',
-  walletAccountId: 'walletAccountId',
+  accountId: 'accountId',
   type: 'type',
   amount: 'amount',
   actionId: 'actionId',
@@ -148,7 +163,7 @@ export const TransactionScalarFieldEnum = {
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
 
 
-export const PlanScalarFieldEnum = {
+export const InvestmentPlanScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
@@ -161,12 +176,12 @@ export const PlanScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+export type InvestmentPlanScalarFieldEnum = (typeof InvestmentPlanScalarFieldEnum)[keyof typeof InvestmentPlanScalarFieldEnum]
 
 
 export const InvestmentScalarFieldEnum = {
   id: 'id',
-  walletAccountId: 'walletAccountId',
+  accountId: 'accountId',
   planId: 'planId',
   amount: 'amount',
   profit: 'profit',

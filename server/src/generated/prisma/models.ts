@@ -9,10 +9,11 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
-export type * from './models/WalletAccount'
+export type * from './models/Account'
+export type * from './models/Assets'
 export type * from './models/Deposit'
 export type * from './models/Withdrawal'
 export type * from './models/Transaction'
-export type * from './models/Plan'
+export type * from './models/InvestmentPlan'
 export type * from './models/Investment'
 export type * from './commonInputTypes'

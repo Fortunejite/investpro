@@ -23,10 +23,15 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
- * Model WalletAccount
+ * Model Account
  * 
  */
-export type WalletAccount = Prisma.WalletAccountModel
+export type Account = Prisma.AccountModel
+/**
+ * Model Assets
+ * 
+ */
+export type Assets = Prisma.AssetsModel
 /**
  * Model Deposit
  * 
@@ -43,10 +48,10 @@ export type Withdrawal = Prisma.WithdrawalModel
  */
 export type Transaction = Prisma.TransactionModel
 /**
- * Model Plan
+ * Model InvestmentPlan
  * 
  */
-export type Plan = Prisma.PlanModel
+export type InvestmentPlan = Prisma.InvestmentPlanModel
 /**
  * Model Investment
  * 

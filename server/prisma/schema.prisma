@@ -65,16 +65,14 @@ model User {
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
-  walletAccounts WalletAccount[]
+  assets  Assets[]
+  account Account?
 
   @@map("users")
 }
 
-model WalletAccount {
-  id     String  @id @default(uuid())
-  userId Int
-  chain  Chain
-  label  String?
+model Account {
+  id Int @id @unique
 
   availableBalance Decimal @default(0) @db.Decimal(18, 8)
   lockedBalance    Decimal @default(0) @db.Decimal(18, 8)
@@ -83,48 +81,68 @@ model WalletAccount {
   lastDepositAt    DateTime?
   lastWithdrawalAt DateTime?
 
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [id], references: [id])
   deposits     Deposit[]
   withdrawals  Withdrawal[]
   transactions Transaction[]
   investments  Investment[]
 
+  @@map("accounts")
+}
+
+model Assets {
+  id     String  @id @default(uuid())
+  userId Int
+  chain  Chain
+  label  String?
+
+  availableBalance Decimal @default(0) @db.Decimal(18, 8)
+  lockedBalance    Decimal @default(0) @db.Decimal(18, 8)
+
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
   @@unique([userId, chain])
-  @@map("wallet_accounts")
+  @@map("assets")
 }
 
 model Deposit {
-  id              String            @id @default(uuid())
-  walletAccountId String
-  amount          Decimal           @db.Decimal(18, 8)
-  txHash          String?           @unique
-  proofUrl        String?
-  status          TransactionStatus @default(pending)
-  adminNote       String?
-  createdAt       DateTime          @default(now())
+  id         String            @id @default(uuid())
+  accountId  Int
+  chain      Chain
+  perUsdRate Decimal           @db.Decimal(18, 8)
+  amount     Decimal           @db.Decimal(18, 8)
+  txHash     String?           @unique
+  proofUrl   String?
+  status     TransactionStatus @default(pending)
+  adminNote  String?
+  createdAt  DateTime          @default(now())
 
-  walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
 
   @@map("deposits")
 }
 
 model Withdrawal {
   id                 String            @id @default(uuid())
-  walletAccountId    String
+  accountId          Int
+  chain              Chain
+  perUsdRate         Decimal           @db.Decimal(18, 8)
   amount             Decimal           @db.Decimal(18, 8)
   destinationAddress String
   status             TransactionStatus @default(pending)
   adminNote          String?
   createdAt          DateTime          @default(now())
 
-  walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
 
   @@map("withdrawals")
 }
 
 model Transaction {
   id                 String          @id @default(uuid())
-  walletAccountId    String
+  accountId          Int
   type               TransactionType
   amount             Decimal         @db.Decimal(18, 8)
   actionId           String
@@ -132,12 +150,12 @@ model Transaction {
   destinationAddress String?
   createdAt          DateTime        @default(now())
 
-  walletAccount WalletAccount @relation(fields: [walletAccountId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
 
   @@map("transactions")
 }
 
-model Plan {
+model InvestmentPlan {
   id             Int        @id @default(autoincrement())
   name           String
   description    String?
@@ -156,20 +174,20 @@ model Plan {
 }
 
 model Investment {
-  id              String           @id @default(uuid())
-  walletAccountId String
-  planId          Int
-  amount          Decimal          @db.Decimal(18, 8)
-  profit          Decimal          @db.Decimal(18, 8)
-  startDate       DateTime
-  endDate         DateTime
-  status          InvestmentStatus @default(active)
+  id        String           @id @default(uuid())
+  accountId Int
+  planId    Int
+  amount    Decimal          @db.Decimal(18, 8)
+  profit    Decimal          @db.Decimal(18, 8)
+  startDate DateTime
+  endDate   DateTime
+  status    InvestmentStatus @default(active)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  wallet WalletAccount @relation(fields: [walletAccountId], references: [id])
-  plan   Plan          @relation(fields: [planId], references: [id])
+  account Account        @relation(fields: [accountId], references: [id])
+  plan    InvestmentPlan @relation(fields: [planId], references: [id])
 
   @@map("investments")
 }

@@ -27,16 +27,22 @@ export type AggregateDeposit = {
 }
 
 export type DepositAvgAggregateOutputType = {
+  accountId: number | null
+  perUsdRate: runtime.Decimal | null
   amount: runtime.Decimal | null
 }
 
 export type DepositSumAggregateOutputType = {
+  accountId: number | null
+  perUsdRate: runtime.Decimal | null
   amount: runtime.Decimal | null
 }
 
 export type DepositMinAggregateOutputType = {
   id: string | null
-  walletAccountId: string | null
+  accountId: number | null
+  chain: $Enums.Chain | null
+  perUsdRate: runtime.Decimal | null
   amount: runtime.Decimal | null
   txHash: string | null
   proofUrl: string | null
@@ -47,7 +53,9 @@ export type DepositMinAggregateOutputType = {
 
 export type DepositMaxAggregateOutputType = {
   id: string | null
-  walletAccountId: string | null
+  accountId: number | null
+  chain: $Enums.Chain | null
+  perUsdRate: runtime.Decimal | null
   amount: runtime.Decimal | null
   txHash: string | null
   proofUrl: string | null
@@ -58,7 +66,9 @@ export type DepositMaxAggregateOutputType = {
 
 export type DepositCountAggregateOutputType = {
   id: number
-  walletAccountId: number
+  accountId: number
+  chain: number
+  perUsdRate: number
   amount: number
   txHash: number
   proofUrl: number
@@ -70,16 +80,22 @@ export type DepositCountAggregateOutputType = {
 
 
 export type DepositAvgAggregateInputType = {
+  accountId?: true
+  perUsdRate?: true
   amount?: true
 }
 
 export type DepositSumAggregateInputType = {
+  accountId?: true
+  perUsdRate?: true
   amount?: true
 }
 
 export type DepositMinAggregateInputType = {
   id?: true
-  walletAccountId?: true
+  accountId?: true
+  chain?: true
+  perUsdRate?: true
   amount?: true
   txHash?: true
   proofUrl?: true
@@ -90,7 +106,9 @@ export type DepositMinAggregateInputType = {
 
 export type DepositMaxAggregateInputType = {
   id?: true
-  walletAccountId?: true
+  accountId?: true
+  chain?: true
+  perUsdRate?: true
   amount?: true
   txHash?: true
   proofUrl?: true
@@ -101,7 +119,9 @@ export type DepositMaxAggregateInputType = {
 
 export type DepositCountAggregateInputType = {
   id?: true
-  walletAccountId?: true
+  accountId?: true
+  chain?: true
+  perUsdRate?: true
   amount?: true
   txHash?: true
   proofUrl?: true
@@ -199,7 +219,9 @@ export type DepositGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type DepositGroupByOutputType = {
   id: string
-  walletAccountId: string
+  accountId: number
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal
   amount: runtime.Decimal
   txHash: string | null
   proofUrl: string | null
@@ -233,26 +255,30 @@ export type DepositWhereInput = {
   OR?: Prisma.DepositWhereInput[]
   NOT?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[]
   id?: Prisma.StringFilter<"Deposit"> | string
-  walletAccountId?: Prisma.StringFilter<"Deposit"> | string
+  accountId?: Prisma.IntFilter<"Deposit"> | number
+  chain?: Prisma.EnumChainFilter<"Deposit"> | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.StringNullableFilter<"Deposit"> | string | null
   proofUrl?: Prisma.StringNullableFilter<"Deposit"> | string | null
   status?: Prisma.EnumTransactionStatusFilter<"Deposit"> | $Enums.TransactionStatus
   adminNote?: Prisma.StringNullableFilter<"Deposit"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Deposit"> | Date | string
-  walletAccount?: Prisma.XOR<Prisma.WalletAccountScalarRelationFilter, Prisma.WalletAccountWhereInput>
+  account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
 }
 
 export type DepositOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  walletAccountId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  chain?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   txHash?: Prisma.SortOrderInput | Prisma.SortOrder
   proofUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   adminNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  walletAccount?: Prisma.WalletAccountOrderByWithRelationInput
+  account?: Prisma.AccountOrderByWithRelationInput
 }
 
 export type DepositWhereUniqueInput = Prisma.AtLeast<{
@@ -261,18 +287,22 @@ export type DepositWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[]
   OR?: Prisma.DepositWhereInput[]
   NOT?: Prisma.DepositWhereInput | Prisma.DepositWhereInput[]
-  walletAccountId?: Prisma.StringFilter<"Deposit"> | string
+  accountId?: Prisma.IntFilter<"Deposit"> | number
+  chain?: Prisma.EnumChainFilter<"Deposit"> | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   proofUrl?: Prisma.StringNullableFilter<"Deposit"> | string | null
   status?: Prisma.EnumTransactionStatusFilter<"Deposit"> | $Enums.TransactionStatus
   adminNote?: Prisma.StringNullableFilter<"Deposit"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Deposit"> | Date | string
-  walletAccount?: Prisma.XOR<Prisma.WalletAccountScalarRelationFilter, Prisma.WalletAccountWhereInput>
+  account?: Prisma.XOR<Prisma.AccountScalarRelationFilter, Prisma.AccountWhereInput>
 }, "id" | "txHash">
 
 export type DepositOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  walletAccountId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  chain?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   txHash?: Prisma.SortOrderInput | Prisma.SortOrder
   proofUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -291,7 +321,9 @@ export type DepositScalarWhereWithAggregatesInput = {
   OR?: Prisma.DepositScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DepositScalarWhereWithAggregatesInput | Prisma.DepositScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Deposit"> | string
-  walletAccountId?: Prisma.StringWithAggregatesFilter<"Deposit"> | string
+  accountId?: Prisma.IntWithAggregatesFilter<"Deposit"> | number
+  chain?: Prisma.EnumChainWithAggregatesFilter<"Deposit"> | $Enums.Chain
+  perUsdRate?: Prisma.DecimalWithAggregatesFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalWithAggregatesFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.StringNullableWithAggregatesFilter<"Deposit"> | string | null
   proofUrl?: Prisma.StringNullableWithAggregatesFilter<"Deposit"> | string | null
@@ -302,18 +334,22 @@ export type DepositScalarWhereWithAggregatesInput = {
 
 export type DepositCreateInput = {
   id?: string
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: string | null
   proofUrl?: string | null
   status?: $Enums.TransactionStatus
   adminNote?: string | null
   createdAt?: Date | string
-  walletAccount: Prisma.WalletAccountCreateNestedOneWithoutDepositsInput
+  account: Prisma.AccountCreateNestedOneWithoutDepositsInput
 }
 
 export type DepositUncheckedCreateInput = {
   id?: string
-  walletAccountId: string
+  accountId: number
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: string | null
   proofUrl?: string | null
@@ -324,18 +360,22 @@ export type DepositUncheckedCreateInput = {
 
 export type DepositUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   adminNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  walletAccount?: Prisma.WalletAccountUpdateOneRequiredWithoutDepositsNestedInput
+  account?: Prisma.AccountUpdateOneRequiredWithoutDepositsNestedInput
 }
 
 export type DepositUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -346,7 +386,9 @@ export type DepositUncheckedUpdateInput = {
 
 export type DepositCreateManyInput = {
   id?: string
-  walletAccountId: string
+  accountId: number
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: string | null
   proofUrl?: string | null
@@ -357,6 +399,8 @@ export type DepositCreateManyInput = {
 
 export type DepositUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -367,7 +411,9 @@ export type DepositUpdateManyMutationInput = {
 
 export type DepositUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  walletAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.IntFieldUpdateOperationsInput | number
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -388,7 +434,9 @@ export type DepositOrderByRelationAggregateInput = {
 
 export type DepositCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  walletAccountId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  chain?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   txHash?: Prisma.SortOrder
   proofUrl?: Prisma.SortOrder
@@ -398,12 +446,16 @@ export type DepositCountOrderByAggregateInput = {
 }
 
 export type DepositAvgOrderByAggregateInput = {
+  accountId?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
 }
 
 export type DepositMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  walletAccountId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  chain?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   txHash?: Prisma.SortOrder
   proofUrl?: Prisma.SortOrder
@@ -414,7 +466,9 @@ export type DepositMaxOrderByAggregateInput = {
 
 export type DepositMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  walletAccountId?: Prisma.SortOrder
+  accountId?: Prisma.SortOrder
+  chain?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   txHash?: Prisma.SortOrder
   proofUrl?: Prisma.SortOrder
@@ -424,48 +478,50 @@ export type DepositMinOrderByAggregateInput = {
 }
 
 export type DepositSumOrderByAggregateInput = {
+  accountId?: Prisma.SortOrder
+  perUsdRate?: Prisma.SortOrder
   amount?: Prisma.SortOrder
 }
 
-export type DepositCreateNestedManyWithoutWalletAccountInput = {
-  create?: Prisma.XOR<Prisma.DepositCreateWithoutWalletAccountInput, Prisma.DepositUncheckedCreateWithoutWalletAccountInput> | Prisma.DepositCreateWithoutWalletAccountInput[] | Prisma.DepositUncheckedCreateWithoutWalletAccountInput[]
-  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutWalletAccountInput | Prisma.DepositCreateOrConnectWithoutWalletAccountInput[]
-  createMany?: Prisma.DepositCreateManyWalletAccountInputEnvelope
+export type DepositCreateNestedManyWithoutAccountInput = {
+  create?: Prisma.XOR<Prisma.DepositCreateWithoutAccountInput, Prisma.DepositUncheckedCreateWithoutAccountInput> | Prisma.DepositCreateWithoutAccountInput[] | Prisma.DepositUncheckedCreateWithoutAccountInput[]
+  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutAccountInput | Prisma.DepositCreateOrConnectWithoutAccountInput[]
+  createMany?: Prisma.DepositCreateManyAccountInputEnvelope
   connect?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
 }
 
-export type DepositUncheckedCreateNestedManyWithoutWalletAccountInput = {
-  create?: Prisma.XOR<Prisma.DepositCreateWithoutWalletAccountInput, Prisma.DepositUncheckedCreateWithoutWalletAccountInput> | Prisma.DepositCreateWithoutWalletAccountInput[] | Prisma.DepositUncheckedCreateWithoutWalletAccountInput[]
-  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutWalletAccountInput | Prisma.DepositCreateOrConnectWithoutWalletAccountInput[]
-  createMany?: Prisma.DepositCreateManyWalletAccountInputEnvelope
+export type DepositUncheckedCreateNestedManyWithoutAccountInput = {
+  create?: Prisma.XOR<Prisma.DepositCreateWithoutAccountInput, Prisma.DepositUncheckedCreateWithoutAccountInput> | Prisma.DepositCreateWithoutAccountInput[] | Prisma.DepositUncheckedCreateWithoutAccountInput[]
+  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutAccountInput | Prisma.DepositCreateOrConnectWithoutAccountInput[]
+  createMany?: Prisma.DepositCreateManyAccountInputEnvelope
   connect?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
 }
 
-export type DepositUpdateManyWithoutWalletAccountNestedInput = {
-  create?: Prisma.XOR<Prisma.DepositCreateWithoutWalletAccountInput, Prisma.DepositUncheckedCreateWithoutWalletAccountInput> | Prisma.DepositCreateWithoutWalletAccountInput[] | Prisma.DepositUncheckedCreateWithoutWalletAccountInput[]
-  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutWalletAccountInput | Prisma.DepositCreateOrConnectWithoutWalletAccountInput[]
-  upsert?: Prisma.DepositUpsertWithWhereUniqueWithoutWalletAccountInput | Prisma.DepositUpsertWithWhereUniqueWithoutWalletAccountInput[]
-  createMany?: Prisma.DepositCreateManyWalletAccountInputEnvelope
+export type DepositUpdateManyWithoutAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.DepositCreateWithoutAccountInput, Prisma.DepositUncheckedCreateWithoutAccountInput> | Prisma.DepositCreateWithoutAccountInput[] | Prisma.DepositUncheckedCreateWithoutAccountInput[]
+  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutAccountInput | Prisma.DepositCreateOrConnectWithoutAccountInput[]
+  upsert?: Prisma.DepositUpsertWithWhereUniqueWithoutAccountInput | Prisma.DepositUpsertWithWhereUniqueWithoutAccountInput[]
+  createMany?: Prisma.DepositCreateManyAccountInputEnvelope
   set?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
   disconnect?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
   delete?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
   connect?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
-  update?: Prisma.DepositUpdateWithWhereUniqueWithoutWalletAccountInput | Prisma.DepositUpdateWithWhereUniqueWithoutWalletAccountInput[]
-  updateMany?: Prisma.DepositUpdateManyWithWhereWithoutWalletAccountInput | Prisma.DepositUpdateManyWithWhereWithoutWalletAccountInput[]
+  update?: Prisma.DepositUpdateWithWhereUniqueWithoutAccountInput | Prisma.DepositUpdateWithWhereUniqueWithoutAccountInput[]
+  updateMany?: Prisma.DepositUpdateManyWithWhereWithoutAccountInput | Prisma.DepositUpdateManyWithWhereWithoutAccountInput[]
   deleteMany?: Prisma.DepositScalarWhereInput | Prisma.DepositScalarWhereInput[]
 }
 
-export type DepositUncheckedUpdateManyWithoutWalletAccountNestedInput = {
-  create?: Prisma.XOR<Prisma.DepositCreateWithoutWalletAccountInput, Prisma.DepositUncheckedCreateWithoutWalletAccountInput> | Prisma.DepositCreateWithoutWalletAccountInput[] | Prisma.DepositUncheckedCreateWithoutWalletAccountInput[]
-  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutWalletAccountInput | Prisma.DepositCreateOrConnectWithoutWalletAccountInput[]
-  upsert?: Prisma.DepositUpsertWithWhereUniqueWithoutWalletAccountInput | Prisma.DepositUpsertWithWhereUniqueWithoutWalletAccountInput[]
-  createMany?: Prisma.DepositCreateManyWalletAccountInputEnvelope
+export type DepositUncheckedUpdateManyWithoutAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.DepositCreateWithoutAccountInput, Prisma.DepositUncheckedCreateWithoutAccountInput> | Prisma.DepositCreateWithoutAccountInput[] | Prisma.DepositUncheckedCreateWithoutAccountInput[]
+  connectOrCreate?: Prisma.DepositCreateOrConnectWithoutAccountInput | Prisma.DepositCreateOrConnectWithoutAccountInput[]
+  upsert?: Prisma.DepositUpsertWithWhereUniqueWithoutAccountInput | Prisma.DepositUpsertWithWhereUniqueWithoutAccountInput[]
+  createMany?: Prisma.DepositCreateManyAccountInputEnvelope
   set?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
   disconnect?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
   delete?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
   connect?: Prisma.DepositWhereUniqueInput | Prisma.DepositWhereUniqueInput[]
-  update?: Prisma.DepositUpdateWithWhereUniqueWithoutWalletAccountInput | Prisma.DepositUpdateWithWhereUniqueWithoutWalletAccountInput[]
-  updateMany?: Prisma.DepositUpdateManyWithWhereWithoutWalletAccountInput | Prisma.DepositUpdateManyWithWhereWithoutWalletAccountInput[]
+  update?: Prisma.DepositUpdateWithWhereUniqueWithoutAccountInput | Prisma.DepositUpdateWithWhereUniqueWithoutAccountInput[]
+  updateMany?: Prisma.DepositUpdateManyWithWhereWithoutAccountInput | Prisma.DepositUpdateManyWithWhereWithoutAccountInput[]
   deleteMany?: Prisma.DepositScalarWhereInput | Prisma.DepositScalarWhereInput[]
 }
 
@@ -473,8 +529,10 @@ export type EnumTransactionStatusFieldUpdateOperationsInput = {
   set?: $Enums.TransactionStatus
 }
 
-export type DepositCreateWithoutWalletAccountInput = {
+export type DepositCreateWithoutAccountInput = {
   id?: string
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: string | null
   proofUrl?: string | null
@@ -483,8 +541,10 @@ export type DepositCreateWithoutWalletAccountInput = {
   createdAt?: Date | string
 }
 
-export type DepositUncheckedCreateWithoutWalletAccountInput = {
+export type DepositUncheckedCreateWithoutAccountInput = {
   id?: string
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: string | null
   proofUrl?: string | null
@@ -493,30 +553,30 @@ export type DepositUncheckedCreateWithoutWalletAccountInput = {
   createdAt?: Date | string
 }
 
-export type DepositCreateOrConnectWithoutWalletAccountInput = {
+export type DepositCreateOrConnectWithoutAccountInput = {
   where: Prisma.DepositWhereUniqueInput
-  create: Prisma.XOR<Prisma.DepositCreateWithoutWalletAccountInput, Prisma.DepositUncheckedCreateWithoutWalletAccountInput>
+  create: Prisma.XOR<Prisma.DepositCreateWithoutAccountInput, Prisma.DepositUncheckedCreateWithoutAccountInput>
 }
 
-export type DepositCreateManyWalletAccountInputEnvelope = {
-  data: Prisma.DepositCreateManyWalletAccountInput | Prisma.DepositCreateManyWalletAccountInput[]
+export type DepositCreateManyAccountInputEnvelope = {
+  data: Prisma.DepositCreateManyAccountInput | Prisma.DepositCreateManyAccountInput[]
   skipDuplicates?: boolean
 }
 
-export type DepositUpsertWithWhereUniqueWithoutWalletAccountInput = {
+export type DepositUpsertWithWhereUniqueWithoutAccountInput = {
   where: Prisma.DepositWhereUniqueInput
-  update: Prisma.XOR<Prisma.DepositUpdateWithoutWalletAccountInput, Prisma.DepositUncheckedUpdateWithoutWalletAccountInput>
-  create: Prisma.XOR<Prisma.DepositCreateWithoutWalletAccountInput, Prisma.DepositUncheckedCreateWithoutWalletAccountInput>
+  update: Prisma.XOR<Prisma.DepositUpdateWithoutAccountInput, Prisma.DepositUncheckedUpdateWithoutAccountInput>
+  create: Prisma.XOR<Prisma.DepositCreateWithoutAccountInput, Prisma.DepositUncheckedCreateWithoutAccountInput>
 }
 
-export type DepositUpdateWithWhereUniqueWithoutWalletAccountInput = {
+export type DepositUpdateWithWhereUniqueWithoutAccountInput = {
   where: Prisma.DepositWhereUniqueInput
-  data: Prisma.XOR<Prisma.DepositUpdateWithoutWalletAccountInput, Prisma.DepositUncheckedUpdateWithoutWalletAccountInput>
+  data: Prisma.XOR<Prisma.DepositUpdateWithoutAccountInput, Prisma.DepositUncheckedUpdateWithoutAccountInput>
 }
 
-export type DepositUpdateManyWithWhereWithoutWalletAccountInput = {
+export type DepositUpdateManyWithWhereWithoutAccountInput = {
   where: Prisma.DepositScalarWhereInput
-  data: Prisma.XOR<Prisma.DepositUpdateManyMutationInput, Prisma.DepositUncheckedUpdateManyWithoutWalletAccountInput>
+  data: Prisma.XOR<Prisma.DepositUpdateManyMutationInput, Prisma.DepositUncheckedUpdateManyWithoutAccountInput>
 }
 
 export type DepositScalarWhereInput = {
@@ -524,7 +584,9 @@ export type DepositScalarWhereInput = {
   OR?: Prisma.DepositScalarWhereInput[]
   NOT?: Prisma.DepositScalarWhereInput | Prisma.DepositScalarWhereInput[]
   id?: Prisma.StringFilter<"Deposit"> | string
-  walletAccountId?: Prisma.StringFilter<"Deposit"> | string
+  accountId?: Prisma.IntFilter<"Deposit"> | number
+  chain?: Prisma.EnumChainFilter<"Deposit"> | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFilter<"Deposit"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.StringNullableFilter<"Deposit"> | string | null
   proofUrl?: Prisma.StringNullableFilter<"Deposit"> | string | null
@@ -533,8 +595,10 @@ export type DepositScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Deposit"> | Date | string
 }
 
-export type DepositCreateManyWalletAccountInput = {
+export type DepositCreateManyAccountInput = {
   id?: string
+  chain: $Enums.Chain
+  perUsdRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: string | null
   proofUrl?: string | null
@@ -543,8 +607,10 @@ export type DepositCreateManyWalletAccountInput = {
   createdAt?: Date | string
 }
 
-export type DepositUpdateWithoutWalletAccountInput = {
+export type DepositUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -553,8 +619,10 @@ export type DepositUpdateWithoutWalletAccountInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type DepositUncheckedUpdateWithoutWalletAccountInput = {
+export type DepositUncheckedUpdateWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -563,8 +631,10 @@ export type DepositUncheckedUpdateWithoutWalletAccountInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type DepositUncheckedUpdateManyWithoutWalletAccountInput = {
+export type DepositUncheckedUpdateManyWithoutAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  chain?: Prisma.EnumChainFieldUpdateOperationsInput | $Enums.Chain
+  perUsdRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   txHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   proofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -577,43 +647,51 @@ export type DepositUncheckedUpdateManyWithoutWalletAccountInput = {
 
 export type DepositSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  walletAccountId?: boolean
+  accountId?: boolean
+  chain?: boolean
+  perUsdRate?: boolean
   amount?: boolean
   txHash?: boolean
   proofUrl?: boolean
   status?: boolean
   adminNote?: boolean
   createdAt?: boolean
-  walletAccount?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deposit"]>
 
 export type DepositSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  walletAccountId?: boolean
+  accountId?: boolean
+  chain?: boolean
+  perUsdRate?: boolean
   amount?: boolean
   txHash?: boolean
   proofUrl?: boolean
   status?: boolean
   adminNote?: boolean
   createdAt?: boolean
-  walletAccount?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deposit"]>
 
 export type DepositSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  walletAccountId?: boolean
+  accountId?: boolean
+  chain?: boolean
+  perUsdRate?: boolean
   amount?: boolean
   txHash?: boolean
   proofUrl?: boolean
   status?: boolean
   adminNote?: boolean
   createdAt?: boolean
-  walletAccount?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deposit"]>
 
 export type DepositSelectScalar = {
   id?: boolean
-  walletAccountId?: boolean
+  accountId?: boolean
+  chain?: boolean
+  perUsdRate?: boolean
   amount?: boolean
   txHash?: boolean
   proofUrl?: boolean
@@ -622,25 +700,27 @@ export type DepositSelectScalar = {
   createdAt?: boolean
 }
 
-export type DepositOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "walletAccountId" | "amount" | "txHash" | "proofUrl" | "status" | "adminNote" | "createdAt", ExtArgs["result"]["deposit"]>
+export type DepositOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "accountId" | "chain" | "perUsdRate" | "amount" | "txHash" | "proofUrl" | "status" | "adminNote" | "createdAt", ExtArgs["result"]["deposit"]>
 export type DepositInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  walletAccount?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }
 export type DepositIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  walletAccount?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }
 export type DepositIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  walletAccount?: boolean | Prisma.WalletAccountDefaultArgs<ExtArgs>
+  account?: boolean | Prisma.AccountDefaultArgs<ExtArgs>
 }
 
 export type $DepositPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Deposit"
   objects: {
-    walletAccount: Prisma.$WalletAccountPayload<ExtArgs>
+    account: Prisma.$AccountPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    walletAccountId: string
+    accountId: number
+    chain: $Enums.Chain
+    perUsdRate: runtime.Decimal
     amount: runtime.Decimal
     txHash: string | null
     proofUrl: string | null
@@ -1041,7 +1121,7 @@ readonly fields: DepositFieldRefs;
  */
 export interface Prisma__DepositClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  walletAccount<T extends Prisma.WalletAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WalletAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__WalletAccountClient<runtime.Types.Result.GetResult<Prisma.$WalletAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  account<T extends Prisma.AccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AccountDefaultArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1072,7 +1152,9 @@ export interface Prisma__DepositClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface DepositFieldRefs {
   readonly id: Prisma.FieldRef<"Deposit", 'String'>
-  readonly walletAccountId: Prisma.FieldRef<"Deposit", 'String'>
+  readonly accountId: Prisma.FieldRef<"Deposit", 'Int'>
+  readonly chain: Prisma.FieldRef<"Deposit", 'Chain'>
+  readonly perUsdRate: Prisma.FieldRef<"Deposit", 'Decimal'>
   readonly amount: Prisma.FieldRef<"Deposit", 'Decimal'>
   readonly txHash: Prisma.FieldRef<"Deposit", 'String'>
   readonly proofUrl: Prisma.FieldRef<"Deposit", 'String'>
