@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { Chain, TransactionStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
@@ -22,9 +23,7 @@ class DepositController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const chain = queryParams.chain as
-        | (typeof config.chains)[number]
-        | undefined;
+      const chain = queryParams.chain as Chain
       if (chain && !config.chains.includes(chain)) {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
@@ -32,7 +31,11 @@ class DepositController {
       const status =
         queryParams.status === 'all'
           ? undefined
-          : (queryParams.status as (typeof config.transactionStatuses)[number]);
+          : (queryParams.status as TransactionStatus);
+
+      if (status && !config.transactionStatuses.includes(status)) {
+        return res.status(400).json({ message: 'Invalid status parameter' });
+      }
 
       const deposits = await prisma.deposit.findMany({
         where: {
@@ -141,9 +144,7 @@ class DepositController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const chain = queryParams.chain as
-        | (typeof config.chains)[number]
-        | undefined;
+      const chain = queryParams.chain as Chain;
       if (chain && !config.chains.includes(chain)) {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }

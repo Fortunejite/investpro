@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
-import { Investment } from '@prisma/client';
+import { Investment, InvestmentStatus } from '@prisma/client';
 
 const createInvestmentSchema = z.object({
   planId: z.number(),
@@ -22,9 +22,7 @@ class InvestmentController {
 
       // Filters
       const status =
-        queryParams.status as
-          | (typeof config.investmentStatuses)[number]
-          | undefined;
+        queryParams.status as InvestmentStatus | undefined;
       if (status && !config.investmentStatuses.includes(status)) {
         return res.status(400).json({ message: 'Invalid status parameter' });
       }
@@ -242,9 +240,7 @@ class InvestmentController {
 
       // Filters
       const status =
-        queryParams.status as
-          | (typeof config.investmentStatuses)[number]
-          | undefined;
+        queryParams.status as InvestmentStatus;
       const userId = parseInt(queryParams.userId as string) || undefined;
       if (status && !config.investmentStatuses.includes(status)) {
         return res.status(400).json({ message: 'Invalid status parameter' });

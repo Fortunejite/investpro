@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '@/lib/prisma';
 import config from '@/config';
+import { TransactionType } from '@prisma/client';
 
 class TransactionController {
   getUserTransactions = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,7 @@ class TransactionController {
       const type =
         queryParams.type === 'all'
           ? undefined
-          : (queryParams.type as (typeof config.transactionTypes)[number]);
+          : (queryParams.type as TransactionType);
       if (type && !config.transactionTypes.includes(type)) {
         return res.status(400).json({ message: 'Invalid type parameter' });
       }
@@ -72,7 +73,7 @@ class TransactionController {
       const type =
         queryParams.type === 'all'
           ? undefined
-          : (queryParams.type as (typeof config.transactionTypes)[number]);
+          : (queryParams.type as TransactionType);
 
       if (type && !config.transactionTypes.includes(type)) {
         return res.status(400).json({ message: 'Invalid type parameter' });

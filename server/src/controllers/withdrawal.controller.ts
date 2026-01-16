@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
-import { Withdrawal } from '@prisma/client';
+import { Chain, TransactionStatus, Withdrawal } from '@prisma/client';
 
 const createWithdrawalSchema = z.object({
   chain: z.enum(config.chains),
@@ -25,11 +25,9 @@ class WithdrawalController {
       const status =
         queryParams.status === 'all'
           ? undefined
-          : (queryParams.status as (typeof config.transactionStatuses)[number]);
+          : (queryParams.status as TransactionStatus);
 
-      const chain = queryParams.chain as
-        | (typeof config.chains)[number]
-        | undefined;
+      const chain = queryParams.chain as Chain;
       if (chain && !config.chains.includes(chain)) {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
@@ -178,11 +176,9 @@ class WithdrawalController {
       const status =
         queryParams.status === 'all'
           ? undefined
-          : (queryParams.status as (typeof config.transactionStatuses)[number]);
+          : (queryParams.status as TransactionStatus);
 
-      const chain = queryParams.chain as
-        | (typeof config.chains)[number]
-        | undefined;
+      const chain = queryParams.chain as Chain | undefined;
       if (chain && !config.chains.includes(chain)) {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
