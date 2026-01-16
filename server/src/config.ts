@@ -12,6 +12,7 @@ const config = {
   port: process.env.PORT || 8000,
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
+  refreshToken: process.env.REFRESH_TOKEN!,
   databaseUrl: process.env.DATABASE_URL!,
   redis: {
     host: process.env.REDIS_HOST!,
@@ -51,6 +52,11 @@ const validateConfig = () => {
       name: "JWT Secret",
       key: "jwtSecret",
       value: config.jwtSecret,
+    },
+    {
+      name: "Refresh Token",
+      key: "refreshToken",
+      value: config.refreshToken,
     },
     {
       name: "Database URL",

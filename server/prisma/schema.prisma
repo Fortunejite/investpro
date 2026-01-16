@@ -83,12 +83,13 @@ model User {
   forgetPasswordToken String?    @unique
   resetTokenExpiry    DateTime?
   telegramUserId      String?    @unique
+  refreshToken        String?    @unique
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
-  assets  Assets[]
-  account Account?
-  signalDeliveries TradeSignalDeliveries[]
+  assets                  Assets[]
+  account                 Account?
+  signalDeliveries        TradeSignalDeliveries[]
   tradeSignalSubscription TradeSignalSubscription?
 
   @@map("users")
@@ -218,18 +219,18 @@ model Investment {
 model TradeSignal {
   id Int @id @default(autoincrement())
 
-  action TradeSignalAction
-  currency String
-  entryPrice Decimal @db.Decimal(18, 8)
-  tp1 Decimal @db.Decimal(18, 8)
-  tp2 Decimal? @db.Decimal(18, 8)
-  sl Decimal @db.Decimal(18, 8)
+  action     TradeSignalAction
+  currency   String
+  entryPrice Decimal           @db.Decimal(18, 8)
+  tp1        Decimal           @db.Decimal(18, 8)
+  tp2        Decimal?          @db.Decimal(18, 8)
+  sl         Decimal           @db.Decimal(18, 8)
 
   status TradeSignalStatus @default(published)
 
   scheduledAt DateTime?
   publishedAt DateTime?
-  createdAt DateTime @default(now())
+  createdAt   DateTime  @default(now())
 
   deliveries TradeSignalDeliveries[]
 
@@ -237,29 +238,29 @@ model TradeSignal {
 }
 
 model TradeSignalDeliveries {
-  id String @id @default(uuid())
-  signalId Int
-  userId Int
+  id             String                    @id @default(uuid())
+  signalId       Int
+  userId         Int
   telegramUserId String
-  status TradeSignalDeliveryStatus @default(queued)
-  error String?
-  attempts Int @default(0)
-  lastAttempt DateTime?
-  createdAt DateTime @default(now())
+  status         TradeSignalDeliveryStatus @default(queued)
+  error          String?
+  attempts       Int                       @default(0)
+  lastAttempt    DateTime?
+  createdAt      DateTime                  @default(now())
 
   signal TradeSignal @relation(fields: [signalId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  user   User        @relation(fields: [userId], references: [id])
 
   @@map("trade_signal_deliveries")
 }
 
 model TradeSignalSubscription {
-  id Int @id @default(autoincrement())
-  userId Int @unique
-  plan TradeSignalPlan
-  isActive Boolean @default(true)
-  startedAt DateTime @default(now())
-  endedAt DateTime?
+  id        Int             @id @default(autoincrement())
+  userId    Int             @unique
+  plan      TradeSignalPlan
+  isActive  Boolean         @default(true)
+  startedAt DateTime        @default(now())
+  endedAt   DateTime?
 
   user User @relation(fields: [userId], references: [id])
 

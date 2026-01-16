@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { tokenService } from "@/services/tokenService";
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.token;
+  const token = req.cookies.accessToken;
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });

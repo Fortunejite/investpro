@@ -1,13 +1,23 @@
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto'
+import crypto from 'crypto';
 import config from '@/config';
 import { User } from '@prisma/client';
 
-export type TokenPayload = Omit<User, 'hashed_password'>;
+export type TokenPayload = Omit<User, 'hashed_password' | 'refreshToken'>;
+interface RefreshTokenPayload {
+  userId: number;
+  rememberMe: boolean;
+}
 
 class TokenService {
   generateAccessToken(payload: TokenPayload): string {
-    return jwt.sign(payload, config.jwtSecret, { expiresIn: '15m' });
+    return jwt.sign(payload, config.jwtSecret, { expiresIn: '10m' });
+  }
+
+  generateRefreshToken(userId: number, rememberMe = false): string {
+    return jwt.sign({ userId, rememberMe }, config.refreshToken, {
+      expiresIn: rememberMe ? '30d' : '7d',
+    });
   }
 
   verifyAccessToken(token: string): TokenPayload | null {
@@ -18,7 +28,15 @@ class TokenService {
     }
   }
 
-  generateResetToken (): string {
+  verifyRefreshToken(token: string): RefreshTokenPayload | null {
+    try {
+      return jwt.verify(token, config.refreshToken) as RefreshTokenPayload;
+    } catch {
+      return null;
+    }
+  }
+
+  generateResetToken(): string {
     return crypto.randomInt(100000, 999999).toString();
   }
 }
