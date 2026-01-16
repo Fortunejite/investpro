@@ -53,6 +53,27 @@ enum InvestmentStatus {
   cancelled
 }
 
+enum TradeSignalPlan {
+  monthly
+  quarterly
+  yearly
+}
+
+enum TradeSignalAction {
+  Buy
+  Sell
+}
+
+enum TradeSignalStatus {
+  published
+}
+
+enum TradeSignalDeliveryStatus {
+  queued
+  sent
+  failed
+}
+
 model User {
   id                  Int        @id @default(autoincrement())
   email               String     @unique
@@ -62,11 +83,14 @@ model User {
   status              userStatus @default(active)
   forgetPasswordToken String?    @unique
   resetTokenExpiry    DateTime?
+  telegramUserId      String?    @unique
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
   assets  Assets[]
   account Account?
+  signalDeliveries TradeSignalDeliveries[]
+  tradeSignalSubscription TradeSignalSubscription?
 
   @@map("users")
 }
@@ -190,4 +214,55 @@ model Investment {
   plan    InvestmentPlan @relation(fields: [planId], references: [id])
 
   @@map("investments")
+}
+
+model TradeSignal {
+  id Int @id @default(autoincrement())
+
+  action TradeSignalAction
+  currency String
+  entryPrice Decimal @db.Decimal(18, 8)
+  tp1 Decimal @db.Decimal(18, 8)
+  tp2 Decimal? @db.Decimal(18, 8)
+  sl Decimal @db.Decimal(18, 8)
+
+  status TradeSignalStatus @default(published)
+
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  createdAt DateTime @default(now())
+
+  deliveries TradeSignalDeliveries[]
+
+  @@map("trade_signals")
+}
+
+model TradeSignalDeliveries {
+  id String @id @default(uuid())
+  signalId Int
+  userId Int
+  telegramUserId String
+  status TradeSignalDeliveryStatus @default(queued)
+  error String?
+  attempts Int @default(0)
+  lastAttempt DateTime?
+  createdAt DateTime @default(now())
+
+  signal TradeSignal @relation(fields: [signalId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("trade_signal_deliveries")
+}
+
+model TradeSignalSubscription {
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  plan TradeSignalPlan
+  isActive Boolean @default(true)
+  startedAt DateTime @default(now())
+  endedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("trade_signal_subscriptions")
 }

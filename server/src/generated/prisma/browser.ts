@@ -57,3 +57,18 @@ export type InvestmentPlan = Prisma.InvestmentPlanModel
  * 
  */
 export type Investment = Prisma.InvestmentModel
+/**
+ * Model TradeSignal
+ * 
+ */
+export type TradeSignal = Prisma.TradeSignalModel
+/**
+ * Model TradeSignalDeliveries
+ * 
+ */
+export type TradeSignalDeliveries = Prisma.TradeSignalDeliveriesModel
+/**
+ * Model TradeSignalSubscription
+ * 
+ */
+export type TradeSignalSubscription = Prisma.TradeSignalSubscriptionModel

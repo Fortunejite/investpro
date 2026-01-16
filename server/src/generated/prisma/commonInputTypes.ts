@@ -321,6 +321,101 @@ export type EnumInvestmentStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumInvestmentStatusFilter<$PrismaModel>
 }
 
+export type EnumTradeSignalActionFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalAction | Prisma.EnumTradeSignalActionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalActionFilter<$PrismaModel> | $Enums.TradeSignalAction
+}
+
+export type DecimalNullableFilter<$PrismaModel = never> = {
+  equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
+  in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  notIn?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  lt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  lte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedDecimalNullableFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type EnumTradeSignalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalStatus | Prisma.EnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalStatusFilter<$PrismaModel> | $Enums.TradeSignalStatus
+}
+
+export type EnumTradeSignalActionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalAction | Prisma.EnumTradeSignalActionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalActionWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalAction
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalActionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalActionFilter<$PrismaModel>
+}
+
+export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
+  in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  notIn?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  lt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  lte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type EnumTradeSignalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalStatus | Prisma.EnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalStatusFilter<$PrismaModel>
+}
+
+export type EnumTradeSignalDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalDeliveryStatus | Prisma.EnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel> | $Enums.TradeSignalDeliveryStatus
+}
+
+export type EnumTradeSignalDeliveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalDeliveryStatus | Prisma.EnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalDeliveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalDeliveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel>
+}
+
+export type EnumTradeSignalPlanFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalPlan | Prisma.EnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalPlanFilter<$PrismaModel> | $Enums.TradeSignalPlan
+}
+
+export type EnumTradeSignalPlanWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalPlan | Prisma.EnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalPlanWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalPlan
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalPlanFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalPlanFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -639,6 +734,101 @@ export type NestedEnumInvestmentStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumInvestmentStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumInvestmentStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeSignalActionFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalAction | Prisma.EnumTradeSignalActionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalActionFilter<$PrismaModel> | $Enums.TradeSignalAction
+}
+
+export type NestedDecimalNullableFilter<$PrismaModel = never> = {
+  equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
+  in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  notIn?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  lt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  lte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedDecimalNullableFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+}
+
+export type NestedEnumTradeSignalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalStatus | Prisma.EnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalStatusFilter<$PrismaModel> | $Enums.TradeSignalStatus
+}
+
+export type NestedEnumTradeSignalActionWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalAction | Prisma.EnumTradeSignalActionFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalAction[] | Prisma.ListEnumTradeSignalActionFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalActionWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalAction
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalActionFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalActionFilter<$PrismaModel>
+}
+
+export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel> | null
+  in?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  notIn?: runtime.Decimal[] | runtime.DecimalJsLike[] | number[] | string[] | Prisma.ListDecimalFieldRefInput<$PrismaModel> | null
+  lt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  lte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gt?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  gte?: runtime.Decimal | runtime.DecimalJsLike | number | string | Prisma.DecimalFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedDecimalNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeSignalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalStatus | Prisma.EnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalStatus[] | Prisma.ListEnumTradeSignalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalDeliveryStatus | Prisma.EnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel> | $Enums.TradeSignalDeliveryStatus
+}
+
+export type NestedEnumTradeSignalDeliveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalDeliveryStatus | Prisma.EnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalDeliveryStatus[] | Prisma.ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalDeliveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalDeliveryStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalDeliveryStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumTradeSignalPlanFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalPlan | Prisma.EnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalPlanFilter<$PrismaModel> | $Enums.TradeSignalPlan
+}
+
+export type NestedEnumTradeSignalPlanWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TradeSignalPlan | Prisma.EnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  in?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TradeSignalPlan[] | Prisma.ListEnumTradeSignalPlanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTradeSignalPlanWithAggregatesFilter<$PrismaModel> | $Enums.TradeSignalPlan
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTradeSignalPlanFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTradeSignalPlanFilter<$PrismaModel>
 }
 
 

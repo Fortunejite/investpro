@@ -74,3 +74,36 @@ export const InvestmentStatus = {
 } as const
 
 export type InvestmentStatus = (typeof InvestmentStatus)[keyof typeof InvestmentStatus]
+
+
+export const TradeSignalPlan = {
+  monthly: 'monthly',
+  quarterly: 'quarterly',
+  yearly: 'yearly'
+} as const
+
+export type TradeSignalPlan = (typeof TradeSignalPlan)[keyof typeof TradeSignalPlan]
+
+
+export const TradeSignalAction = {
+  Buy: 'Buy',
+  Sell: 'Sell'
+} as const
+
+export type TradeSignalAction = (typeof TradeSignalAction)[keyof typeof TradeSignalAction]
+
+
+export const TradeSignalStatus = {
+  published: 'published'
+} as const
+
+export type TradeSignalStatus = (typeof TradeSignalStatus)[keyof typeof TradeSignalStatus]
+
+
+export const TradeSignalDeliveryStatus = {
+  queued: 'queued',
+  sent: 'sent',
+  failed: 'failed'
+} as const
+
+export type TradeSignalDeliveryStatus = (typeof TradeSignalDeliveryStatus)[keyof typeof TradeSignalDeliveryStatus]

@@ -43,6 +43,7 @@ export type UserMinAggregateOutputType = {
   status: $Enums.userStatus | null
   forgetPasswordToken: string | null
   resetTokenExpiry: Date | null
+  telegramUserId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +57,7 @@ export type UserMaxAggregateOutputType = {
   status: $Enums.userStatus | null
   forgetPasswordToken: string | null
   resetTokenExpiry: Date | null
+  telegramUserId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -69,6 +71,7 @@ export type UserCountAggregateOutputType = {
   status: number
   forgetPasswordToken: number
   resetTokenExpiry: number
+  telegramUserId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,6 +95,7 @@ export type UserMinAggregateInputType = {
   status?: true
   forgetPasswordToken?: true
   resetTokenExpiry?: true
+  telegramUserId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -105,6 +109,7 @@ export type UserMaxAggregateInputType = {
   status?: true
   forgetPasswordToken?: true
   resetTokenExpiry?: true
+  telegramUserId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -118,6 +123,7 @@ export type UserCountAggregateInputType = {
   status?: true
   forgetPasswordToken?: true
   resetTokenExpiry?: true
+  telegramUserId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -218,6 +224,7 @@ export type UserGroupByOutputType = {
   status: $Enums.userStatus
   forgetPasswordToken: string | null
   resetTokenExpiry: Date | null
+  telegramUserId: string | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -254,10 +261,13 @@ export type UserWhereInput = {
   status?: Prisma.EnumuserStatusFilter<"User"> | $Enums.userStatus
   forgetPasswordToken?: Prisma.StringNullableFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  telegramUserId?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   assets?: Prisma.AssetsListRelationFilter
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
+  signalDeliveries?: Prisma.TradeSignalDeliveriesListRelationFilter
+  tradeSignalSubscription?: Prisma.XOR<Prisma.TradeSignalSubscriptionNullableScalarRelationFilter, Prisma.TradeSignalSubscriptionWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -269,16 +279,20 @@ export type UserOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   forgetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  telegramUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   assets?: Prisma.AssetsOrderByRelationAggregateInput
   account?: Prisma.AccountOrderByWithRelationInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesOrderByRelationAggregateInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   email?: string
   forgetPasswordToken?: string
+  telegramUserId?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -291,7 +305,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   assets?: Prisma.AssetsListRelationFilter
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
-}, "id" | "email" | "forgetPasswordToken">
+  signalDeliveries?: Prisma.TradeSignalDeliveriesListRelationFilter
+  tradeSignalSubscription?: Prisma.XOR<Prisma.TradeSignalSubscriptionNullableScalarRelationFilter, Prisma.TradeSignalSubscriptionWhereInput> | null
+}, "id" | "email" | "forgetPasswordToken" | "telegramUserId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -302,6 +318,7 @@ export type UserOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   forgetPasswordToken?: Prisma.SortOrderInput | Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  telegramUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -323,6 +340,7 @@ export type UserScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumuserStatusWithAggregatesFilter<"User"> | $Enums.userStatus
   forgetPasswordToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  telegramUserId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -335,10 +353,13 @@ export type UserCreateInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assets?: Prisma.AssetsCreateNestedManyWithoutUserInput
   account?: Prisma.AccountCreateNestedOneWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesCreateNestedManyWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -350,10 +371,13 @@ export type UserUncheckedCreateInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assets?: Prisma.AssetsUncheckedCreateNestedManyWithoutUserInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedCreateNestedManyWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -364,10 +388,13 @@ export type UserUpdateInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.AssetsUpdateManyWithoutUserNestedInput
   account?: Prisma.AccountUpdateOneWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUpdateManyWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -379,10 +406,13 @@ export type UserUncheckedUpdateInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.AssetsUncheckedUpdateManyWithoutUserNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedUpdateManyWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -394,6 +424,7 @@ export type UserCreateManyInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -406,6 +437,7 @@ export type UserUpdateManyMutationInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -419,6 +451,7 @@ export type UserUncheckedUpdateManyInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -432,6 +465,7 @@ export type UserCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   forgetPasswordToken?: Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrder
+  telegramUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -449,6 +483,7 @@ export type UserMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   forgetPasswordToken?: Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrder
+  telegramUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -462,6 +497,7 @@ export type UserMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   forgetPasswordToken?: Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrder
+  telegramUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -535,6 +571,34 @@ export type UserUpdateOneRequiredWithoutAssetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssetsInput, Prisma.UserUpdateWithoutAssetsInput>, Prisma.UserUncheckedUpdateWithoutAssetsInput>
 }
 
+export type UserCreateNestedOneWithoutSignalDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSignalDeliveriesInput, Prisma.UserUncheckedCreateWithoutSignalDeliveriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSignalDeliveriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSignalDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSignalDeliveriesInput, Prisma.UserUncheckedCreateWithoutSignalDeliveriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSignalDeliveriesInput
+  upsert?: Prisma.UserUpsertWithoutSignalDeliveriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSignalDeliveriesInput, Prisma.UserUpdateWithoutSignalDeliveriesInput>, Prisma.UserUncheckedUpdateWithoutSignalDeliveriesInput>
+}
+
+export type UserCreateNestedOneWithoutTradeSignalSubscriptionInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTradeSignalSubscriptionInput, Prisma.UserUncheckedCreateWithoutTradeSignalSubscriptionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTradeSignalSubscriptionInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTradeSignalSubscriptionNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTradeSignalSubscriptionInput, Prisma.UserUncheckedCreateWithoutTradeSignalSubscriptionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTradeSignalSubscriptionInput
+  upsert?: Prisma.UserUpsertWithoutTradeSignalSubscriptionInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTradeSignalSubscriptionInput, Prisma.UserUpdateWithoutTradeSignalSubscriptionInput>, Prisma.UserUncheckedUpdateWithoutTradeSignalSubscriptionInput>
+}
+
 export type UserCreateWithoutAccountInput = {
   email: string
   name: string
@@ -543,9 +607,12 @@ export type UserCreateWithoutAccountInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assets?: Prisma.AssetsCreateNestedManyWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesCreateNestedManyWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountInput = {
@@ -557,9 +624,12 @@ export type UserUncheckedCreateWithoutAccountInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   assets?: Prisma.AssetsUncheckedCreateNestedManyWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedCreateNestedManyWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountInput = {
@@ -586,9 +656,12 @@ export type UserUpdateWithoutAccountInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.AssetsUpdateManyWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUpdateManyWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountInput = {
@@ -600,9 +673,12 @@ export type UserUncheckedUpdateWithoutAccountInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assets?: Prisma.AssetsUncheckedUpdateManyWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedUpdateManyWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAssetsInput = {
@@ -613,9 +689,12 @@ export type UserCreateWithoutAssetsInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   account?: Prisma.AccountCreateNestedOneWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesCreateNestedManyWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAssetsInput = {
@@ -627,9 +706,12 @@ export type UserUncheckedCreateWithoutAssetsInput = {
   status?: $Enums.userStatus
   forgetPasswordToken?: string | null
   resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedCreateNestedManyWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAssetsInput = {
@@ -656,9 +738,12 @@ export type UserUpdateWithoutAssetsInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUpdateOneWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUpdateManyWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssetsInput = {
@@ -670,9 +755,176 @@ export type UserUncheckedUpdateWithoutAssetsInput = {
   status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
   forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   account?: Prisma.AccountUncheckedUpdateOneWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedUpdateManyWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSignalDeliveriesInput = {
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assets?: Prisma.AssetsCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountCreateNestedOneWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSignalDeliveriesInput = {
+  id?: number
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assets?: Prisma.AssetsUncheckedCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountUncheckedCreateNestedOneWithoutUserInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSignalDeliveriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSignalDeliveriesInput, Prisma.UserUncheckedCreateWithoutSignalDeliveriesInput>
+}
+
+export type UserUpsertWithoutSignalDeliveriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSignalDeliveriesInput, Prisma.UserUncheckedUpdateWithoutSignalDeliveriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSignalDeliveriesInput, Prisma.UserUncheckedCreateWithoutSignalDeliveriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSignalDeliveriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSignalDeliveriesInput, Prisma.UserUncheckedUpdateWithoutSignalDeliveriesInput>
+}
+
+export type UserUpdateWithoutSignalDeliveriesInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assets?: Prisma.AssetsUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUpdateOneWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSignalDeliveriesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assets?: Prisma.AssetsUncheckedUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUncheckedUpdateOneWithoutUserNestedInput
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTradeSignalSubscriptionInput = {
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assets?: Prisma.AssetsCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountCreateNestedOneWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTradeSignalSubscriptionInput = {
+  id?: number
+  email: string
+  name: string
+  hashed_password: string
+  role?: $Enums.Role
+  status?: $Enums.userStatus
+  forgetPasswordToken?: string | null
+  resetTokenExpiry?: Date | string | null
+  telegramUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assets?: Prisma.AssetsUncheckedCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountUncheckedCreateNestedOneWithoutUserInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTradeSignalSubscriptionInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTradeSignalSubscriptionInput, Prisma.UserUncheckedCreateWithoutTradeSignalSubscriptionInput>
+}
+
+export type UserUpsertWithoutTradeSignalSubscriptionInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTradeSignalSubscriptionInput, Prisma.UserUncheckedUpdateWithoutTradeSignalSubscriptionInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTradeSignalSubscriptionInput, Prisma.UserUncheckedCreateWithoutTradeSignalSubscriptionInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTradeSignalSubscriptionInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTradeSignalSubscriptionInput, Prisma.UserUncheckedUpdateWithoutTradeSignalSubscriptionInput>
+}
+
+export type UserUpdateWithoutTradeSignalSubscriptionInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assets?: Prisma.AssetsUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUpdateOneWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTradeSignalSubscriptionInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  hashed_password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  status?: Prisma.EnumuserStatusFieldUpdateOperationsInput | $Enums.userStatus
+  forgetPasswordToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  telegramUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assets?: Prisma.AssetsUncheckedUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUncheckedUpdateOneWithoutUserNestedInput
+  signalDeliveries?: Prisma.TradeSignalDeliveriesUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -682,10 +934,12 @@ export type UserUncheckedUpdateWithoutAssetsInput = {
 
 export type UserCountOutputType = {
   assets: number
+  signalDeliveries: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assets?: boolean | UserCountOutputTypeCountAssetsArgs
+  signalDeliveries?: boolean | UserCountOutputTypeCountSignalDeliveriesArgs
 }
 
 /**
@@ -705,6 +959,13 @@ export type UserCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.AssetsWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSignalDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TradeSignalDeliveriesWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -715,10 +976,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   status?: boolean
   forgetPasswordToken?: boolean
   resetTokenExpiry?: boolean
+  telegramUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   assets?: boolean | Prisma.User$assetsArgs<ExtArgs>
   account?: boolean | Prisma.User$accountArgs<ExtArgs>
+  signalDeliveries?: boolean | Prisma.User$signalDeliveriesArgs<ExtArgs>
+  tradeSignalSubscription?: boolean | Prisma.User$tradeSignalSubscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -731,6 +995,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   forgetPasswordToken?: boolean
   resetTokenExpiry?: boolean
+  telegramUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -744,6 +1009,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   status?: boolean
   forgetPasswordToken?: boolean
   resetTokenExpiry?: boolean
+  telegramUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -757,14 +1023,17 @@ export type UserSelectScalar = {
   status?: boolean
   forgetPasswordToken?: boolean
   resetTokenExpiry?: boolean
+  telegramUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "hashed_password" | "role" | "status" | "forgetPasswordToken" | "resetTokenExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "hashed_password" | "role" | "status" | "forgetPasswordToken" | "resetTokenExpiry" | "telegramUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assets?: boolean | Prisma.User$assetsArgs<ExtArgs>
   account?: boolean | Prisma.User$accountArgs<ExtArgs>
+  signalDeliveries?: boolean | Prisma.User$signalDeliveriesArgs<ExtArgs>
+  tradeSignalSubscription?: boolean | Prisma.User$tradeSignalSubscriptionArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -775,6 +1044,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     assets: Prisma.$AssetsPayload<ExtArgs>[]
     account: Prisma.$AccountPayload<ExtArgs> | null
+    signalDeliveries: Prisma.$TradeSignalDeliveriesPayload<ExtArgs>[]
+    tradeSignalSubscription: Prisma.$TradeSignalSubscriptionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -785,6 +1056,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     status: $Enums.userStatus
     forgetPasswordToken: string | null
     resetTokenExpiry: Date | null
+    telegramUserId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1183,6 +1455,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   assets<T extends Prisma.User$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   account<T extends Prisma.User$accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  signalDeliveries<T extends Prisma.User$signalDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$signalDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TradeSignalDeliveriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tradeSignalSubscription<T extends Prisma.User$tradeSignalSubscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tradeSignalSubscriptionArgs<ExtArgs>>): Prisma.Prisma__TradeSignalSubscriptionClient<runtime.Types.Result.GetResult<Prisma.$TradeSignalSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1220,6 +1494,7 @@ export interface UserFieldRefs {
   readonly status: Prisma.FieldRef<"User", 'userStatus'>
   readonly forgetPasswordToken: Prisma.FieldRef<"User", 'String'>
   readonly resetTokenExpiry: Prisma.FieldRef<"User", 'DateTime'>
+  readonly telegramUserId: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -1650,6 +1925,49 @@ export type User$accountArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
   where?: Prisma.AccountWhereInput
+}
+
+/**
+ * User.signalDeliveries
+ */
+export type User$signalDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeSignalDeliveries
+   */
+  select?: Prisma.TradeSignalDeliveriesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeSignalDeliveries
+   */
+  omit?: Prisma.TradeSignalDeliveriesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeSignalDeliveriesInclude<ExtArgs> | null
+  where?: Prisma.TradeSignalDeliveriesWhereInput
+  orderBy?: Prisma.TradeSignalDeliveriesOrderByWithRelationInput | Prisma.TradeSignalDeliveriesOrderByWithRelationInput[]
+  cursor?: Prisma.TradeSignalDeliveriesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TradeSignalDeliveriesScalarFieldEnum | Prisma.TradeSignalDeliveriesScalarFieldEnum[]
+}
+
+/**
+ * User.tradeSignalSubscription
+ */
+export type User$tradeSignalSubscriptionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TradeSignalSubscription
+   */
+  select?: Prisma.TradeSignalSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TradeSignalSubscription
+   */
+  omit?: Prisma.TradeSignalSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TradeSignalSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.TradeSignalSubscriptionWhereInput
 }
 
 /**

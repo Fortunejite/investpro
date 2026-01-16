@@ -391,7 +391,10 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   Transaction: 'Transaction',
   InvestmentPlan: 'InvestmentPlan',
-  Investment: 'Investment'
+  Investment: 'Investment',
+  TradeSignal: 'TradeSignal',
+  TradeSignalDeliveries: 'TradeSignalDeliveries',
+  TradeSignalSubscription: 'TradeSignalSubscription'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "assets" | "deposit" | "withdrawal" | "transaction" | "investmentPlan" | "investment"
+    modelProps: "user" | "account" | "assets" | "deposit" | "withdrawal" | "transaction" | "investmentPlan" | "investment" | "tradeSignal" | "tradeSignalDeliveries" | "tradeSignalSubscription"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1006,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TradeSignal: {
+      payload: Prisma.$TradeSignalPayload<ExtArgs>
+      fields: Prisma.TradeSignalFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TradeSignalFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TradeSignalFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>
+        }
+        findFirst: {
+          args: Prisma.TradeSignalFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TradeSignalFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>
+        }
+        findMany: {
+          args: Prisma.TradeSignalFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>[]
+        }
+        create: {
+          args: Prisma.TradeSignalCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>
+        }
+        createMany: {
+          args: Prisma.TradeSignalCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TradeSignalCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>[]
+        }
+        delete: {
+          args: Prisma.TradeSignalDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>
+        }
+        update: {
+          args: Prisma.TradeSignalUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>
+        }
+        deleteMany: {
+          args: Prisma.TradeSignalDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TradeSignalUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TradeSignalUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>[]
+        }
+        upsert: {
+          args: Prisma.TradeSignalUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalPayload>
+        }
+        aggregate: {
+          args: Prisma.TradeSignalAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTradeSignal>
+        }
+        groupBy: {
+          args: Prisma.TradeSignalGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeSignalGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TradeSignalCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeSignalCountAggregateOutputType> | number
+        }
+      }
+    }
+    TradeSignalDeliveries: {
+      payload: Prisma.$TradeSignalDeliveriesPayload<ExtArgs>
+      fields: Prisma.TradeSignalDeliveriesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TradeSignalDeliveriesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TradeSignalDeliveriesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>
+        }
+        findFirst: {
+          args: Prisma.TradeSignalDeliveriesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TradeSignalDeliveriesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>
+        }
+        findMany: {
+          args: Prisma.TradeSignalDeliveriesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>[]
+        }
+        create: {
+          args: Prisma.TradeSignalDeliveriesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>
+        }
+        createMany: {
+          args: Prisma.TradeSignalDeliveriesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TradeSignalDeliveriesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>[]
+        }
+        delete: {
+          args: Prisma.TradeSignalDeliveriesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>
+        }
+        update: {
+          args: Prisma.TradeSignalDeliveriesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>
+        }
+        deleteMany: {
+          args: Prisma.TradeSignalDeliveriesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TradeSignalDeliveriesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TradeSignalDeliveriesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>[]
+        }
+        upsert: {
+          args: Prisma.TradeSignalDeliveriesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalDeliveriesPayload>
+        }
+        aggregate: {
+          args: Prisma.TradeSignalDeliveriesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTradeSignalDeliveries>
+        }
+        groupBy: {
+          args: Prisma.TradeSignalDeliveriesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeSignalDeliveriesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TradeSignalDeliveriesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeSignalDeliveriesCountAggregateOutputType> | number
+        }
+      }
+    }
+    TradeSignalSubscription: {
+      payload: Prisma.$TradeSignalSubscriptionPayload<ExtArgs>
+      fields: Prisma.TradeSignalSubscriptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TradeSignalSubscriptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TradeSignalSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>
+        }
+        findFirst: {
+          args: Prisma.TradeSignalSubscriptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TradeSignalSubscriptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>
+        }
+        findMany: {
+          args: Prisma.TradeSignalSubscriptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>[]
+        }
+        create: {
+          args: Prisma.TradeSignalSubscriptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>
+        }
+        createMany: {
+          args: Prisma.TradeSignalSubscriptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TradeSignalSubscriptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>[]
+        }
+        delete: {
+          args: Prisma.TradeSignalSubscriptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>
+        }
+        update: {
+          args: Prisma.TradeSignalSubscriptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.TradeSignalSubscriptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TradeSignalSubscriptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TradeSignalSubscriptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.TradeSignalSubscriptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TradeSignalSubscriptionPayload>
+        }
+        aggregate: {
+          args: Prisma.TradeSignalSubscriptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTradeSignalSubscription>
+        }
+        groupBy: {
+          args: Prisma.TradeSignalSubscriptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeSignalSubscriptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TradeSignalSubscriptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TradeSignalSubscriptionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1051,6 +1276,7 @@ export const UserScalarFieldEnum = {
   status: 'status',
   forgetPasswordToken: 'forgetPasswordToken',
   resetTokenExpiry: 'resetTokenExpiry',
+  telegramUserId: 'telegramUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1158,6 +1384,50 @@ export const InvestmentScalarFieldEnum = {
 } as const
 
 export type InvestmentScalarFieldEnum = (typeof InvestmentScalarFieldEnum)[keyof typeof InvestmentScalarFieldEnum]
+
+
+export const TradeSignalScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  currency: 'currency',
+  entryPrice: 'entryPrice',
+  tp1: 'tp1',
+  tp2: 'tp2',
+  sl: 'sl',
+  status: 'status',
+  scheduledAt: 'scheduledAt',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeSignalScalarFieldEnum = (typeof TradeSignalScalarFieldEnum)[keyof typeof TradeSignalScalarFieldEnum]
+
+
+export const TradeSignalDeliveriesScalarFieldEnum = {
+  id: 'id',
+  signalId: 'signalId',
+  userId: 'userId',
+  telegramUserId: 'telegramUserId',
+  status: 'status',
+  error: 'error',
+  attempts: 'attempts',
+  lastAttempt: 'lastAttempt',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeSignalDeliveriesScalarFieldEnum = (typeof TradeSignalDeliveriesScalarFieldEnum)[keyof typeof TradeSignalDeliveriesScalarFieldEnum]
+
+
+export const TradeSignalSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  isActive: 'isActive',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt'
+} as const
+
+export type TradeSignalSubscriptionScalarFieldEnum = (typeof TradeSignalSubscriptionScalarFieldEnum)[keyof typeof TradeSignalSubscriptionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1352,6 +1622,62 @@ export type ListEnumInvestmentStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'TradeSignalAction'
+ */
+export type EnumTradeSignalActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalAction'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalAction[]'
+ */
+export type ListEnumTradeSignalActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalAction[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalStatus'
+ */
+export type EnumTradeSignalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalStatus[]'
+ */
+export type ListEnumTradeSignalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalDeliveryStatus'
+ */
+export type EnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalDeliveryStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalDeliveryStatus[]'
+ */
+export type ListEnumTradeSignalDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalDeliveryStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalPlan'
+ */
+export type EnumTradeSignalPlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalPlan'>
+    
+
+
+/**
+ * Reference to a field of type 'TradeSignalPlan[]'
+ */
+export type ListEnumTradeSignalPlanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TradeSignalPlan[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1467,6 +1793,9 @@ export type GlobalOmitConfig = {
   transaction?: Prisma.TransactionOmit
   investmentPlan?: Prisma.InvestmentPlanOmit
   investment?: Prisma.InvestmentOmit
+  tradeSignal?: Prisma.TradeSignalOmit
+  tradeSignalDeliveries?: Prisma.TradeSignalDeliveriesOmit
+  tradeSignalSubscription?: Prisma.TradeSignalSubscriptionOmit
 }
 
 /* Types for Logging */

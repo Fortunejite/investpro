@@ -58,7 +58,10 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   Transaction: 'Transaction',
   InvestmentPlan: 'InvestmentPlan',
-  Investment: 'Investment'
+  Investment: 'Investment',
+  TradeSignal: 'TradeSignal',
+  TradeSignalDeliveries: 'TradeSignalDeliveries',
+  TradeSignalSubscription: 'TradeSignalSubscription'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -86,6 +89,7 @@ export const UserScalarFieldEnum = {
   status: 'status',
   forgetPasswordToken: 'forgetPasswordToken',
   resetTokenExpiry: 'resetTokenExpiry',
+  telegramUserId: 'telegramUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -193,6 +197,50 @@ export const InvestmentScalarFieldEnum = {
 } as const
 
 export type InvestmentScalarFieldEnum = (typeof InvestmentScalarFieldEnum)[keyof typeof InvestmentScalarFieldEnum]
+
+
+export const TradeSignalScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  currency: 'currency',
+  entryPrice: 'entryPrice',
+  tp1: 'tp1',
+  tp2: 'tp2',
+  sl: 'sl',
+  status: 'status',
+  scheduledAt: 'scheduledAt',
+  publishedAt: 'publishedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeSignalScalarFieldEnum = (typeof TradeSignalScalarFieldEnum)[keyof typeof TradeSignalScalarFieldEnum]
+
+
+export const TradeSignalDeliveriesScalarFieldEnum = {
+  id: 'id',
+  signalId: 'signalId',
+  userId: 'userId',
+  telegramUserId: 'telegramUserId',
+  status: 'status',
+  error: 'error',
+  attempts: 'attempts',
+  lastAttempt: 'lastAttempt',
+  createdAt: 'createdAt'
+} as const
+
+export type TradeSignalDeliveriesScalarFieldEnum = (typeof TradeSignalDeliveriesScalarFieldEnum)[keyof typeof TradeSignalDeliveriesScalarFieldEnum]
+
+
+export const TradeSignalSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plan: 'plan',
+  isActive: 'isActive',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt'
+} as const
+
+export type TradeSignalSubscriptionScalarFieldEnum = (typeof TradeSignalSubscriptionScalarFieldEnum)[keyof typeof TradeSignalSubscriptionScalarFieldEnum]
 
 
 export const SortOrder = {
