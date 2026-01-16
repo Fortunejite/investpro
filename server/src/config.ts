@@ -13,6 +13,26 @@ const config = {
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   databaseUrl: process.env.DATABASE_URL!,
+  redis: {
+    host: process.env.REDIS_HOST!,
+    port: parseInt(process.env.REDIS_PORT!),
+    // password: process.env.REDIS_PASSWORD!,
+  },
+  email: {
+    service: 'Gmail',
+    auth: {
+      user: process.env.EMAIL_USER!,
+      pass: process.env.EMAIL_PASS!,
+    },
+  },
+  signals: {
+    monthly: 100,
+    quarterly: 200,
+    yearly: 300
+  } as const,
+  telegram: {
+    botToken: process.env.TELEGRAM_BOT_TOKEN!,
+  },
   chains: ["eth", "bsc", "polygon", "sol"] as const,
   transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
   transactionTypes: ["deposit", "withdrawal", "investment", "profit_payout"] as const,
