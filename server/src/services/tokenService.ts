@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto'
 import config from '@/config';
-import { User } from '@/generated/prisma/client';
+import { User } from '@prisma/client';
 
 export type TokenPayload = Omit<User, 'hashed_password'>;
 

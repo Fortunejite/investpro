@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import z from 'zod';
 import { prisma } from '@/lib/prisma';
-import { TradeSignal } from '@/generated/prisma/client';
+import { TradeSignal } from '@prisma/client';
 import queueSignalForDelivery from '@/queues/signalDelivery';
 import config from '@/config';
 

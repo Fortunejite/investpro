@@ -1,4 +1,4 @@
-import { TradeSignal, TradeSignalDeliveries } from "@/generated/prisma/client";
+import { TradeSignal, TradeSignalDeliveries } from "@prisma/client";
 import axios from "axios";
 import { url } from ".";
 

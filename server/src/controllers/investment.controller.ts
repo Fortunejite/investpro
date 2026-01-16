@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
-import { Investment } from '@/generated/prisma/client';
+import { Investment } from '@prisma/client';
 
 const createInvestmentSchema = z.object({
   planId: z.number(),

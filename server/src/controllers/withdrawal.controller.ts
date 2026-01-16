@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
-import { Withdrawal } from '@/generated/prisma/client';
+import { Withdrawal } from '@prisma/client';
 
 const createWithdrawalSchema = z.object({
   chain: z.enum(config.chains),
