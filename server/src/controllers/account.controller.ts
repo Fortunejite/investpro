@@ -30,6 +30,26 @@ class AccountController {
       next(err);
     }
   };
+
+  // Admin functions
+  getAllAccounts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const queryParams = req.query;
+      
+      // pagination
+      const page = parseInt(queryParams.page as string) || 1;
+      const limit = parseInt(queryParams.limit as string) || 10;
+      const skip = (page - 1) * limit;
+      const accounts = await prisma.account.findMany({
+        skip,
+        take: limit,
+        include: { user: true },
+      });
+      res.status(200).json({ data: accounts, pagination: { page, limit } });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export default new AccountController();
