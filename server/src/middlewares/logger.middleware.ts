@@ -1,7 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
 const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  console.log(`Request: ${req.method} ${req.url} ${res.statusCode}`);
+  const start = Date.now();
+  const url = req.url;
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(
+      `${req.method} ${url} ${res.statusCode} - ${duration}ms`
+    );
+  });
   next();
 };
 

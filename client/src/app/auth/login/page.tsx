@@ -13,12 +13,20 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import type { z } from "zod";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAppDispatch } from "@/hooks/redux.hook";
+import { fetchUser } from "@/redux/user.slice";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const next = searchParams?.get('next') ?? '/dashboard';
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -36,8 +44,8 @@ export default function LoginPage() {
     
     try {
       await api.post("/auth/login", data);
-      // Handle successful login - redirect to dashboard
-      window.location.href = "/dashboard";
+      router.push(next);
+      dispatch(fetchUser());
     } catch (error: unknown) {
       // Handle API errors using utility function
       handleAPIError<LoginFormData>(error, form);
