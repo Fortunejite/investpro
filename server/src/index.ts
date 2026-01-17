@@ -15,6 +15,7 @@ import {
  } from './routes';
 import { authenticate } from './middlewares/auth.middleware';
 import startJobs from './cron';
+import loggerMiddleware from './middlewares/logger.middleware';
 
 if (!config.isValid) {
   console.error("Invalid configuration. Exiting...");
@@ -30,6 +31,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(loggerMiddleware);
 
 // Routes
 app.use('/account', authenticate, accountRoutes);
