@@ -6,3 +6,4 @@ export { default as investmentPlanRoutes } from './investmentPlan.routes';
 export { default as tradeSignalRoutes } from './tradeSignal.routes';
 export { default as transactionRoutes } from './transaction.routes';
 export { default as withdrawalRoutes } from './withdrawal.routes';
+export { default as settingsRoutes } from './settings.routes';

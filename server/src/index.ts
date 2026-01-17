@@ -9,6 +9,7 @@ import {
   depositRoutes,
   investmentPlanRoutes,
   investmentRoutes,
+  settingsRoutes,
   tradeSignalRoutes,
   transactionRoutes,
   withdrawalRoutes,
@@ -43,6 +44,7 @@ app.use('/deposits', authenticate, depositRoutes);
 app.use('/trading-signals', authenticate, tradeSignalRoutes);
 app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
+app.use('/settings', authenticate, settingsRoutes);
 
 app.use('/status', (req, res) => {
   res.status(200).json({ running: true });
