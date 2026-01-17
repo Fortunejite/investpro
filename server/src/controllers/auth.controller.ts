@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { tokenService } from "@/services/tokenService";
 import { createAccount } from "@/lib/account";
+import queueResetEmailForDelivery from "@/queues/email.queues";
 
 const registerSchema = z.object({
   email: z.email(),
@@ -172,13 +173,11 @@ class AuthController {
       const resetToken = tokenService.generateResetToken();
       await prisma.user.update({
         where: { id: user.id },
-        data: { forgetPasswordToken: resetToken, resetTokenExpiry: new Date(Date.now() + 3600000) }, // 1 hour
+        data: { forgetPasswordToken: resetToken, resetTokenExpiry: new Date(Date.now() + 15 * 60 * 1000) }, // 15 minutes expiry
       });
 
-      // TODO: Send email with reset link (pseudo code)
-      // await emailService.sendPasswordResetEmail(email, resetToken);
-
-      res.status(200).json({ message: "Password reset email sent" });
+      await queueResetEmailForDelivery(email, resetToken);
+      res.status(200).json({ message: "Password reset request sent" });
     } catch (err) {
       next(err);
     }
@@ -193,9 +192,13 @@ class AuthController {
         return res.status(404).json({ message: "Invalid Reset Code" });
       }
 
+      if (!user.resetTokenExpiry || user.resetTokenExpiry < new Date()) {
+        return res.status(400).json({ message: "Reset token has expired" });
+      }
+
       const hashed_password = await bcrypt.hash(newPassword, 10);
 
-      const updatedUser = await prisma.user.update({
+      const { hashed_password: _, refreshToken: __, ...updatedUser } = await prisma.user.update({
         where: { id: user.id },
         data: { hashed_password, forgetPasswordToken: null, resetTokenExpiry: null },
       });

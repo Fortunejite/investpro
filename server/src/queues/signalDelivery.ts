@@ -1,6 +1,6 @@
 import Bull from "bull";
 import config from "@/config";
-import deliverSignal from "./workers/signalWorker";
+import deliverSignal from "./workers/signal.worker";
 
 const queueConfig = {
   redis: config.redis

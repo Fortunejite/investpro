@@ -20,7 +20,7 @@ const config = {
     // password: process.env.REDIS_PASSWORD!,
   },
   email: {
-    service: 'Gmail',
+    service: 'gmail',
     auth: {
       user: process.env.EMAIL_USER!,
       pass: process.env.EMAIL_PASS!,
@@ -62,6 +62,16 @@ const validateConfig = () => {
       name: "Database URL",
       key: "databaseUrl",
       value: config.databaseUrl,
+    },
+    {
+      name: "Email User",
+      key: "email.user",
+      value: config.email.auth.user,
+    },
+    {
+      name: "Email Pass",
+      key: "email.pass",
+      value: config.email.auth.pass,
     }
   ];
 
