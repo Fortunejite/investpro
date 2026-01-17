@@ -3,10 +3,14 @@
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
+import { logout } from '@/redux/user.slice';
 
 export default function Home() {
   const [data, setData] = useState(null);
   const [form, setForm] = useState({ email: '', password: '' });
+  const { user, status } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const submitForm = async () => {
     try {
@@ -17,16 +21,10 @@ export default function Home() {
       console.error('Error during login:', error);
     }
   };
-  const logout = async () => {
-    try {
-      await api.post('/auth/logout', form, { withCredentials: true });
-      const response = await api.get('/account');
-      setData(response.data);
-    } catch (error) {
-      console.error('Error during login:', error);
-    }
-  };
 
+  const logoutUser = async () => {
+    dispatch(logout());
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,6 +41,7 @@ export default function Home() {
   return (
     <div>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre>{JSON.stringify({ user, status }, null, 2)}</pre>
       <div>
         <p>Email</p>
         <input
@@ -59,7 +58,7 @@ export default function Home() {
         />
 
         <Button onClick={() => submitForm()} type="submit">Submit</Button>
-        <Button onClick={() => logout()} type="submit">Logout</Button>
+        <Button onClick={() => logoutUser()} type="submit">Logout</Button>
       </div>
     </div>
   );
