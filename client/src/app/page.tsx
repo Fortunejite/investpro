@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const [data, setData] = useState(null);
@@ -57,8 +58,8 @@ export default function Home() {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
 
-        <button onClick={() => submitForm()} type="submit">Submit</button>
-        <button onClick={() => logout()} type="submit">Logout</button>
+        <Button onClick={() => submitForm()} type="submit">Submit</Button>
+        <Button onClick={() => logout()} type="submit">Logout</Button>
       </div>
     </div>
   );
