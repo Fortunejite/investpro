@@ -232,14 +232,14 @@ class WithdrawalController {
 
         if (!withdrawal) {
           throw Object.assign(new Error('Withdrawal not found'), {
-            statusCode: 404,
+            status: 404,
           });
         }
 
         if (withdrawal.status !== 'pending') {
           throw Object.assign(
             new Error('Only pending withdrawals can be approved'),
-            { statusCode: 400 },
+            { status: 400 },
           );
         }
 
@@ -286,14 +286,14 @@ class WithdrawalController {
 
         if (!withdrawal) {
           throw Object.assign(new Error('Withdrawal not found'), {
-            statusCode: 404,
+            status: 404,
           });
         }
 
         if (withdrawal.status !== 'pending') {
           throw Object.assign(
             new Error('Only pending withdrawals can be rejected'),
-            { statusCode: 400 },
+            { status: 400 },
           );
         }
         await prisma.account.update({

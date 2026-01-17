@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
-app.use('/accounts', authenticate, accountRoutes);
+app.use('/account', authenticate, accountRoutes);
 app.use('/auth', authRoutes);
 app.use('/investment-plans', authenticate, investmentPlanRoutes);
 app.use('/investments', authenticate, investmentRoutes);

@@ -111,14 +111,14 @@ class DepositController {
   
       if (!deposit || deposit.accountId !== userId) {
         throw Object.assign(new Error('Deposit not found'), {
-          statusCode: 404,
+          status: 404,
         });
       }
   
       if (deposit.status !== 'pending') {
         throw Object.assign(
           new Error('Only pending deposits can be cancelled'),
-          { statusCode: 400 },
+          { status: 400 },
         );
       }
   
@@ -205,14 +205,14 @@ class DepositController {
 
         if (!deposit) {
           throw Object.assign(new Error('Deposit not found'), {
-            statusCode: 404,
+            status: 404,
           });
         }
 
         if (deposit.status !== 'pending') {
           throw Object.assign(
             new Error('Only pending deposits can be approved'),
-            { statusCode: 400 },
+            { status: 400 },
           );
         }
 
@@ -259,14 +259,14 @@ class DepositController {
 
         if (!deposit) {
           throw Object.assign(new Error('Deposit not found'), {
-            statusCode: 404,
+            status: 404,
           });
         }
 
         if (deposit.status !== 'pending') {
           throw Object.assign(
             new Error('Only pending deposits can be rejected'),
-            { statusCode: 400 },
+            { status: 400 },
           );
         }
 
