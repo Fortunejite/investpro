@@ -1,7 +1,7 @@
 import config from "@/config";
 
-export const forgotPasswordEmail = (resetToken: string) => {
-  const resetLink = `${config.clientUrl}/reset-password?token=${resetToken}`;
+export const forgotPasswordEmail = (resetToken: string, email: string) => {
+  const resetLink = `${config.clientUrl}/auth/reset-password?token=${resetToken}&email=${email}`;
   return {
     subject: 'Password Reset Request',
     text: `You have requested to reset your password. Use the following token to reset your password: ${resetToken}. This token is valid for 15 minutes.`,

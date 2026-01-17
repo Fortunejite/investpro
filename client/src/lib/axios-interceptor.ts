@@ -42,7 +42,7 @@ api.interceptors.response.use(
       } catch (err) {
         processQueue(err);
         await api.post('/auth/logout');
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
         return Promise.reject(err);
       } finally {
         isRefreshing = false;

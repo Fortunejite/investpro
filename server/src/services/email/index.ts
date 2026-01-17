@@ -29,7 +29,7 @@ export const sendEmail = async (
 
 class EmailService {
   sendPasswordResetEmail = async (to: string, token: string) => {
-    const data = forgotPasswordEmail(token);
+    const data = forgotPasswordEmail(token, to);
     await sendEmail(to, data.subject, data.text, data.html);
   };
 }
