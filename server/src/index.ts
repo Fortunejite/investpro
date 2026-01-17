@@ -41,6 +41,10 @@ app.use('/trading-signals', authenticate, tradeSignalRoutes);
 app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
 
+app.use('/status', (req, res) => {
+  res.status(200).json({ running: true });
+});
+
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });
 });
