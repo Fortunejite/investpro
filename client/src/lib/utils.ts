@@ -6,15 +6,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Format currency
-export const formatCurrency = (amount: string) => {
+export const formatCurrency = (amount: string | number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-  }).format(parseFloat(amount));
+  }).format(typeof amount === 'string' ? parseFloat(amount) : amount);
 };
 
 // Format date
-export const formatDate = (date: Date) => {
+export const formatDate = (date: Date | string) => {
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',

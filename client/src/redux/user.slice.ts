@@ -20,7 +20,7 @@ export const fetchUser = createAsyncThunk(
   'user/fetchUser',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get<{ user: User }>('/auth/verify');
+      const response = await api.get<{ user: User }>('/auth/me');
       return response.data.user;
     } catch (err) {
       if (isAxiosError(err) && err.response) {

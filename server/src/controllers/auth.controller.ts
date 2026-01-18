@@ -28,6 +28,11 @@ const resetPasswordSchema = z.object({
   newPassword: z.string().min(6),
 });
 
+const updateUserProfile = z.object({
+  name: z.string().min(2).optional(),
+  telegramUserId: z.string().optional(),
+});
+
 class AuthController {
   registerUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -98,7 +103,7 @@ class AuthController {
     }
   };
 
-  verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+  getMe = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.cookies.accessToken;
       if (!token) {
@@ -111,6 +116,21 @@ class AuthController {
       }
 
       res.status(200).json({ message: "Token is valid", user: payload });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateMe = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user.id;
+      const updateData = updateUserProfile.parse(req.body);
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+      });
+      const { hashed_password, refreshToken, ...userData } = updatedUser;
+      res.status(200).json({ message: "User updated successfully", user: userData });
     } catch (error) {
       next(error);
     }

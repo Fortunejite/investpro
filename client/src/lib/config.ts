@@ -15,6 +15,11 @@ const config = {
   api: {
     baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL!,
   },
+  signals: {
+    monthly: 100,
+    quarterly: 200,
+    yearly: 300
+  } as const,
   chains: ["eth", "bsc", "polygon", "sol"] as const,
   chainInfo,
   transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
