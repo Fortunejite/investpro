@@ -22,18 +22,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppSelector } from "@/hooks/redux.hook";
-import { api } from "@/lib/api";
+import { api, PagedResponse } from "@/lib/api";
 import { TableLoading } from "@/components/Loading";
 import type { Account } from "@/types/account";
 import type { Transaction } from "@/types/transaction";
-
-interface TransactionResponse {
-  data: Transaction[];
-  pagination: {
-    page: number;
-    limit: number;
-  };
-}
 
 interface DashboardData {
   account: Account;
@@ -62,7 +54,7 @@ export default function DashboardPage() {
         ]);
 
         // Extract transactions from the API response structure
-        const transactionData = transactionsResponse.data as TransactionResponse;
+        const transactionData = transactionsResponse.data as PagedResponse<Transaction>;
         const transactions = transactionData.data;
         
         // Calculate stats from transaction data

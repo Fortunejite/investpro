@@ -2,6 +2,15 @@ import axios from "axios";
 import config from "./config";
 import { AxiosError } from "@/types/api";
 
+export interface PagedResponse<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+  };
+}
+
 export const api = axios.create({
   baseURL: config.api.baseURL,
   withCredentials: true,
