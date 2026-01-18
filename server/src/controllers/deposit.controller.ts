@@ -7,7 +7,7 @@ import config from '@/config';
 const createDepositSchema = z.object({
   chain: z.enum(config.chains),
   amount: z.number().positive(),
-  txHash: z.string().min(10).max(100).optional(),
+  txHash: z.string().max(100).optional(),
   proofUrl: z.url().optional(),
 });
 

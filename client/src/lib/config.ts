@@ -4,10 +4,20 @@ interface requiredEnv {
   value: string | undefined;
 }
 
+const chainInfo = {
+  eth: { name: "Ethereum", symbol: "ETH" },
+  bsc: { name: "Binance Smart Chain", symbol: "BNB" },
+  polygon: { name: "Polygon", symbol: "MATIC" },
+  sol: { name: "Solana", symbol: "SOL" },
+}
+
 const config = {
   api: {
     baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL!,
   },
+  chains: ["eth", "bsc", "polygon", "sol"] as const,
+  chainInfo,
+  transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
   isValid: false,
 };
 

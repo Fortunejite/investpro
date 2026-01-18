@@ -1,20 +1,13 @@
 'use client';
 
 import Loading from '@/components/Loading';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
-import { fetchSettings } from '@/redux/settings.slice';
+import { useAppSelector } from '@/hooks/redux.hook';
 import { usePathname, useRouter } from 'next/navigation';
 
 const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
   const { status } = useAppSelector((state) => state.user);
   const router = useRouter();
   const pathName = usePathname();
-  const dispatch = useAppDispatch();
-
-  // Fetch settings once authenticated
-  if (status === 'authenticated') {
-    dispatch(fetchSettings());
-  }
   
   if (status === 'loading') {
     return (

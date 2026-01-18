@@ -2,11 +2,13 @@
 
 import Loading from '@/components/Loading';
 import { useAppSelector } from '@/hooks/redux.hook';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const { status } = useAppSelector((state) => state.user);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams?.get('next') ?? '/dashboard';
 
   if (status === 'loading') {
     return (
@@ -16,7 +18,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
       />
     );
   } else if (status === 'authenticated') {
-    router.push('/dashboard');
+    router.push(next);
     return null;
   }
 
