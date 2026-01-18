@@ -9,6 +9,7 @@ import {
   depositRoutes,
   investmentPlanRoutes,
   investmentRoutes,
+  priceRoutes,
   settingsRoutes,
   tradeSignalRoutes,
   transactionRoutes,
@@ -41,6 +42,7 @@ app.use('/auth', authRoutes);
 app.use('/investment-plans', authenticate, investmentPlanRoutes);
 app.use('/investments', authenticate, investmentRoutes);
 app.use('/deposits', authenticate, depositRoutes);
+app.use('/prices', priceRoutes);
 app.use('/trading-signals', authenticate, tradeSignalRoutes);
 app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
