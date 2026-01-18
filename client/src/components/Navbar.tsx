@@ -43,7 +43,7 @@ const navItems = [
   },
   {
     name: 'Withdraw',
-    href: '/withdraw',
+    href: '/withdrawal',
     icon: ArrowUpFromLine,
   },
   {
