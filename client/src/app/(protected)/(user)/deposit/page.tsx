@@ -55,7 +55,7 @@ import {
   FormMessage 
 } from "@/components/ui/form";
 import { useAppSelector } from "@/hooks/redux.hook";
-import { api, PagedResponse } from "@/lib/api";
+import { api, PagedResponse, handleAPIError } from "@/lib/api";
 import { uploadPhoto } from "@/lib/uploadPhoto";
 import { createDepositSchema } from "@/types/deposit/deposit.schema";
 import { Deposit } from "@/types/deposit";
@@ -264,6 +264,7 @@ export default function DepositPage() {
             type: "manual",
             message: uploadResult.error || "Failed to upload proof"
           });
+          toast.error(uploadResult.error || "Failed to upload proof");
           return;
         }
       }
@@ -284,35 +285,18 @@ export default function DepositPage() {
       toast.success("Deposit request submitted successfully!");
       
     } catch (error: unknown) {
-      // Handle API errors
+      // Use the reusable handleAPIError utility
+      handleAPIError<CreateDepositData>(error, form);
+      
+      // Also show toast for better user feedback
       if (error && typeof error === "object" && "response" in error) {
-        const axiosError = error as { response?: { data?: { error?: string; issues?: Array<{ path: string; message: string }>; message?: string } } };
-        
-        if (axiosError.response?.data?.error === "ValidationError" && axiosError.response?.data?.issues) {
-          axiosError.response.data.issues.forEach((issue: { path: string; message: string }) => {
-            form.setError(issue.path as keyof CreateDepositData, {
-              type: "server",
-              message: issue.message,
-            });
-          });
-        } else if (axiosError.response?.data?.message) {
-          form.setError("root", {
-            type: "server",
-            message: axiosError.response.data.message,
-          });
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        if (axiosError.response?.data?.message) {
           toast.error(axiosError.response.data.message);
         } else {
-          form.setError("root", {
-            type: "server",
-            message: "Something went wrong. Please try again.",
-          });
           toast.error("Something went wrong. Please try again.");
         }
       } else {
-        form.setError("root", {
-          type: "server", 
-          message: "Something went wrong. Please try again.",
-        });
         toast.error("Something went wrong. Please try again.");
       }
     } finally {
