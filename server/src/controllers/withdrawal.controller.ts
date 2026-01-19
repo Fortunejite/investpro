@@ -33,17 +33,21 @@ class WithdrawalController {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
 
-      const withdrawals = await prisma.withdrawal.findMany({
-        where: {
+      const where = {
           accountId: userId,
           chain,
           ...(status ? { status } : {}),
-        },
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      });
-      res.status(200).json({ data: withdrawals, pagination: { page, limit } });
+        }
+      const [withdrawals, totalCount] = await Promise.all([
+        await prisma.withdrawal.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+        }),
+        await prisma.withdrawal.count({ where }),
+      ]);
+      res.status(200).json({ data: withdrawals, pagination: { page, limit, total: totalCount } });
     } catch (err) {
       next(err);
     }
@@ -205,17 +209,28 @@ class WithdrawalController {
       }
       const userId = parseInt(queryParams.userId as string) || undefined;
 
-      const withdrawals = await prisma.withdrawal.findMany({
-        where: {
+      const where = {
           accountId: userId,
           status,
           ...(chain ? { chain } : {}),
-        },
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      });
-      res.status(200).json({ data: withdrawals, pagination: { page, limit } });
+        }
+      const [withdrawals, totalCount] = await Promise.all([
+        await prisma.withdrawal.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            account: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        }),
+        await prisma.withdrawal.count({ where }),
+      ]);
+      res.status(200).json({ data: withdrawals, pagination: { page, limit, total: totalCount } });
     } catch (err) {
       next(err);
     }
