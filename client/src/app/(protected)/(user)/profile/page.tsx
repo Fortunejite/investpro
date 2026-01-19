@@ -75,13 +75,10 @@ export default function ProfilePage() {
 
     try {
       // Filter out empty optional fields
-      const updateData: Partial<UpdateUserProfileData> = {};
-      if (data.name && data.name !== user.name) {
-        updateData.name = data.name;
-      }
-      if (data.telegramUserId !== undefined && data.telegramUserId !== user.telegramUserId) {
-        updateData.telegramUserId = data.telegramUserId || undefined;
-      }
+      const updateData: Partial<UpdateUserProfileData> = {
+        name: data.name,
+        telegramUserId: data.telegramUserId,
+      };
 
       // Only submit if there are changes
       if (Object.keys(updateData).length === 0) {
