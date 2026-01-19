@@ -53,6 +53,7 @@ import { Account } from "@/types/account";
 import { TableLoading } from "@/components/Loading";
 import { toast } from "sonner";
 import type { z } from "zod";
+import { formatCurrency, formatDate } from "@/lib/utils";
 
 type CreateInvestmentData = z.infer<typeof createInvestmentSchema>;
 
@@ -201,23 +202,6 @@ const InvestmentsPage = () => {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  // Format currency
-  const formatCurrency = (amount: string | number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(typeof amount === 'string' ? parseFloat(amount) : amount);
-  };
-
-  // Format date
-  const formatDate = (date: Date | string) => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    }).format(new Date(date));
   };
 
   // Get status badge variant
