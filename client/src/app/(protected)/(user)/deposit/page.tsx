@@ -106,8 +106,8 @@ export default function DepositPage() {
   // Chain address mapping
   const chainAddresses = useMemo(() => ({
     eth: settings?.ethAddress || "",
-    bsc: settings?.bnbAddress || "",
-    polygon: settings?.bnbAddress || "", // Assuming same as BSC for polygon
+    bsc: settings?.bscAddress || "",
+    btc: settings?.btcAddress || "",
     sol: settings?.solAddress || "",
   }), [settings]);
 

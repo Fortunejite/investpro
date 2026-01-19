@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
 import { Chain, TransactionStatus, Withdrawal } from '@prisma/client';
+import { getPriceInUsd } from '@/services/price';
 
 const createWithdrawalSchema = z.object({
   chain: z.enum(config.chains),
@@ -90,8 +91,7 @@ class WithdrawalController {
 
       let newWithdrawal: Withdrawal | null = null;
 
-      // TODO: Fetch actual perUsdRate from a reliable source
-      const perUsdRate = 1; // Placeholder for actual price fetching logic
+      const perUsdRate = await getPriceInUsd(validatedData.chain);
 
       await prisma.$transaction(async (prisma) => {
         await prisma.account.update({

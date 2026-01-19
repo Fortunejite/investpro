@@ -1,7 +1,9 @@
+import config from "@/lib/config";
+
 export interface Transaction {
   id: string;
   createdAt: Date;
-  type: "deposit" | "withdrawal" | "investment" | "profit_payout";
+  type: keyof typeof config.transactionTypes;
   amount: string;
   txHash: string | null;
   accountId: number;

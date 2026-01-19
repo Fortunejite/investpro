@@ -48,7 +48,7 @@ const navItems = [
   },
   {
     name: 'Invest',
-    href: '/invest',
+    href: '/investments',
     icon: TrendingUp,
   },
   {

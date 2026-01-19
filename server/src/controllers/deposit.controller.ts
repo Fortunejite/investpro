@@ -3,6 +3,7 @@ import { Chain, TransactionStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
+import { getPriceInUsd } from '@/services/price';
 
 const createDepositSchema = z.object({
   chain: z.enum(config.chains),
@@ -80,8 +81,7 @@ class DepositController {
       const userId = req.user.id;
       const validatedData = createDepositSchema.parse(req.body);
 
-      // TODO: Compute actual perUsdRate value based on chain and current market rates
-      const perUsdRate = 1; // Placeholder value
+      const perUsdRate = await getPriceInUsd(validatedData.chain);
       
       const newDeposit = await prisma.deposit.create({
         data: {

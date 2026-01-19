@@ -20,7 +20,7 @@ enum userStatus {
 enum Chain {
   eth
   bsc
-  polygon
+  btc
   sol
 }
 

@@ -6,8 +6,8 @@ interface requiredEnv {
 
 const chainInfo = {
   eth: { name: "Ethereum", symbol: "ETH" },
-  bsc: { name: "Binance Smart Chain", symbol: "BNB" },
-  polygon: { name: "Polygon", symbol: "MATIC" },
+  bsc: { name: "Binance Smart Chain", symbol: "BSC" },
+  btc: { name: "Bitcoin", symbol: "BTC" },
   sol: { name: "Solana", symbol: "SOL" },
 }
 
@@ -20,9 +20,12 @@ const config = {
     quarterly: 200,
     yearly: 300
   } as const,
-  chains: ["eth", "bsc", "polygon", "sol"] as const,
+  chains: ["eth", "bsc", "btc", "sol"] as const,
   chainInfo,
   transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
+  transactionTypes: ["deposit", "withdrawal", "investment", "profit_payout"] as const,
+  investmentStatuses: ["active", "inactive", "expired", "cancelled"] as const,
+  payoutTypes: ["daily", "weekly", "monthly", "end_of_term"] as const,
   isValid: false,
 };
 

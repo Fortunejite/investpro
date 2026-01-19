@@ -5,7 +5,7 @@ const settingsConstants = [
   // Admin Addresses
   "btcAddress",
   "ethAddress",
-  "bnbAddress",
+  "bscAddress",
   "solAddress",
 
   // Telegram Settings
@@ -16,7 +16,7 @@ const clientAccessibleSettings = [
   // Admin Addresses
   "btcAddress",
   "ethAddress",
-  "bnbAddress",
+  "bscAddress",
   "solAddress",
 ];
 

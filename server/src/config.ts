@@ -29,56 +29,72 @@ const config = {
   signals: {
     monthly: 100,
     quarterly: 200,
-    yearly: 300
+    yearly: 300,
   } as const,
   telegram: {
     botToken: process.env.TELEGRAM_BOT_TOKEN!,
   },
-  chains: ["eth", "bsc", "polygon", "sol"] as const,
-  transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
-  transactionTypes: ["deposit", "withdrawal", "investment", "profit_payout"] as const,
-  investmentStatuses: ["active", "inactive", "expired", "cancelled"] as const,
+  chains: ['eth', 'bsc', 'btc', 'sol'] as const,
+  coinIds: {
+    eth: '80',
+    btc: '90',
+    bsc: '2710',
+    sol: '48543',
+  },
+  transactionStatuses: [
+    'pending',
+    'approved',
+    'rejected',
+    'cancelled',
+  ] as const,
+  transactionTypes: [
+    'deposit',
+    'withdrawal',
+    'investment',
+    'profit_payout',
+  ] as const,
+  investmentStatuses: ['active', 'inactive', 'expired', 'cancelled'] as const,
   isValid: false,
-}
+};
 
 const validateConfig = () => {
   const required: requiredEnv[] = [
     {
-      name: "Client URL",
-      key: "clientUrl",
+      name: 'Client URL',
+      key: 'clientUrl',
       value: config.clientUrl,
     },
     {
-      name: "JWT Secret",
-      key: "jwtSecret",
+      name: 'JWT Secret',
+      key: 'jwtSecret',
       value: config.jwtSecret,
     },
     {
-      name: "Refresh Token",
-      key: "refreshToken",
+      name: 'Refresh Token',
+      key: 'refreshToken',
       value: config.refreshToken,
     },
     {
-      name: "Database URL",
-      key: "databaseUrl",
+      name: 'Database URL',
+      key: 'databaseUrl',
       value: config.databaseUrl,
     },
     {
-      name: "Email User",
-      key: "email.user",
+      name: 'Email User',
+      key: 'email.user',
       value: config.email.auth.user,
     },
     {
-      name: "Email Pass",
-      key: "email.pass",
+      name: 'Email Pass',
+      key: 'email.pass',
       value: config.email.auth.pass,
-    }
+    },
   ];
 
   const missing = required.filter((item) => !item.value);
 
   if (missing.length > 0) {
-    console.error("Missing required configuration:");
+    console.error('Missing required configuration:');
     missing.forEach((item) => {
       console.error(`- ${item.name} (${item.key})`);
     });
