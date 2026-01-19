@@ -1,6 +1,16 @@
-import { Request, Response, NextFunction } from "express";
-import { prisma } from "@/lib/prisma";
-import { createAccount as _createAccount } from "@/lib/account";
+import { Request, Response, NextFunction } from 'express';
+import { prisma } from '@/lib/prisma';
+import { createAccount as _createAccount } from '@/lib/account';
+import z from 'zod';
+
+const adminGetAllAccountsSchema = z.object({
+  page: z.string().optional(),
+  limit: z.string().optional(),
+
+  search: z.string().optional(),
+  status: z.enum(['active', 'inactive', 'banned']).optional(),
+  role: z.enum(['user', 'admin']).optional(),
+});
 
 class AccountController {
   getUserAccount = async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +21,7 @@ class AccountController {
       });
 
       if (!account) {
-        return res.status(404).json({ message: "Account not found" });
+        return res.status(404).json({ message: 'Account not found' });
       }
 
       res.status(200).json(account);
@@ -34,18 +44,36 @@ class AccountController {
   // Admin functions
   getAllAccounts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const queryParams = req.query;
-      
+      const queryParams = adminGetAllAccountsSchema.parse(req.query);
+
       // pagination
       const page = parseInt(queryParams.page as string) || 1;
       const limit = parseInt(queryParams.limit as string) || 10;
       const skip = (page - 1) * limit;
-      const accounts = await prisma.account.findMany({
-        skip,
-        take: limit,
-        include: { user: true },
-      });
-      res.status(200).json({ data: accounts, pagination: { page, limit } });
+
+      // filters
+      const { search, status, role } = queryParams;
+
+      const where = {
+        user: {
+          ...(search && {
+            name: { contains: search, mode: 'insensitive' },
+            email: { contains: search, mode: 'insensitive' },
+          }),
+          ...(status && { status }),
+          ...(role && { role }),
+        },
+      } as any;
+      const [accounts, totalCount] = await Promise.all([
+        await prisma.account.findMany({
+          where,
+          skip,
+          take: limit,
+          include: { user: true },
+        }),
+        await prisma.account.count({ where }),
+      ]);
+      res.status(200).json({ data: accounts, pagination: { page, limit, total: totalCount } });
     } catch (err) {
       next(err);
     }
