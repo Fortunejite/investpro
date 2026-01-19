@@ -24,7 +24,7 @@ class DepositController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const chain = queryParams.chain as Chain
+      const chain = queryParams.chain as Chain;
       if (chain && !config.chains.includes(chain)) {
         return res.status(400).json({ message: 'Invalid chain parameter' });
       }
@@ -38,23 +38,31 @@ class DepositController {
         return res.status(400).json({ message: 'Invalid status parameter' });
       }
 
-      const deposits = await prisma.deposit.findMany({
-        where: {
+      const where = {
           accountId: userId,
           ...(status ? { status } : {}),
           ...(chain ? { chain } : {}),
-        },
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      });
-      res.status(200).json({ data: deposits, pagination: { page, limit } });
+        }
+      const [deposits, totalCount] = await Promise.all([
+        await prisma.deposit.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+        }),
+        await prisma.deposit.count({ where }),
+      ]);
+      res.status(200).json({ data: deposits, pagination: { page, limit, total: totalCount } });
     } catch (err) {
       next(err);
     }
   };
 
-  getUserDepositById = async (req: Request, res: Response, next: NextFunction) => {
+  getUserDepositById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const userId = req.user.id;
       const depositId = req.params.id as string;
@@ -85,7 +93,7 @@ class DepositController {
       if (!perUsdRate) {
         return res.status(500).json({ message: 'Failed to fetch price data' });
       }
-      
+
       const newDeposit = await prisma.deposit.create({
         data: {
           accountId: userId,
@@ -107,29 +115,29 @@ class DepositController {
     try {
       const userId = req.user.id;
       const depositId = req.params.id as string;
-  
+
       const deposit = await prisma.deposit.findUnique({
         where: { id: depositId },
       });
-  
+
       if (!deposit || deposit.accountId !== userId) {
         throw Object.assign(new Error('Deposit not found'), {
           status: 404,
         });
       }
-  
+
       if (deposit.status !== 'pending') {
         throw Object.assign(
           new Error('Only pending deposits can be cancelled'),
           { status: 400 },
         );
       }
-  
+
       await prisma.deposit.update({
         where: { id: depositId },
         data: { status: 'cancelled' },
       });
-  
+
       res.status(200).json({ message: 'Deposit cancelled successfully' });
     } catch (err) {
       next(err);
@@ -157,17 +165,31 @@ class DepositController {
           : (queryParams.status as (typeof config.transactionStatuses)[number]);
 
       const userId = parseInt(queryParams.userId as string) || undefined;
-      const deposits = await prisma.deposit.findMany({
-        where: {
-          accountId: userId,
-          status,
-          ...(chain ? { chain } : {}),
-        },
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
+      const where = {
+        accountId: userId,
+        status,
+        ...(chain ? { chain } : {}),
+      };
+      const [deposits, totalCount] = await Promise.all([
+        await prisma.deposit.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            account: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        }),
+        await prisma.deposit.count({ where }),
+      ]);
+      res.status(200).json({
+        data: deposits,
+        pagination: { page, limit, total: totalCount },
       });
-      res.status(200).json({ data: deposits, pagination: { page, limit } });
     } catch (err) {
       next(err);
     }

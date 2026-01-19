@@ -7,3 +7,7 @@ export const createDepositSchema = z.object({
   txHash: z.string().max(100).optional(),
   proofUrl: z.url().optional(),
 });
+
+export const rejectDepositSchema = z.object({
+  adminNote: z.string().min(1, "Admin note is required for rejection"),
+});
