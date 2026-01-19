@@ -82,6 +82,9 @@ class DepositController {
       const validatedData = createDepositSchema.parse(req.body);
 
       const perUsdRate = await getPriceInUsd(validatedData.chain);
+      if (!perUsdRate) {
+        return res.status(500).json({ message: 'Failed to fetch price data' });
+      }
       
       const newDeposit = await prisma.deposit.create({
         data: {

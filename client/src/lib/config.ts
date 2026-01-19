@@ -5,11 +5,11 @@ interface requiredEnv {
 }
 
 const chainInfo = {
-  eth: { name: "Ethereum", symbol: "ETH" },
-  bsc: { name: "Binance Smart Chain", symbol: "BSC" },
-  btc: { name: "Bitcoin", symbol: "BTC" },
-  sol: { name: "Solana", symbol: "SOL" },
-}
+  eth: { name: 'Ethereum', symbol: 'ETH' },
+  bsc: { name: 'Binance Smart Chain', symbol: 'BSC' },
+  btc: { name: 'Bitcoin', symbol: 'BTC' },
+  sol: { name: 'Solana', symbol: 'SOL' },
+};
 
 const config = {
   api: {
@@ -18,22 +18,35 @@ const config = {
   signals: {
     monthly: 100,
     quarterly: 200,
-    yearly: 300
+    yearly: 300,
   } as const,
-  chains: ["eth", "bsc", "btc", "sol"] as const,
+  chains: ['eth', 'bsc', 'btc', 'sol'] as const,
   chainInfo,
-  transactionStatuses: ["pending", "approved", "rejected", "cancelled"] as const,
-  transactionTypes: ["deposit", "withdrawal", "investment", "profit_payout"] as const,
-  investmentStatuses: ["active", "inactive", "expired", "cancelled"] as const,
-  payoutTypes: ["daily", "weekly", "monthly", "end_of_term"] as const,
+  transactionStatuses: [
+    'pending',
+    'approved',
+    'rejected',
+    'cancelled',
+  ] as const,
+  transactionTypes: [
+    'deposit',
+    'withdrawal',
+    'withdrawal_cancellation',
+    'withdrawal_rejected',
+    'investment',
+    'profit_payout',
+    'signal_subscription',
+  ] as const,
+  investmentStatuses: ['active', 'inactive', 'expired', 'cancelled'] as const,
+  payoutTypes: ['daily', 'weekly', 'monthly', 'end_of_term'] as const,
   isValid: false,
 };
 
 const validateConfig = () => {
   const required: requiredEnv[] = [
     {
-      name: "Backend API URL",
-      key: "backendApiUrl",
+      name: 'Backend API URL',
+      key: 'backendApiUrl',
       value: config.api.baseURL,
     },
   ];
@@ -41,7 +54,7 @@ const validateConfig = () => {
   const missing = required.filter((item) => !item.value);
 
   if (missing.length > 0) {
-    console.error("Missing required configuration:");
+    console.error('Missing required configuration:');
     missing.forEach((item) => {
       console.error(`- ${item.name} (${item.key})`);
     });

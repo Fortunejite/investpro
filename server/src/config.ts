@@ -50,8 +50,11 @@ const config = {
   transactionTypes: [
     'deposit',
     'withdrawal',
+    'withdrawal_cancellation',
+    'withdrawal_rejected',
     'investment',
     'profit_payout',
+    'signal_subscription',
   ] as const,
   investmentStatuses: ['active', 'inactive', 'expired', 'cancelled'] as const,
   isValid: false,

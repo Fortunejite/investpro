@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import z from 'zod';
 import { prisma } from '@/lib/prisma';
-import { TradeSignal } from '@prisma/client';
+import { TradeSignal, TradeSignalSubscription } from '@prisma/client';
 import queueSignalForDelivery from '@/queues/signalDelivery';
 import config from '@/config';
 
@@ -16,16 +16,16 @@ const signalSchema = z.object({
 });
 
 const subscribeSchema = z.object({
-  plan: z.enum(Object.keys(config.signals)),
+  plan: z.enum(Object.keys(config.signals) as Array<keyof typeof config.signals>),
 });
 
 const deliverSignal = async (signal: TradeSignal) => {
-    if (!signal.scheduledAt) {
-      await queueSignalForDelivery(signal.id);
-    } else {
-      await queueSignalForDelivery(signal.id, { runAt: signal.scheduledAt });
-    }
-  };
+  if (!signal.scheduledAt) {
+    await queueSignalForDelivery(signal.id);
+  } else {
+    await queueSignalForDelivery(signal.id, { runAt: signal.scheduledAt });
+  }
+};
 
 class TradeSignalController {
   async createTradeSignal(req: Request, res: Response, next: NextFunction) {
@@ -151,14 +151,49 @@ class TradeSignalController {
   async subscribeToSignals(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.user.id;
-      
       const validatedData = subscribeSchema.parse(req.body);
-
-      const subscription = await prisma.tradeSignalSubscription.upsert({
-        where: { userId },
-        update: { isActive: true },
-        create: { userId, plan: validatedData.plan as keyof typeof config.signals },
+      const account = await prisma.account.findUnique({
+        where: { id: userId },
+        select: { id: true, availableBalance: true },
       });
+
+      if (!account) {
+        return res.status(404).json({ message: 'Wallet not Found' });
+      }
+
+      if (account.availableBalance.lessThan(config.signals[validatedData.plan])) {
+        return res.status(400).json({ message: 'Insufficient funds' });
+      }
+
+      let subscription: TradeSignalSubscription | null = null;
+      const endedAt = new Date();
+      endedAt.setMonth(endedAt.getMonth() + 1); // 1 month subscription
+
+      await prisma.$transaction(async (prisma) => {
+        await prisma.account.update({
+          where: { id: account.id },
+          data: {
+            availableBalance: { decrement: config.signals[validatedData.plan] },
+          },
+        });
+        await prisma.transaction.create({
+          data: {
+            accountId: userId,
+            type: 'signal_subscription',
+            amount: config.signals[validatedData.plan],
+          },
+        });
+        subscription = await prisma.tradeSignalSubscription.upsert({
+          where: { userId },
+          update: { isActive: true, endedAt },
+          create: {
+            userId,
+            plan: validatedData.plan as keyof typeof config.signals,
+            endedAt,
+          },
+        });
+      });
+
 
       res.status(200).json(subscription);
     } catch (error) {
@@ -193,6 +228,14 @@ class TradeSignalController {
       const subscription = await prisma.tradeSignalSubscription.findUnique({
         where: { userId },
       });
+
+      if (subscription?.endedAt && subscription.endedAt < new Date()) {
+        await prisma.tradeSignalSubscription.update({
+          where: { userId },
+          data: { isActive: false },
+        });
+        subscription.isActive = false;
+      }
 
       res.status(200).json(subscription);
     } catch (error) {

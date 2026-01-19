@@ -27,8 +27,11 @@ enum Chain {
 enum TransactionType {
   deposit
   withdrawal
+  withdrawal_cancellation
+  withdrawal_rejected
   investment
   profit_payout
+  signal_subscription
 }
 
 enum TransactionStatus {
@@ -169,7 +172,7 @@ model Transaction {
   accountId          Int
   type               TransactionType
   amount             Decimal         @db.Decimal(18, 8)
-  actionId           String
+  actionId           String?
   txHash             String?         @unique
   destinationAddress String?
   createdAt          DateTime        @default(now())
@@ -260,7 +263,7 @@ model TradeSignalSubscription {
   plan      TradeSignalPlan
   isActive  Boolean         @default(true)
   startedAt DateTime        @default(now())
-  endedAt   DateTime?
+  endedAt   DateTime
 
   user User @relation(fields: [userId], references: [id])
 

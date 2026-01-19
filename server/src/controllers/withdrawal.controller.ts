@@ -92,6 +92,9 @@ class WithdrawalController {
       let newWithdrawal: Withdrawal | null = null;
 
       const perUsdRate = await getPriceInUsd(validatedData.chain);
+      if (!perUsdRate) {
+        return res.status(500).json({ message: 'Failed to fetch price data' });
+      }
 
       await prisma.$transaction(async (prisma) => {
         await prisma.account.update({
@@ -109,6 +112,16 @@ class WithdrawalController {
             destinationAddress: validatedData.destinationAddress,
             perUsdRate,
             chain: validatedData.chain,
+          },
+        });
+
+        await prisma.transaction.create({
+          data: {
+            accountId: userId,
+            type: 'withdrawal',
+            amount: validatedData.amount,
+            actionId: newWithdrawal.id,
+            destinationAddress: validatedData.destinationAddress,
           },
         });
       });
@@ -153,6 +166,14 @@ class WithdrawalController {
         await prisma.withdrawal.update({
           where: { id: withdrawalId },
           data: { status: 'cancelled' },
+        });
+        await prisma.transaction.create({
+          data: {
+            accountId: userId,
+            type: 'withdrawal_cancellation',
+            amount: withdrawal.amount,
+            actionId: withdrawal.id,
+          },
         });
       });
 
@@ -256,16 +277,6 @@ class WithdrawalController {
           where: { id: withdrawalId },
           data: { status: 'approved' },
         });
-
-        await prisma.transaction.create({
-          data: {
-            accountId: withdrawal.accountId,
-            type: 'withdrawal',
-            amount: withdrawal.amount,
-            actionId: withdrawal.id,
-            destinationAddress: withdrawal.destinationAddress,
-          },
-        });
       });
 
       res.status(200).json({ message: 'Withdrawal approved successfully' });
@@ -301,6 +312,16 @@ class WithdrawalController {
           data: {
             availableBalance: { increment: withdrawal.amount },
             lockedBalance: { decrement: withdrawal.amount },
+          },
+        });
+
+        await prisma.transaction.create({
+          data: {
+            accountId: withdrawal.accountId,
+            type: 'withdrawal_rejected',
+            amount: withdrawal.amount,
+            actionId: withdrawal.id,
+            destinationAddress: withdrawal.destinationAddress,
           },
         });
 
