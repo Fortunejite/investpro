@@ -2,7 +2,7 @@ export const settingsConstants = [
   // Admin Addresses
   "btcAddress",
   "ethAddress",
-  "bsc",
+  "bscAddress",
   "solAddress",
 
   // Telegram Settings
