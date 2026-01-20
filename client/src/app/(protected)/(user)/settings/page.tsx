@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Lock, Eye, EyeOff, Save, Settings2, Mail, MessageSquare } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, Save, Settings2, Mail, MessageSquare, Palette } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -16,6 +16,7 @@ import api from '@/lib/api';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux.hook';
 import { fetchUser } from '@/redux/user.slice';
 import { Separator } from '@radix-ui/react-dropdown-menu';
+import ThemeSwitch from '@/components/ThemeSwitch';
 
 // Validation schemas
 const profileSchema = z.object({
@@ -121,9 +122,10 @@ const UserSettingsPage = () => {
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="profile">Profile Settings</TabsTrigger>
             <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="preferences">Preferences</TabsTrigger>
           </TabsList>
 
           {/* Profile Settings Tab */}
@@ -392,6 +394,95 @@ const UserSettingsPage = () => {
                     <p className="font-medium">Login Sessions</p>
                     <p className="text-sm text-muted-foreground">
                       Manage your active login sessions
+                    </p>
+                  </div>
+                  <Badge variant="secondary">Coming Soon</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Preferences Tab */}
+          <TabsContent value="preferences" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Palette className="w-5 h-5" />
+                  Appearance & Theme
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Customize your visual experience and interface preferences
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                  <div className="space-y-1">
+                    <p className="font-medium">Theme</p>
+                    <p className="text-sm text-muted-foreground">
+                      Switch between light and dark themes
+                    </p>
+                  </div>
+                  <ThemeSwitch />
+                </div>
+
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/10">
+                  <div className="space-y-1">
+                    <p className="font-medium">Language</p>
+                    <p className="text-sm text-muted-foreground">
+                      Change your preferred language
+                    </p>
+                  </div>
+                  <Badge variant="secondary">English (Default)</Badge>
+                </div>
+
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/10">
+                  <div className="space-y-1">
+                    <p className="font-medium">Timezone</p>
+                    <p className="text-sm text-muted-foreground">
+                      Set your local timezone for accurate timestamps
+                    </p>
+                  </div>
+                  <Badge variant="secondary">Auto-detect</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings2 className="w-5 h-5" />
+                  Notification Preferences
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Control how and when you receive notifications
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/10">
+                  <div className="space-y-1">
+                    <p className="font-medium">Email Notifications</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receive trading signals and account updates via email
+                    </p>
+                  </div>
+                  <Badge variant="secondary">Coming Soon</Badge>
+                </div>
+
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/10">
+                  <div className="space-y-1">
+                    <p className="font-medium">Telegram Notifications</p>
+                    <p className="text-sm text-muted-foreground">
+                      Get instant notifications through Telegram
+                    </p>
+                  </div>
+                  <Badge variant="secondary">Coming Soon</Badge>
+                </div>
+
+                <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/10">
+                  <div className="space-y-1">
+                    <p className="font-medium">Trading Signal Alerts</p>
+                    <p className="text-sm text-muted-foreground">
+                      Choose when to receive trading signal notifications
                     </p>
                   </div>
                   <Badge variant="secondary">Coming Soon</Badge>
