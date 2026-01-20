@@ -3,7 +3,7 @@ import config from "@/lib/config";
 export interface Transaction {
   id: string;
   createdAt: Date;
-  type: keyof typeof config.transactionTypes;
+  type: typeof config.transactionTypes[number];
   amount: string;
   txHash: string | null;
   accountId: number;
