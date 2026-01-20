@@ -34,6 +34,11 @@ const updateUserProfile = z.object({
   telegramUserId: z.string().trim().optional(),
 });
 
+const updatePasswordSchema = z.object({
+  newPassword: z.string().min(6),
+  currentPassword: z.string().min(6),
+});
+
 const login = async (res: Response, userData: Omit<User, "hashed_password" | "refreshToken">, rememberMe: boolean) => {
   const token = tokenService.generateAccessToken(userData);
   const refreshToken = tokenService.generateRefreshToken(userData.id, rememberMe);
@@ -138,6 +143,36 @@ class AuthController {
       });
       const { hashed_password, refreshToken, ...userData } = updatedUser;
       res.status(200).json({ message: "User updated successfully", user: userData });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updatePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user.id;
+      const { currentPassword, newPassword } = updatePasswordSchema.parse(req.body);
+      if (currentPassword === newPassword) {
+        return res.status(400).json({ message: "New password must be different from current password" });
+      }
+      const user = await prisma.user.findUnique({
+        where: {
+          id: userId
+        }
+      });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.hashed_password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ message: "Current Password Incorrect" });
+      }
+      const hashed_password = await bcrypt.hash(newPassword, 10)
+      await prisma.user.update({
+        where: { id: userId },
+        data: { hashed_password },
+      });
+      res.status(200).json({ message: "Password updated successfully" });
     } catch (error) {
       next(error);
     }
