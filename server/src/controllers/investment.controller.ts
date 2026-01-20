@@ -10,7 +10,11 @@ const createInvestmentSchema = z.object({
 });
 
 class InvestmentController {
-  getUserInvestments = async (req: Request, res: Response, next: NextFunction) => {
+  getUserInvestments = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const userId = req.user.id;
       const queryParams = req.query;
@@ -21,8 +25,7 @@ class InvestmentController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const status =
-        queryParams.status as InvestmentStatus | undefined;
+      const status = queryParams.status as InvestmentStatus | undefined;
       if (status && !config.investmentStatuses.includes(status)) {
         return res.status(400).json({ message: 'Invalid status parameter' });
       }
@@ -41,7 +44,11 @@ class InvestmentController {
     }
   };
 
-  getUserInvestmentById = async (req: Request, res: Response, next: NextFunction) => {
+  getUserInvestmentById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const userId = req.user.id;
       const investmentId = req.params.id as string;
@@ -49,12 +56,14 @@ class InvestmentController {
       const investment = await prisma.investment.findUnique({
         where: { id: investmentId },
         include: {
-          account: true,
+          account: {
+            include: { user: true },
+          },
           plan: true,
         },
       });
 
-      if (!investment || investment.account.id !== userId) {
+      if (!investment || (investment.account.id !== userId && req.user.role !== 'admin')) {
         return res.status(404).json({ message: 'Investment not found' });
       }
 
@@ -64,7 +73,11 @@ class InvestmentController {
     }
   };
 
-  createInvestment = async (req: Request, res: Response, next: NextFunction) => {
+  createInvestment = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const validatedData = createInvestmentSchema.parse(req.body);
 
@@ -75,25 +88,36 @@ class InvestmentController {
         });
 
         if (!plan || !plan.isActive) {
-          throw Object.assign(new Error('Invalid or inactive investment plan'), {
-            status: 400,
-          });
+          throw Object.assign(
+            new Error('Invalid or inactive investment plan'),
+            {
+              status: 400,
+            },
+          );
         }
 
         const userWallet = await prisma.account.findUnique({
           where: { id: req.user.id },
         });
 
-        if (!userWallet || userWallet.availableBalance.lessThan(validatedData.amount)) {
+        if (
+          !userWallet ||
+          userWallet.availableBalance.lessThan(validatedData.amount)
+        ) {
           throw Object.assign(new Error('Insufficient funds in wallet'), {
             status: 400,
           });
         }
 
         if (validatedData.amount < plan.minAmount) {
-          throw Object.assign(new Error(`Investment amount is below the minimum of ${plan.minAmount}`), {
-            status: 400,
-          });
+          throw Object.assign(
+            new Error(
+              `Investment amount is below the minimum of ${plan.minAmount}`,
+            ),
+            {
+              status: 400,
+            },
+          );
         }
 
         await prisma.account.update({
@@ -111,7 +135,9 @@ class InvestmentController {
             amount: validatedData.amount,
             profit: (validatedData.amount * plan.roiPercent) / 100,
             startDate: new Date(),
-            endDate: new Date(Date.now() + plan.durationInDays * 24 * 60 * 60 * 1000),
+            endDate: new Date(
+              Date.now() + plan.durationInDays * 24 * 60 * 60 * 1000,
+            ),
           },
         });
 
@@ -123,9 +149,7 @@ class InvestmentController {
             actionId: newInvestment.id,
           },
         });
-
       });
-
 
       res.status(201).json(newInvestment);
     } catch (err) {
@@ -147,7 +171,9 @@ class InvestmentController {
       }
 
       if (investment.status !== 'active') {
-        return res.status(400).json({ message: 'Only active investments can be ended' });
+        return res
+          .status(400)
+          .json({ message: 'Only active investments can be ended' });
       }
 
       await prisma.$transaction(async (prisma) => {
@@ -229,7 +255,11 @@ class InvestmentController {
     }
   };
 
-  getAllInvestments = async (req: Request, res: Response, next: NextFunction) => {
+  getAllInvestments = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const queryParams = req.query;
 
@@ -239,27 +269,41 @@ class InvestmentController {
       const skip = (page - 1) * limit;
 
       // Filters
-      const status =
-        queryParams.status as InvestmentStatus;
+      const status = queryParams.status as InvestmentStatus;
       const userId = parseInt(queryParams.userId as string) || undefined;
       if (status && !config.investmentStatuses.includes(status)) {
         return res.status(400).json({ message: 'Invalid status parameter' });
       }
 
-      const investments = await prisma.investment.findMany({
-        where: {
-          ...(status ? { status } : {}),
-          accountId: userId,
-        },
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          account: true,
-          plan: true,
-        },
-      });
-      res.status(200).json({ data: investments, pagination: { page, limit } });
+      const [investments, totalCount] = await Promise.all([
+        await prisma.investment.findMany({
+          where: {
+            ...(status ? { status } : {}),
+            accountId: userId,
+          },
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            account: {
+              include: { user: true },
+            },
+            plan: true,
+          },
+        }),
+        await prisma.investment.count({
+          where: {
+            ...(status ? { status } : {}),
+            accountId: userId,
+          },
+        }),
+      ]);
+      res
+        .status(200)
+        .json({
+          data: investments,
+          pagination: { page, limit, total: totalCount },
+        });
     } catch (err) {
       next(err);
     }
