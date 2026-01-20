@@ -197,6 +197,8 @@ class TradeSignalController {
         data: validatedData,
       });
 
+      await deliverSignal(tradeSignal);
+
       res.status(200).json(tradeSignal);
     } catch (error) {
       next(error);
