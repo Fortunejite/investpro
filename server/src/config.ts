@@ -9,14 +9,14 @@ interface requiredEnv {
 }
 
 const config = {
-  port: process.env.PORT || 8000,
+  port: process.env.PORT,
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   refreshToken: process.env.REFRESH_TOKEN!,
   databaseUrl: process.env.DATABASE_URL!,
   redis: {
     host: process.env.REDIS_HOST!,
-    port: parseInt(process.env.REDIS_PORT!),
+    // port: parseInt(process.env.REDIS_PORT!),
     // password: process.env.REDIS_PASSWORD!,
   },
   signals: {
