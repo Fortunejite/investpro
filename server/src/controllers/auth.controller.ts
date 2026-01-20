@@ -49,6 +49,7 @@ const login = async (res: Response, userData: Omit<User, "hashed_password" | "re
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "none",
+    path: "/",
     maxAge: 10 * 60 * 1000 // 10 minutes
   });
 
@@ -206,6 +207,7 @@ class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "none",
+        path: "/",
         maxAge: 10 * 60 * 1000 // 10 minutes
       });
 
