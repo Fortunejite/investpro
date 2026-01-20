@@ -36,7 +36,7 @@ export default function SignupPage() {
     try {
       await api.post("/auth/register", data);
       // Handle successful registration - redirect to login or dashboard
-      window.location.href = "/auth/login";
+      window.location.href = "/dashboard";
     } catch (error: unknown) {
       // Handle API errors using utility function
       handleAPIError<RegisterFormData>(error, form);

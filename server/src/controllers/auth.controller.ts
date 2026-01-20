@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { tokenService } from "@/services/tokenService";
 import { createAccount } from "@/lib/account";
 import queueResetEmailForDelivery from "@/queues/email.queues";
+import { User } from "@prisma/client";
 
 const registerSchema = z.object({
   email: z.email(),
@@ -30,8 +31,30 @@ const resetPasswordSchema = z.object({
 
 const updateUserProfile = z.object({
   name: z.string().min(2).optional(),
-  telegramUserId: z.string().optional(),
+  telegramUserId: z.string().trim().optional(),
 });
+
+const login = async (res: Response, userData: Omit<User, "hashed_password" | "refreshToken">, rememberMe: boolean) => {
+  const token = tokenService.generateAccessToken(userData);
+  const refreshToken = tokenService.generateRefreshToken(userData.id, rememberMe);
+
+  await prisma.user.update({ where: { id: userData.id }, data: { refreshToken } });
+
+  res.cookie("accessToken", token, { 
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 10 * 60 * 1000 // 10 minutes
+  });
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/auth/refresh",
+    maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000 // 7 or 30 days
+  });
+}
 
 class AuthController {
   registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -46,11 +69,12 @@ class AuthController {
 
       const hashPassword = await bcrypt.hash(password, 10);
       // Create new user
-      const newUser = await prisma.user.create({
+      const { hashed_password, refreshToken, ...newUser } = await prisma.user.create({
         data: { email, name, hashed_password: hashPassword },
       });
 
       await createAccount(newUser.id);
+      await login(res, newUser, false);
 
       res.status(201).json({ message: "User registered successfully", userId: newUser.id });
     } catch (error) {
@@ -78,25 +102,8 @@ class AuthController {
         return res.status(403).json({ message: "User is not active. Contact admin" });
       }
 
-      const token = tokenService.generateAccessToken(userData);
-      const refreshToken = tokenService.generateRefreshToken(userData.id, rememberMe);
-
-      await prisma.user.update({ where: { id: userData.id }, data: { refreshToken } });
-
-      res.cookie("accessToken", token, { 
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 10 * 60 * 1000 // 10 minutes
-      });
-
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/auth/refresh",
-        maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000 // 7 or 30 days
-      });
+      await login(res, userData, Boolean(rememberMe));
+      
       res.status(200).json({ message: "Login successful", user: userData });
     } catch (error) {
       next(error);
