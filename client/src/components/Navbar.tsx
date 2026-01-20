@@ -15,6 +15,7 @@ import {
   Menu,
   X,
   Bell,
+  Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -123,6 +124,20 @@ export default function Navbar() {
               </Badge>
             </Button>
 
+            {/* Admin Panel Access - Only show if user is admin */}
+            {user?.role === 'admin' && (
+              <Link href="/admin">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="relative hover:bg-primary/10 hover:text-primary"
+                  title="Admin Panel"
+                >
+                  <Shield className="h-5 w-5" />
+                </Button>
+              </Link>
+            )}
+
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -158,6 +173,17 @@ export default function Navbar() {
                     <span>Settings</span>
                   </Link>
                 </DropdownMenuItem>
+                {user?.role === 'admin' && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="flex items-center text-primary">
+                        <Shield className="mr-2 h-4 w-4" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={handleLogout}
@@ -208,6 +234,23 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+              
+              {/* Admin Panel Access - Mobile */}
+              {user?.role === 'admin' && (
+                <Link
+                  href="/admin"
+                  className={cn(
+                    'flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium transition-all duration-200 border-t border-border mt-2 pt-3',
+                    pathname.startsWith('/admin')
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Shield className="h-5 w-5" />
+                  <span>Admin Panel</span>
+                </Link>
+              )}
             </div>
           </div>
         )}
