@@ -21,7 +21,6 @@ import { formatDate, formatCurrency } from '@/lib/utils';
 import { User } from '@/types/user';
 import { createSignalSchema, editSignalSchema } from '@/types/signal/signal.schema';
 import { Signal, Subscription } from '@/types/signal';
-import config from '@/lib/config';
 
 interface SubscriberWithUser extends Subscription {
   user: User;
@@ -632,7 +631,7 @@ const AdminTradingSignalsPage = () => {
                           </TableCell>
                           <TableCell>{formatDate(subscriber.startedAt)}</TableCell>
                           <TableCell>{formatDate(subscriber.endedAt)}</TableCell>
-                          <TableCell>{formatCurrency(config.signals[subscriber.plan])}</TableCell>
+                          <TableCell>{formatCurrency(subscriber.amount)}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

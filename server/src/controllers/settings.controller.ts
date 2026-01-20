@@ -1,31 +1,57 @@
 import { Request, Response, NextFunction } from 'express';
-import { prisma } from "@/lib/prisma";
+import { prisma } from '@/lib/prisma';
 
 const settingsConstants = [
   // Admin Addresses
-  "btcAddress",
-  "ethAddress",
-  "bscAddress",
-  "solAddress",
+  'btcAddress',
+  'ethAddress',
+  'bscAddress',
+  'solAddress',
 
   // Telegram Settings
-  "telegramBotToken"
+  'telegramBotToken',
+
+  // Gmail SMTP Settings
+  'emailUser',
+  'emailPass',
+
+  // Signal Pricing
+  'monthlySignalPrice',
+  'quarterlySignalPrice',
+  'annualSignalPrice',
 ];
 
 const clientAccessibleSettings = [
   // Admin Addresses
-  "btcAddress",
-  "ethAddress",
-  "bscAddress",
-  "solAddress",
+  'btcAddress',
+  'ethAddress',
+  'bscAddress',
+  'solAddress',
+
+  // Signal Pricing
+  'monthlySignalPrice',
+  'quarterlySignalPrice',
+  'annualSignalPrice',
 ];
+
+export const _getSettingsByKey = async (key: string) => {
+  const setting = await prisma.settings.findUnique({
+    where: { key },
+  });
+
+  if (!setting) return null;
+
+  return setting.value;
+};
 
 class SettingsController {
   getSettings = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const isAdmin = req.user.role === 'admin';
       const settings = await prisma.settings.findMany({
-        where: { key: { in: isAdmin ? settingsConstants : clientAccessibleSettings } }
+        where: {
+          key: { in: isAdmin ? settingsConstants : clientAccessibleSettings },
+        },
       });
 
       const settingsData: any = {};
@@ -44,19 +70,19 @@ class SettingsController {
       const isAdmin = req.user.role === 'admin';
 
       if (!settingsConstants.includes(key)) {
-        return res.status(400).json({ message: "Invalid setting key" });
+        return res.status(400).json({ message: 'Invalid setting key' });
       }
 
       if (!isAdmin && !clientAccessibleSettings.includes(key)) {
-        return res.status(403).json({ message: "Access denied" });
+        return res.status(403).json({ message: 'Access denied' });
       }
 
       const setting = await prisma.settings.findUnique({
-        where: { key }
+        where: { key },
       });
 
       if (!setting) {
-        return res.status(404).json({ message: "Setting not found" });
+        return res.status(404).json({ message: 'Setting not found' });
       }
 
       res.status(200).json({ key: setting.key, value: setting.value });
@@ -72,12 +98,14 @@ class SettingsController {
       const { key, value } = req.body;
 
       if (!settingsConstants.includes(key)) {
-        return res.status(400).json({ message: "Invalid setting key" });
+        return res.status(400).json({ message: 'Invalid setting key' });
       }
 
-      const existingSetting = await prisma.settings.findUnique({ where: { key } });
+      const existingSetting = await prisma.settings.findUnique({
+        where: { key },
+      });
       if (existingSetting) {
-        return res.status(400).json({ message: "Setting already exists" });
+        return res.status(400).json({ message: 'Setting already exists' });
       }
 
       const newSetting = await prisma.settings.create({
@@ -96,7 +124,7 @@ class SettingsController {
       const { value } = req.body;
 
       if (!settingsConstants.includes(key)) {
-        return res.status(400).json({ message: "Invalid setting key" });
+        return res.status(400).json({ message: 'Invalid setting key' });
       }
 
       const updatedSetting = await prisma.settings.upsert({
@@ -105,7 +133,9 @@ class SettingsController {
         create: { key, value },
       });
 
-      res.status(200).json({ key: updatedSetting.key, value: updatedSetting.value });
+      res
+        .status(200)
+        .json({ key: updatedSetting.key, value: updatedSetting.value });
     } catch (error) {
       next(error);
     }
@@ -115,14 +145,16 @@ class SettingsController {
     try {
       const key = req.params.key as string;
       if (!settingsConstants.includes(key)) {
-        return res.status(400).json({ message: "Invalid setting key" });
+        return res.status(400).json({ message: 'Invalid setting key' });
       }
 
       const deletedSetting = await prisma.settings.delete({
-        where: { key }
+        where: { key },
       });
 
-      res.status(200).json({ key: deletedSetting.key, value: deletedSetting.value });
+      res
+        .status(200)
+        .json({ key: deletedSetting.key, value: deletedSetting.value });
     } catch (error) {
       next(error);
     }

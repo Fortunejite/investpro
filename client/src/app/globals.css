@@ -51,84 +51,131 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --radius: 0.75rem;
+  
+  /* Premium Investment Theme - Light Mode */
+  --background: oklch(0.98 0.005 240); /* Subtle cool white */
+  --foreground: oklch(0.15 0.02 240); /* Deep navy text */
+  
+  --card: oklch(1 0 0); /* Pure white cards */
+  --card-foreground: oklch(0.15 0.02 240);
+  
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --success: oklch(0.646 0.222 41.116);
-  --success-foreground: oklch(0.985 0 0);
-  --warning: oklch(0.828 0.189 84.429);
-  --warning-foreground: oklch(0.205 0 0);
-  --info: oklch(0.6 0.118 184.704);
-  --info-foreground: oklch(0.985 0 0);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --popover-foreground: oklch(0.15 0.02 240);
+  
+  /* Royal Blue Primary - Investment Trust */
+  --primary: oklch(0.45 0.15 240); /* Rich royal blue */
+  --primary-foreground: oklch(0.98 0 0);
+  
+  /* Platinum Secondary */
+  --secondary: oklch(0.94 0.01 240); /* Platinum gray */
+  --secondary-foreground: oklch(0.25 0.02 240);
+  
+  /* Sophisticated Muted Tones */
+  --muted: oklch(0.96 0.008 240); /* Cool light gray */
+  --muted-foreground: oklch(0.45 0.01 240); /* Medium gray */
+  
+  /* Silver-Blue Accent - Refined Elegance */
+  --accent: oklch(0.72 0.08 220); /* Sophisticated silver-blue */
+  --accent-foreground: oklch(0.15 0.02 240);
+  
+  /* Enhanced State Colors */
+  --destructive: oklch(0.65 0.2 25); /* Sophisticated red */
+  
+  /* Refined Borders and Inputs */
+  --border: oklch(0.88 0.01 240); /* Subtle blue-gray border */
+  --input: oklch(0.96 0.008 240); /* Matching input background */
+  --ring: oklch(0.45 0.15 240 / 0.3); /* Primary ring with transparency */
+  
+  /* Professional Chart Colors */
+  --chart-1: oklch(0.45 0.15 240); /* Primary blue */
+  --chart-2: oklch(0.72 0.08 220); /* Silver-blue */
+  --chart-3: oklch(0.55 0.12 180); /* Teal */
+  --chart-4: oklch(0.68 0.15 320); /* Purple */
+  --chart-5: oklch(0.72 0.18 140); /* Green */
+  
+  /* Semantic Investment Colors */
+  --success: oklch(0.65 0.15 140); /* Profit green */
+  --success-foreground: oklch(0.98 0 0);
+  
+  --warning: oklch(0.75 0.15 45); /* Caution amber */
+  --warning-foreground: oklch(0.15 0.02 240);
+  
+  --info: oklch(0.55 0.12 200); /* Information cyan */
+  --info-foreground: oklch(0.98 0 0);
+  
+  /* Premium Sidebar */
+  --sidebar: oklch(0.96 0.008 240); /* Matching light background */
+  --sidebar-foreground: oklch(0.15 0.02 240);
+  --sidebar-primary: oklch(0.45 0.15 240);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.72 0.08 220); /* Silver-blue accent */
+  --sidebar-accent-foreground: oklch(0.15 0.02 240);
+  --sidebar-border: oklch(0.88 0.01 240);
+  --sidebar-ring: oklch(0.45 0.15 240 / 0.3);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --success: oklch(0.696 0.17 162.48);
-  --success-foreground: oklch(0.985 0 0);
-  --warning: oklch(0.769 0.188 70.08);
-  --warning-foreground: oklch(0.205 0 0);
-  --info: oklch(0.488 0.243 264.376);
-  --info-foreground: oklch(0.985 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Premium Investment Theme - Dark Mode */
+  --background: oklch(0.08 0.02 240); /* Deep navy background */
+  --foreground: oklch(0.92 0.01 240); /* Platinum white text */
+  
+  --card: oklch(0.12 0.025 240); /* Rich dark blue cards */
+  --card-foreground: oklch(0.92 0.01 240);
+  
+  --popover: oklch(0.12 0.025 240);
+  --popover-foreground: oklch(0.92 0.01 240);
+  
+  /* Luxurious Primary - Glowing Blue */
+  --primary: oklch(0.65 0.18 240); /* Bright royal blue */
+  --primary-foreground: oklch(0.08 0.02 240);
+  
+  /* Sophisticated Dark Secondary */
+  --secondary: oklch(0.18 0.02 240); /* Charcoal blue */
+  --secondary-foreground: oklch(0.85 0.01 240);
+  
+  /* Elegant Muted Tones */
+  --muted: oklch(0.15 0.02 240); /* Dark blue-gray */
+  --muted-foreground: oklch(0.65 0.01 240); /* Medium light gray */
+  
+  /* Premium Silver-Blue Accent */
+  --accent: oklch(0.78 0.12 220); /* Bright silver-blue */
+  --accent-foreground: oklch(0.08 0.02 240);
+  
+  /* Refined Destructive */
+  --destructive: oklch(0.72 0.22 25); /* Bright but refined red */
+  
+  /* Sophisticated Borders */
+  --border: oklch(0.25 0.02 240); /* Subtle dark blue border */
+  --input: oklch(0.15 0.02 240); /* Dark input background */
+  --ring: oklch(0.65 0.18 240 / 0.4); /* Glowing primary ring */
+  
+  /* Professional Dark Chart Colors */
+  --chart-1: oklch(0.65 0.18 240); /* Bright blue */
+  --chart-2: oklch(0.78 0.12 220); /* Bright silver-blue */
+  --chart-3: oklch(0.68 0.15 180); /* Bright teal */
+  --chart-4: oklch(0.75 0.18 320); /* Bright purple */
+  --chart-5: oklch(0.78 0.2 140); /* Bright green */
+  
+  /* Enhanced Semantic Colors for Dark Mode */
+  --success: oklch(0.72 0.18 140); /* Bright profit green */
+  --success-foreground: oklch(0.08 0.02 240);
+  
+  --warning: oklch(0.78 0.18 45); /* Bright warning amber */
+  --warning-foreground: oklch(0.08 0.02 240);
+  
+  --info: oklch(0.68 0.15 200); /* Bright info cyan */
+  --info-foreground: oklch(0.08 0.02 240);
+  
+  /* Luxurious Dark Sidebar */
+  --sidebar: oklch(0.1 0.022 240); /* Slightly lighter than background */
+  --sidebar-foreground: oklch(0.9 0.01 240);
+  --sidebar-primary: oklch(0.65 0.18 240);
+  --sidebar-primary-foreground: oklch(0.08 0.02 240);
+  --sidebar-accent: oklch(0.78 0.12 220); /* Silver-blue accent */
+  --sidebar-accent-foreground: oklch(0.08 0.02 240);
+  --sidebar-border: oklch(0.25 0.02 240);
+  --sidebar-ring: oklch(0.65 0.18 240 / 0.4);
 }
 
 @layer base {
@@ -161,6 +208,19 @@
   /* Loading animations */
   .animate-loading-bar {
     animation: loadingBar 2s ease-in-out infinite;
+  }
+  
+  /* Investment-themed animations */
+  .animate-pulse-gold {
+    animation: pulseGold 2s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+  
+  .animate-chart-grow {
+    animation: chartGrow 0.8s ease-out;
   }
   
   .animation-delay-200 {
@@ -228,9 +288,69 @@
     }
   }
   
-  /* Gradient backgrounds */
-  .bg-linear-to-br {
-    background: linear-gradient(to bottom right, var(--background), var(--background), hsl(var(--muted) / 0.3));
+  @keyframes pulseGold {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(var(--accent) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px hsl(var(--accent) / 0.6);
+    }
+  }
+  
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px -10px hsl(var(--primary) / 0.5);
+    }
+    to {
+      box-shadow: 0 0 30px -5px hsl(var(--primary) / 0.8);
+    }
+  }
+  
+  @keyframes chartGrow {
+    from {
+      transform: scaleY(0);
+      opacity: 0;
+    }
+    to {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Premium Investment Gradient Backgrounds */
+  .bg-investment-gradient {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary) / 0.1) 0%, 
+      hsl(var(--background)) 25%, 
+      hsl(var(--accent) / 0.05) 100%);
+  }
+  
+  .bg-hero-gradient {
+    background: linear-gradient(135deg,
+      hsl(var(--primary) / 0.15) 0%,
+      hsl(var(--background)) 40%,
+      hsl(var(--accent) / 0.1) 100%);
+  }
+  
+  .bg-card-premium {
+    background: linear-gradient(145deg,
+      hsl(var(--card)) 0%,
+      hsl(var(--muted) / 0.3) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+  
+  /* Gold accent gradients for success/profit displays */
+  .bg-profit-gradient {
+    background: linear-gradient(135deg,
+      hsl(var(--success) / 0.1) 0%,
+      hsl(var(--accent) / 0.05) 100%);
+  }
+  
+  .bg-loss-gradient {
+    background: linear-gradient(135deg,
+      hsl(var(--destructive) / 0.1) 0%,
+      hsl(var(--background)) 100%);
   }
 
   /* Custom semantic colors */
@@ -243,6 +363,7 @@
   .border-success {
     border-color: hsl(var(--success));
   }
+  
   .text-warning {
     color: hsl(var(--warning));
   }
@@ -255,6 +376,7 @@
   .text-warning-foreground {
     color: hsl(var(--warning-foreground));
   }
+  
   .text-info {
     color: hsl(var(--info));
   }
@@ -266,5 +388,44 @@
   }
   .text-info-foreground {
     color: hsl(var(--info-foreground));
+  }
+  
+  /* Investment-specific text styles */
+  .text-profit {
+    color: hsl(var(--success));
+    font-weight: 600;
+  }
+  
+  .text-loss {
+    color: hsl(var(--destructive));
+    font-weight: 600;
+  }
+  
+  .text-accent {
+    color: hsl(var(--accent));
+    font-weight: 600;
+  }
+  
+  /* Premium hover effects */
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px hsl(var(--primary) / 0.1);
+  }
+  
+  /* Glass morphism effects */
+  .glass-card {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+  
+  .glass-nav {
+    background: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
   }
 }

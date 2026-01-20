@@ -1,5 +1,9 @@
-import config from "@/config";
+import { _getSettingsByKey } from "@/controllers/settings.controller";
 
-export const url = 'https://api.telegram.org/bot' + config.telegram.botToken + '/sendMessage';
+export const getUrl = async () => {
+  const botToken = await _getSettingsByKey('telegramBotToken')
+  if (!botToken) return null;
+  return 'https://api.telegram.org/bot' + botToken + '/sendMessage'
+};
 
 export { default as sendSignalMessage } from './signal';

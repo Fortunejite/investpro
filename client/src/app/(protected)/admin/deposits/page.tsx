@@ -177,15 +177,15 @@ const AdminDepositsPage = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-warning/20 text-warning-foreground border-warning/30';
+        return 'bg-warning/90 text-warning-foreground border-warning/90';
       case 'approved':
-        return 'bg-success/20 text-success-foreground border-success/30';
+        return 'bg-success/90 hover:bg-success text-success-foreground';
       case 'rejected':
-        return 'bg-destructive/20 text-destructive-foreground border-destructive/30';
+        return 'bg-destructive/90 text-destructive-foreground border-destructive/30';
       case 'cancelled':
-        return 'bg-muted text-muted-foreground border-muted-foreground/30';
+        return 'bg-muted/90 text-muted-foreground border-muted-foreground/30';
       default:
-        return 'bg-muted text-muted-foreground border-muted-foreground/30';
+        return 'bg-muted/90 text-muted-foreground border-muted-foreground/30';
     }
   };
 

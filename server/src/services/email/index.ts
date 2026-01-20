@@ -1,14 +1,7 @@
 import nodemailer from 'nodemailer';
 import config from '@/config';
 import { forgotPasswordEmail } from './forgotPassword';
-
-const transporter = nodemailer.createTransport({
-  service: config.email.service,
-  auth: {
-    user: config.email.auth.user,
-    pass: config.email.auth.pass,
-  },
-});
+import { _getSettingsByKey } from '@/controllers/settings.controller';
 
 export const sendEmail = async (
   to: string,
@@ -16,13 +9,24 @@ export const sendEmail = async (
   text: string,
   html?: string
 ) => {
+  const emailUser = await _getSettingsByKey('emailUser')
+  const emailPass = await _getSettingsByKey('emailPass')
+  if (!emailUser || !emailPass) return;
   const mailOptions = {
-    from: config.email.auth.user,
+    from: emailUser,
     to,
     subject,
     text,
     html,
   };
+
+  const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: emailUser,
+    pass: emailPass,
+  },
+});
 
   await transporter.sendMail(mailOptions);
 };

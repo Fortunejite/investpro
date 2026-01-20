@@ -16,9 +16,9 @@ const config = {
     baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL!,
   },
   signals: {
-    monthly: 100,
-    quarterly: 200,
-    yearly: 300,
+    monthly: 'monthlySignalPrice',
+    quarterly: 'quarterlySignalPrice',
+    yearly: 'annualSignalPrice',
   } as const,
   chains: ['eth', 'bsc', 'btc', 'sol'] as const,
   chainInfo,

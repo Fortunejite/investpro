@@ -19,21 +19,11 @@ const config = {
     port: parseInt(process.env.REDIS_PORT!),
     // password: process.env.REDIS_PASSWORD!,
   },
-  email: {
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER!,
-      pass: process.env.EMAIL_PASS!,
-    },
-  },
   signals: {
-    monthly: 100,
-    quarterly: 200,
-    yearly: 300,
+    monthly: 'monthlySignalPrice',
+    quarterly: 'quarterlySignalPrice',
+    yearly: 'annualSignalPrice',
   } as const,
-  telegram: {
-    botToken: process.env.TELEGRAM_BOT_TOKEN!,
-  },
   chains: ['eth', 'bsc', 'btc', 'sol'] as const,
   coinIds: {
     eth: '80',
@@ -81,16 +71,6 @@ const validateConfig = () => {
       name: 'Database URL',
       key: 'databaseUrl',
       value: config.databaseUrl,
-    },
-    {
-      name: 'Email User',
-      key: 'email.user',
-      value: config.email.auth.user,
-    },
-    {
-      name: 'Email Pass',
-      key: 'email.pass',
-      value: config.email.auth.pass,
     },
   ];
 

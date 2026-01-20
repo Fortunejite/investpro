@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { TradeSignal, TradeSignalSubscription } from '@prisma/client';
 import queueSignalForDelivery from '@/queues/signalDelivery';
 import config from '@/config';
+import { _getSettingsByKey } from './settings.controller';
 
 const signalSchema = z.object({
   action: z.enum(['Buy', 'Sell']),
@@ -227,13 +228,20 @@ class TradeSignalController {
         where: { id: userId },
         select: { id: true, availableBalance: true },
       });
+      const planAmount = await _getSettingsByKey(
+        config.signals[validatedData.plan],
+      );
+
+      if (!planAmount) {
+        return res.status(500).json({ message: 'Subscription plan not configured' });
+      }
 
       if (!account) {
         return res.status(404).json({ message: 'Wallet not Found' });
       }
 
       if (
-        account.availableBalance.lessThan(config.signals[validatedData.plan])
+        account.availableBalance.lessThan(parseInt(planAmount))
       ) {
         return res.status(400).json({ message: 'Insufficient funds' });
       }
@@ -246,23 +254,24 @@ class TradeSignalController {
         await prisma.account.update({
           where: { id: account.id },
           data: {
-            availableBalance: { decrement: config.signals[validatedData.plan] },
+            availableBalance: { decrement: parseInt(planAmount) },
           },
         });
         await prisma.transaction.create({
           data: {
             accountId: userId,
             type: 'signal_subscription',
-            amount: config.signals[validatedData.plan],
+            amount: parseInt(planAmount),
           },
         });
         subscription = await prisma.tradeSignalSubscription.upsert({
           where: { userId },
-          update: { isActive: true, endedAt },
+          update: { isActive: true, endedAt, amount: planAmount },
           create: {
             userId,
             plan: validatedData.plan as keyof typeof config.signals,
             endedAt,
+            amount: planAmount,
           },
         });
       });

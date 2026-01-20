@@ -1,6 +1,6 @@
 import { TradeSignal, TradeSignalDeliveries } from "@prisma/client";
 import axios from "axios";
-import { url } from ".";
+import { getUrl } from ".";
 
 const generateSignalMessage = (signal: TradeSignal): string => {
   let message = `📢 New Trade Signal Alert! 📢\n\n`;
@@ -17,6 +17,8 @@ const generateSignalMessage = (signal: TradeSignal): string => {
 const sendSignalMessage = async (payload: TradeSignalDeliveries & { signal: TradeSignal }) => {
   const message = generateSignalMessage(payload.signal);
 
+  const url = await getUrl();
+  if (!url) return null
   const response = await axios.post(url, {
     chat_id: payload.telegramUserId,
     text: message,

@@ -6,7 +6,16 @@ export const settingsConstants = [
   "solAddress",
 
   // Telegram Settings
-  "telegramBotToken"
+  "telegramBotToken",
+
+  // Gmail SMTP Settings
+  "emailUser",
+  "emailPass",
+
+  // Signal Pricing
+  "monthlySignalPrice",
+  "quarterlySignalPrice",
+  "annualSignalPrice",
 ] as const;
 
 

@@ -267,25 +267,25 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button asChild className="h-16 flex-col space-y-2">
+            <Button asChild className="h-16 flex-col md:flex-row md:space-x-2 space-y-2">
               <Link href="/deposit">
                 <ArrowDownToLine className="h-6 w-6" />
                 <span>Deposit</span>
               </Link>
             </Button>
-            <Button asChild variant="outline" className="h-16 flex-col space-y-2">
+            <Button asChild variant="outline" className="h-16 flex-col md:flex-row md:space-x-2 space-y-2">
               <Link href="/withdraw">
                 <ArrowUpFromLine className="h-6 w-6" />
                 <span>Withdraw</span>
               </Link>
             </Button>
-            <Button asChild variant="outline" className="h-16 flex-col space-y-2">
+            <Button asChild variant="outline" className="h-16 flex-col md:flex-row md:space-x-2 space-y-2">
               <Link href="/invest">
                 <TrendingUp className="h-6 w-6" />
                 <span>Invest</span>
               </Link>
             </Button>
-            <Button asChild variant="outline" className="h-16 flex-col space-y-2">
+            <Button asChild variant="outline" className="h-16 flex-col md:flex-row md:space-x-2 space-y-2">
               <Link href="/trading-signals">
                 <Activity className="h-6 w-6" />
                 <span>Signals</span>

@@ -52,6 +52,7 @@ type SignalPlan = keyof typeof config.signals;
 
 export default function TradingSignalsPage() {
   const { user } = useAppSelector((state) => state.user);
+  const { settings } = useAppSelector((state) => state.settings);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [signals, setSignals] = useState<Signal[]>([]);
   const [account, setAccount] = useState<Account | null>(null);
@@ -130,10 +131,16 @@ export default function TradingSignalsPage() {
 
   // Handle plan subscription
   const handleSubscribe = async (plan: SignalPlan) => {
-    const planCost = config.signals[plan];
+    if (!settings) return;
+    const planCost = parseInt(settings[config.signals[plan]] || '');
     
     if (!account) {
       toast.error("Unable to fetch account balance");
+      return;
+    }
+
+    if (!planCost) {
+      toast.error("Plan not yet configured")
       return;
     }
 
@@ -282,7 +289,8 @@ export default function TradingSignalsPage() {
           <h2 className="text-2xl font-bold text-center mb-8">Choose Your Plan</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {(Object.keys(config.signals) as SignalPlan[]).map((plan) => {
-              const cost = config.signals[plan];
+              const cost = parseInt(settings?.[config.signals[plan]] || '');
+              if (!cost) return;
               const isPopular = plan === 'quarterly';
               
               return (
@@ -389,7 +397,7 @@ export default function TradingSignalsPage() {
                 </div>
                 <div className="text-right">
                   <p className="font-bold">
-                    {selectedPlan && formatCurrency(config.signals[selectedPlan])}
+                    {selectedPlan && formatCurrency(parseInt(settings?.[config.signals[selectedPlan]] || ''))}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     Will be deducted from balance
