@@ -40,7 +40,7 @@ import {
 } from '@/components/ui/form';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Filter, CheckCircle, XCircle, Loader2, ExternalLink } from 'lucide-react';
+import { Filter, CheckCircle, XCircle, Loader2, Clipboard } from 'lucide-react';
 import api, { PagedResponse, handleAPIError } from '@/lib/api';
 import { Account } from '@/types/account';
 import { User } from '@/types/user';
@@ -376,7 +376,7 @@ const AdminWithdrawalsPage = () => {
                                     toast.success('Address copied to clipboard');
                                   }}
                                 >
-                                  <ExternalLink className="h-3 w-3" />
+                                  <Clipboard className="h-3 w-3" />
                                 </Button>
                               </div>
                             </TableCell>

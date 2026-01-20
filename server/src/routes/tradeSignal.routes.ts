@@ -10,6 +10,7 @@ routes.post("/subscribe", TradeSignalController.subscribeToSignals);
 routes.get("/subscription", TradeSignalController.getSubscriptionStatus);
 routes.get("/subscribers", authorize(['admin']), TradeSignalController.getAllSubscribers);
 routes.get("/:id", TradeSignalController.getTradeSignalById);
+routes.get("/:id/deliveries", authorize(['admin']), TradeSignalController.getTradeSignalDeliveries);
 routes.put("/:id", authorize(['admin']), TradeSignalController.updateTradeSignal);
 routes.delete("/:id", authorize(['admin']), TradeSignalController.deleteTradeSignal);
 

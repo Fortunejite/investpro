@@ -8,7 +8,7 @@ const generateSignalMessage = (signal: TradeSignal): string => {
   message += `🔹 Action: ${signal.action.toUpperCase()}\n`;
   message += `🔹 Entry Price: ${signal.entryPrice}\n`;
   message += `🔹 Take Profit 1: ${signal.tp1}\n`;
-  message += `🔹 Take Profit 2: ${signal.tp2}\n`;
+  if (parseInt(signal.tp2 as unknown as string || '0') > 0) message += `🔹 Take Profit 2: ${signal.tp2}\n`;
   message += `🔹 Stop Loss: ${signal.sl}\n`;
 
   return message;

@@ -38,6 +38,7 @@ const config = {
     'signal_subscription',
   ] as const,
   investmentStatuses: ['active', 'inactive', 'expired', 'cancelled'] as const,
+  signalDeliveryStatuses: ['queued', 'sent', 'failed'] as const,
   payoutTypes: ['daily', 'weekly', 'monthly', 'end_of_term'] as const,
   isValid: false,
 };

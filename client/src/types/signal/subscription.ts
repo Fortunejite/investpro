@@ -6,5 +6,5 @@ export interface Subscription {
   plan: keyof typeof config.signals;
   isActive: boolean;
   startedAt: Date;
-  endedAt: Date | null;
+  endedAt: Date;
 }

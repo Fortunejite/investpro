@@ -12,11 +12,13 @@ const signalSchema = z.object({
   tp1: z.number().min(0),
   tp2: z.number().min(0).optional(),
   sl: z.number().min(0),
-  scheduledAt: z.date().optional(),
+  scheduledAt: z.string().optional(),
 });
 
 const subscribeSchema = z.object({
-  plan: z.enum(Object.keys(config.signals) as Array<keyof typeof config.signals>),
+  plan: z.enum(
+    Object.keys(config.signals) as Array<keyof typeof config.signals>,
+  ),
 });
 
 const deliverSignal = async (signal: TradeSignal) => {
@@ -31,8 +33,10 @@ class TradeSignalController {
   async createTradeSignal(req: Request, res: Response, next: NextFunction) {
     try {
       const validatedData = signalSchema.parse(req.body);
-      if (validatedData.scheduledAt && validatedData.scheduledAt < new Date()) {
-        return res.status(400).json({ message: 'scheduledAt must be a future date' });
+      if (validatedData.scheduledAt && new Date(validatedData.scheduledAt) < new Date()) {
+        return res
+          .status(400)
+          .json({ message: 'scheduledAt must be a future date' });
       }
 
       const tradeSignal = await prisma.tradeSignal.create({
@@ -46,7 +50,7 @@ class TradeSignalController {
     } catch (error) {
       next(error);
     }
-  };
+  }
 
   async getTradeSignals(req: Request, res: Response, next: NextFunction) {
     try {
@@ -58,25 +62,51 @@ class TradeSignalController {
       const limit = parseInt(queryParams.limit as string) || 10;
       const skip = (page - 1) * limit;
 
+      // filter
+      const actionFilter = queryParams.action as 'Buy' | 'Sell' | undefined;
+      if (actionFilter && !['Buy', 'Sell'].includes(actionFilter)) {
+        return res.status(400).json({ message: 'Invalid action filter' });
+      }
+      const currency = queryParams.currency as string | undefined;
+
       const subscriber = await prisma.tradeSignalSubscription.findUnique({
         where: { userId },
       });
 
-      if (!req.user.role.includes('admin') && (!subscriber || !subscriber.isActive)) {
-        return res.status(403).json({ message: 'You are not subscribed to trade signals' });
+      if (
+        !req.user.role.includes('admin') &&
+        (!subscriber || !subscriber.isActive)
+      ) {
+        return res
+          .status(403)
+          .json({ message: 'You are not subscribed to trade signals' });
       }
 
-      const tradeSignals = await prisma.tradeSignal.findMany({
-        skip,
-        take: limit,
-        orderBy: { createdAt: 'desc' },
-      });
+      const [tradeSignals, totalCount] = await Promise.all([
+        await prisma.tradeSignal.findMany({
+          where: {
+            ...(actionFilter ? { action: actionFilter } : {}),
+            ...(currency
+              ? { currency: { contains: currency, mode: 'insensitive' } }
+              : {}),
+          },
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+        }),
+        await prisma.tradeSignal.count(),
+      ]);
 
-      res.status(200).json({ data: tradeSignals, pagination: { page, limit } });
+      res
+        .status(200)
+        .json({
+          data: tradeSignals,
+          pagination: { page, limit, total: totalCount },
+        });
     } catch (error) {
       next(error);
     }
-  };
+  }
 
   async getTradeSignalById(req: Request, res: Response, next: NextFunction) {
     try {
@@ -87,8 +117,13 @@ class TradeSignalController {
         where: { userId },
       });
 
-      if (!req.user.role.includes('admin') && (!subscriber || !subscriber.isActive)) {
-        return res.status(403).json({ message: 'You are not subscribed to trade signals' });
+      if (
+        !req.user.role.includes('admin') &&
+        (!subscriber || !subscriber.isActive)
+      ) {
+        return res
+          .status(403)
+          .json({ message: 'You are not subscribed to trade signals' });
       }
 
       const tradeSignal = await prisma.tradeSignal.findUnique({
@@ -103,7 +138,39 @@ class TradeSignalController {
     } catch (error) {
       next(error);
     }
-  };
+  }
+
+  async getTradeSignalDeliveries(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const tradeSignalId = parseInt(req.params.id as string);
+      const queryParams = req.query;
+
+      // pagination
+      const page = parseInt(queryParams.page as string) || 1;
+      const limit = parseInt(queryParams.limit as string) || 10;
+      const skip = (page - 1) * limit;
+
+      const [deliveries, totalCount] = await Promise.all([
+        await prisma.tradeSignalDeliveries.findMany({
+          where: { signalId: tradeSignalId },
+          skip,
+          take: limit,
+          orderBy: { createdAt: 'desc' },
+          include: { user: true },
+        }),
+        await prisma.tradeSignalDeliveries.count({
+          where: { signalId: tradeSignalId },
+        }),
+      ]);
+      res.status(200).json({ data: deliveries, pagination: { page, limit, total: totalCount } });
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async updateTradeSignal(req: Request, res: Response, next: NextFunction) {
     try {
@@ -120,7 +187,9 @@ class TradeSignalController {
       }
 
       if (existingSignal.publishedAt) {
-        return res.status(400).json({ message: 'Cannot update a published trade signal' });
+        return res
+          .status(400)
+          .json({ message: 'Cannot update a published trade signal' });
       }
 
       const tradeSignal = await prisma.tradeSignal.update({
@@ -161,7 +230,9 @@ class TradeSignalController {
         return res.status(404).json({ message: 'Wallet not Found' });
       }
 
-      if (account.availableBalance.lessThan(config.signals[validatedData.plan])) {
+      if (
+        account.availableBalance.lessThan(config.signals[validatedData.plan])
+      ) {
         return res.status(400).json({ message: 'Insufficient funds' });
       }
 
@@ -194,12 +265,11 @@ class TradeSignalController {
         });
       });
 
-
       res.status(200).json(subscription);
     } catch (error) {
       next(error);
     }
-  };
+  }
 
   async getAllSubscribers(req: Request, res: Response, next: NextFunction) {
     try {
@@ -208,18 +278,35 @@ class TradeSignalController {
       const limit = parseInt(req.query.limit as string) || 10;
       const skip = (page - 1) * limit;
 
-      const subscribers = await prisma.tradeSignalSubscription.findMany({
-        skip,
-        take: limit,
-        include: { user: true },
-        orderBy: { startedAt: 'desc' },
-      });
+      // filter
+      const search = req.query.search as string | undefined;
 
-      res.status(200).json({ data: subscribers, pagination: { page, limit } });
+      const [subscribers, totalCount] = await Promise.all([
+        prisma.tradeSignalSubscription.findMany({
+          where: {
+            ...(search
+              ? { user: { name: { contains: search, mode: 'insensitive' } } }
+              : {}),
+          },
+          skip,
+          take: limit,
+          include: { user: true },
+          orderBy: { startedAt: 'desc' },
+        }),
+        prisma.tradeSignalSubscription.count({
+          where: {
+            ...(search
+              ? { user: { name: { contains: search, mode: 'insensitive' } } }
+              : {}),
+          },
+        }),
+      ]);
+
+      res.status(200).json({ data: subscribers, pagination: { page, limit, total: totalCount } });
     } catch (error) {
       next(error);
     }
-  };
+  }
 
   async getSubscriptionStatus(req: Request, res: Response, next: NextFunction) {
     try {
