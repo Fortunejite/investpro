@@ -15,6 +15,22 @@ const LoadReduxState = () => {
   const { status } = useAppSelector((state) => state.user);
 
   useEffect(() => {
+    const getInitialDarkMode = () => {
+      if (typeof window === 'undefined') return false;
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)',
+      ).matches;
+      return savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
+    };
+    if (getInitialDarkMode()) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  useEffect(() => {
     dispatch(fetchUser());
   }, [dispatch]);
 
