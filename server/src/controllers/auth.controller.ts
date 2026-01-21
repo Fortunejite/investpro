@@ -7,6 +7,31 @@ import { createAccount } from "@/lib/account";
 import queueResetEmailForDelivery from "@/queues/email.queues";
 import { User } from "@prisma/client";
 
+// Cookie configuration helper
+const getCookieOptions = () => {
+  const isProduction = process.env.NODE_ENV === "production";
+  
+  if (isProduction) {
+    // For production, try both strategies to maximize compatibility
+    return {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none" as const,
+      path: "/",
+      // Only set domain if explicitly configured, otherwise let browser handle it
+      ...(process.env.COOKIE_DOMAIN && { domain: process.env.COOKIE_DOMAIN }),
+    };
+  } else {
+    // Development settings
+    return {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax" as const,
+      path: "/",
+    };
+  }
+};
+
 const registerSchema = z.object({
   email: z.email(),
   name: z.string().min(2),
@@ -45,19 +70,23 @@ const login = async (res: Response, userData: Omit<User, "hashed_password" | "re
 
   await prisma.user.update({ where: { id: userData.id }, data: { refreshToken } });
 
+  const cookieOptions = getCookieOptions();
+  
+  console.log('Setting cookies with options:', {
+    ...cookieOptions,
+    environment: process.env.NODE_ENV,
+    clientUrl: process.env.CLIENT_URL,
+    cookieDomain: process.env.COOKIE_DOMAIN || 'not-set'
+  });
+
+  // Primary cookie strategy
   res.cookie("accessToken", token, { 
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-    path: "/",
+    ...cookieOptions,
     maxAge: 10 * 60 * 1000 // 10 minutes
   });
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-    path: "/auth/refresh",
+    ...cookieOptions,
     maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000 // 7 or 30 days
   });
 }
@@ -183,39 +212,38 @@ class AuthController {
     try {
       const refreshToken = req.cookies.refreshToken;
       if (!refreshToken) {
+        console.log('No refresh token found in cookies or headers');
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       const payload = tokenService.verifyRefreshToken(refreshToken);
       if (!payload) {
+        console.log('Refresh token verification failed');
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       const existingUser = await prisma.user.findUnique({ where: { id: payload.userId } });
       if (!existingUser || existingUser.refreshToken !== refreshToken) {
+        console.log('User not found or refresh token mismatch');
         return res.status(401).json({ message: "Unauthorized" });
       }
 
       const { hashed_password, refreshToken: _, ...userData } = existingUser;
 
       const newAccessToken = tokenService.generateAccessToken(userData);
-      const newRefreshToken = tokenService.generateRefreshToken(userData.id);
+      const newRefreshToken = tokenService.generateRefreshToken(userData.id, payload.rememberMe);
 
       await prisma.user.update({ where: { id: userData.id }, data: { refreshToken: newRefreshToken } });
 
+      const cookieOptions = getCookieOptions();
+
       res.cookie("accessToken", newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        path: "/",
+        ...cookieOptions,
         maxAge: 10 * 60 * 1000 // 10 minutes
       });
 
       res.cookie("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
-        path: "/auth/refresh",
+        ...cookieOptions,
         maxAge: payload.rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000 // 7 or 30 days
       });
 
