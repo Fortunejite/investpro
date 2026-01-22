@@ -126,7 +126,7 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <div className="text-center">
           <div className="text-destructive text-lg font-medium">{error}</div>
           <Button onClick={() => window.location.reload()} className="mt-4">

@@ -111,7 +111,7 @@ const UserSettingsPage = () => {
   }, [user, profileForm]);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div>
       <div className="space-y-6">
         {/* Header */}
         <div className="space-y-2">

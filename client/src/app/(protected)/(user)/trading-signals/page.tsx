@@ -214,7 +214,7 @@ export default function TradingSignalsPage() {
 
   if (isLoadingSubscription) {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div>
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -228,7 +228,7 @@ export default function TradingSignalsPage() {
   // Show subscription plans if user doesn't have active subscription
   if (!subscription?.isActive) {
     return (
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div>
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
@@ -440,7 +440,7 @@ export default function TradingSignalsPage() {
 
   // Show signals page for active subscribers
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div>
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">Trading Signals</h1>

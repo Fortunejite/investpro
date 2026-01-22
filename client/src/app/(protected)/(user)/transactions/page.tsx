@@ -151,7 +151,7 @@ export default function TransactionsPage() {
   const totalPages = Math.ceil(pagination.total / pagination.limit);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div>
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center space-x-4 mb-4">
