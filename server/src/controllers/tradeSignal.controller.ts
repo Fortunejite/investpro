@@ -248,7 +248,8 @@ class TradeSignalController {
 
       let subscription: TradeSignalSubscription | null = null;
       const endedAt = new Date();
-      endedAt.setMonth(endedAt.getMonth() + 1); // 1 month subscription
+      const monthsToAdd = validatedData.plan === 'monthly' ? 1 : validatedData.plan === 'quarterly' ? 3 : 12;
+      endedAt.setMonth(endedAt.getMonth() + monthsToAdd);
 
       await prisma.$transaction(async (prisma) => {
         await prisma.account.update({
