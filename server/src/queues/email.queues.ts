@@ -1,17 +1,10 @@
-import Bull from "bull";
-import config from "@/config";
-import deliverEmail from "./workers/email.worker";
+import { Queue } from "bullmq";
+import { queueConfig } from ".";
 
-const queueConfig = {
-  redis: config.redis
-};
-
-const emailDeliveryQueue = new Bull("email-delivery-queue", queueConfig)
-
-emailDeliveryQueue.process(deliverEmail);
+const emailDeliveryQueue = new Queue("email-delivery-queue", queueConfig);
 
 const queueResetEmailForDelivery = async (email: string, resetToken: string) => {
-  await emailDeliveryQueue.add({ email, resetToken, emailType: 'passwordReset' });
+  await emailDeliveryQueue.add("password-reset", { email, resetToken, emailType: 'passwordReset' });
 };
 
 export default queueResetEmailForDelivery;

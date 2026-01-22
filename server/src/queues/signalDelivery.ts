@@ -1,19 +1,12 @@
-import Bull from "bull";
-import config from "@/config";
-import deliverSignal from "./workers/signal.worker";
+import { JobsOptions, Queue } from "bullmq";
+import { queueConfig } from ".";
 
-const queueConfig = {
-  redis: config.redis
-};
-
-const signalDeliveryQueue = new Bull("signal-delivery-queue", queueConfig)
-
-signalDeliveryQueue.process(deliverSignal);
+const signalDeliveryQueue = new Queue("signal-delivery-queue", queueConfig);
 
 const queueSignalForDelivery = async (signalId: number, opts?: { runAt?: Date }) => {
-  const jobOptions: Bull.JobOptions = {}
+  const jobOptions: JobsOptions = {}
   if (opts?.runAt) jobOptions.delay = opts.runAt.getTime() - Date.now();
-  await signalDeliveryQueue.add({ signalId }, jobOptions);
+  await signalDeliveryQueue.add("telegram-signal", { signalId }, jobOptions);
 }
 
 export default queueSignalForDelivery;

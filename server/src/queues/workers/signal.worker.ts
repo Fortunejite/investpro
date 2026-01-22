@@ -1,12 +1,13 @@
 import { prisma } from "@/lib/prisma";
-import Bull from "bull";
+import { Job, Worker } from 'bullmq';
 import Bottleneck from "bottleneck";
 import { sendSignalMessage } from "@/services/telegram";
 import { AxiosError } from "axios";
+import { queueConfig } from "..";
 
 const limiter = new Bottleneck({ reservoir: 20, reservoirRefreshAmount: 20, reservoirRefreshInterval: 1000 });
 
-const deliverSignal = async (job: Bull.Job) => {
+const deliverSignal = async (job: Job) => {
   const { signalId } = job.data;
 
   const signal = await prisma.tradeSignal.findUnique({
@@ -67,5 +68,17 @@ const deliverSignal = async (job: Bull.Job) => {
     });
   }
 }
+
+const signalWorker = new Worker("signal-delivery-queue", async (job) => {
+  await deliverSignal(job);
+}, queueConfig);
+
+signalWorker.on('completed', (job) => {
+  console.log(`Signal job ${job.id} completed`);
+});
+
+signalWorker.on('failed', (job, err) => {
+  console.error(`Signal job ${job?.id} failed:`, err);
+});
 
 export default deliverSignal;

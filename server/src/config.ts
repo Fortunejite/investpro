@@ -9,15 +9,16 @@ interface requiredEnv {
 }
 
 const config = {
-  port: process.env.PORT,
+  port: process.env.PORT || 8000,
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   refreshToken: process.env.REFRESH_TOKEN!,
   databaseUrl: process.env.DATABASE_URL!,
   redis: {
-    host: process.env.REDIS_HOST!,
-    // port: parseInt(process.env.REDIS_PORT!),
-    // password: process.env.REDIS_PASSWORD!,
+    url: process.env.REDIS_URL!,
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379'),
+    password: process.env.REDIS_PASSWORD || undefined,
   },
   signals: {
     monthly: 'monthlySignalPrice',
