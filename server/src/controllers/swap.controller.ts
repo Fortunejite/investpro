@@ -48,6 +48,14 @@ class SwapController {
       const swaps = await prisma.swap.findMany({
         where: { userId },
         orderBy: { createdAt: 'desc' },
+        include: {
+          fromAsset: {
+            include: { coin: true },
+          },
+          toAsset: {
+            include: { coin: true },
+          },
+        },
         skip,
         take: limit,
       });

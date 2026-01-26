@@ -24,6 +24,7 @@ class CoinController {
 
       const [coins, total] = await Promise.all([
         prisma.coin.findMany({
+          orderBy: { rank: 'asc' },
           skip: (page - 1) * limit,
           take: limit,
           where,
