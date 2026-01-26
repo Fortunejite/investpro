@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { PrismaClientKnownRequestError, PrismaClientUnknownRequestError, PrismaClientValidationError } from "@prisma/client/runtime/client";
+import { AxiosError } from "axios";
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   // Zod validation error
@@ -13,6 +14,16 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
       { error: 'ValidationError', issues },
     );
   }
+
+  if (err instanceof AxiosError) {
+    const status = err.response?.status || 500;
+    const message = err.response?.data?.message || 'External API Error';
+    return res.status(status).json(
+      { error: 'ExternalAPIError', message },
+    );
+  }
+
+  console.error(err.stack);
 
   // Prisma Known Request Error (P2xxx codes)
   if (err instanceof PrismaClientKnownRequestError) {

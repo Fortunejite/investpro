@@ -90,10 +90,11 @@ model User {
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
 
-  assets                  Assets[]
+  assets                  Asset[]
   account                 Account?
   signalDeliveries        TradeSignalDeliveries[]
   tradeSignalSubscription TradeSignalSubscription?
+  swaps                   Swap[]
 
   @@map("users")
 }
@@ -117,21 +118,55 @@ model Account {
   @@map("accounts")
 }
 
-model Assets {
-  id     String  @id @default(uuid())
+model Coin {
+  id        String   @id
+  symbol    String
+  name      String
+  nameId    String
+  img       String
+  rank      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assets Asset[]
+
+  @@map("coins")
+}
+
+model Asset {
+  id     Int        @id @default(autoincrement())
   userId Int
-  chain  Chain
-  label  String?
+  coinId String
 
   availableBalance Decimal @default(0) @db.Decimal(18, 8)
   lockedBalance    Decimal @default(0) @db.Decimal(18, 8)
 
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+  coin Coin @relation(fields: [coinId], references: [id])
+  swapsFrom Swap[] @relation("FromAsset")
+  swapsTo   Swap[] @relation("ToAsset")
 
-  @@unique([userId, chain])
+  @@unique([userId, coinId])
   @@map("assets")
+}
+
+model Swap {
+  id            String   @id @default(uuid())
+  userId        Int
+  fromAssetId   Int // account for main account
+  toAssetId     Int // account for main account
+  amount       Decimal  @db.Decimal(18, 8)
+  exchangeRate  Decimal  @db.Decimal(18, 8)
+  createdAt     DateTime @default(now())
+
+  user     User @relation(fields: [userId], references: [id])
+  fromAsset Asset @relation("FromAsset", fields: [fromAssetId], references: [id])
+  toAsset   Asset @relation("ToAsset", fields: [toAssetId], references: [id])
+
+  @@map("swaps")
 }
 
 model Deposit {

@@ -3,7 +3,7 @@ import { Chain, TransactionStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
-import { getPriceInUsd } from '@/services/price';
+import { getPriceInUsd } from '@/services/coinlore';
 
 const createDepositSchema = z.object({
   chain: z.enum(config.chains),

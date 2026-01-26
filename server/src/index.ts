@@ -5,12 +5,15 @@ import config from './config';
 import errorHandler from './middlewares/error.middleware';
 import { 
   accountRoutes,
+  assetRoutes,
   authRoutes,
+  coinRoutes,
   depositRoutes,
   investmentPlanRoutes,
   investmentRoutes,
-  priceRoutes,
+  marketRoutes,
   settingsRoutes,
+  swapRoutes,
   tradeSignalRoutes,
   transactionRoutes,
   withdrawalRoutes,
@@ -38,15 +41,18 @@ app.use(loggerMiddleware);
 
 // Routes
 app.use('/account', authenticate, accountRoutes);
+app.use('/assets', authenticate, assetRoutes);
 app.use('/auth', authRoutes);
+app.use('/coins', coinRoutes);
 app.use('/investment-plans', authenticate, investmentPlanRoutes);
 app.use('/investments', authenticate, investmentRoutes);
 app.use('/deposits', authenticate, depositRoutes);
-app.use('/prices', priceRoutes);
+app.use('/market', marketRoutes);
 app.use('/trading-signals', authenticate, tradeSignalRoutes);
 app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
 app.use('/settings', authenticate, settingsRoutes);
+app.use('/swaps', authenticate, swapRoutes);
 
 app.use('/status', (req, res) => {
   res.status(200).json({ running: true });

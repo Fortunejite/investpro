@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import z from 'zod';
 import config from '@/config';
 import { Chain, TransactionStatus, Withdrawal } from '@prisma/client';
-import { getPriceInUsd } from '@/services/price';
+import { getPriceInUsd } from '@/services/coinlore';
 
 const createWithdrawalSchema = z.object({
   chain: z.enum(config.chains),
