@@ -1,9 +1,6 @@
-export interface Ticker {
-  id: string;
-  symbol: string;
-  name: string;
-  nameid: string;
-  rank: number;
+import { Coin } from "../asset";
+
+export interface Ticker extends Coin {
   price_usd: string;
   percent_change_24h: string;
   percent_change_1h: string;

@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   Building2,
-  LayoutDashboard
+  LayoutDashboard,
+  Coins
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -34,6 +35,11 @@ const adminRoutes = [
     href: '/admin/accounts',
     label: 'Accounts',
     icon: Building2,
+  },
+  {
+    href: '/admin/tickers',
+    label: 'Tickers',
+    icon: Coins,
   },
   {
     href: '/admin/deposits',
