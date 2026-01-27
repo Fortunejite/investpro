@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "workers": "node dist/queues/workers/email.worker.js && node dist/queues/workers/signal.worker.js",
+    "workers": "node dist/queues/workers/signal.worker.js && node dist/queues/workers/email.worker.js",
     "workers-dev": "ts-node -r tsconfig-paths/register src/queues/workers/email.worker.ts && ts-node-dev -r tsconfig-paths/register src/queues/workers/signal.worker.ts",
     "build": "tsc && tsc-alias",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
