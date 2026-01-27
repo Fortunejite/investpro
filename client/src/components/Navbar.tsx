@@ -13,9 +13,10 @@ import {
   Settings,
   LogOut,
   Menu,
-  X,
   Bell,
   Shield,
+  LineChart,
+  ArrowLeftRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +27,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
@@ -36,6 +44,16 @@ const navItems = [
     name: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+  },
+  {
+    name: 'Markets',
+    href: '/markets',
+    icon: LineChart,
+  },
+  {
+    name: 'Swap',
+    href: '/swap',
+    icon: ArrowLeftRight,
   },
   {
     name: 'Deposit',
@@ -195,65 +213,100 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
+            {/* Mobile Menu Drawer */}
+            <Drawer open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} direction="right">
+              <DrawerTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="h-full w-80 mt-0 rounded-l-lg rounded-r-none">
+                <DrawerHeader>
+                  <DrawerTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    InvestPro
+                  </DrawerTitle>
+                </DrawerHeader>
+                <div className="px-4 pb-6 space-y-2">
+                  {navItems.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={cn(
+                          'flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200',
+                          isActive
+                            ? 'bg-primary/10 text-primary border border-primary/20'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+                        )}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        <span>{item.name}</span>
+                      </Link>
+                    );
+                  })}
+                  
+                  {/* Admin Panel Access - Mobile */}
+                  {user?.role === 'admin' && (
+                    <>
+                      <div className="border-t border-border my-4"></div>
+                      <Link
+                        href="/admin"
+                        className={cn(
+                          'flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium transition-all duration-200',
+                          pathname.startsWith('/admin')
+                            ? 'bg-primary/10 text-primary border border-primary/20'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+                        )}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Shield className="h-5 w-5" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    </>
+                  )}
+                  
+                  {/* User Actions in Mobile Drawer */}
+                  <div className="border-t border-border my-4"></div>
+                  <div className="space-y-2">
+                    <Link
+                      href="/profile"
+                      className="flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <User className="h-5 w-5" />
+                      <span>Profile</span>
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className="flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Settings className="h-5 w-5" />
+                      <span>Settings</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-3 px-3 py-3 rounded-lg text-base font-medium text-destructive hover:bg-destructive/10 transition-all duration-200 w-full text-left"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      <span>Log out</span>
+                    </button>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-border">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      'flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium transition-all duration-200',
-                      isActive
-                        ? 'bg-primary/10 text-primary border border-primary/20'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent',
-                    )}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.name}</span>
-                  </Link>
-                );
-              })}
-              
-              {/* Admin Panel Access - Mobile */}
-              {user?.role === 'admin' && (
-                <Link
-                  href="/admin"
-                  className={cn(
-                    'flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium transition-all duration-200 border-t border-border mt-2 pt-3',
-                    pathname.startsWith('/admin')
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent',
-                  )}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <Shield className="h-5 w-5" />
-                  <span>Admin Panel</span>
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </nav>
   );
