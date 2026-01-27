@@ -8,7 +8,7 @@
     "workers-dev": "ts-node -r tsconfig-paths/register src/queues/workers/email.worker.ts && ts-node-dev -r tsconfig-paths/register src/queues/workers/signal.worker.ts",
     "build": "tsc && tsc-alias",
     "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts",
-    "postinstall": "prisma deploy && prisma generate"
+    "postinstall": "prisma migrate deploy && prisma generate"
   },
   "keywords": [],
   "author": "",
