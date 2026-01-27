@@ -79,14 +79,19 @@ const login = async (res: Response, userData: Omit<User, "hashed_password" | "re
     cookieDomain: process.env.COOKIE_DOMAIN || 'not-set'
   });
 
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+
   // Primary cookie strategy
   res.cookie("accessToken", token, { 
     ...cookieOptions,
+    path: "/",
     maxAge: 10 * 60 * 1000 // 10 minutes
   });
 
   res.cookie("refreshToken", refreshToken, {
     ...cookieOptions,
+    path: "/auth/refresh",
     maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000 // 7 or 30 days
   });
 }
@@ -229,23 +234,7 @@ class AuthController {
       }
 
       const { hashed_password, refreshToken: _, ...userData } = existingUser;
-
-      const newAccessToken = tokenService.generateAccessToken(userData);
-      const newRefreshToken = tokenService.generateRefreshToken(userData.id, payload.rememberMe);
-
-      await prisma.user.update({ where: { id: userData.id }, data: { refreshToken: newRefreshToken } });
-
-      const cookieOptions = getCookieOptions();
-
-      res.cookie("accessToken", newAccessToken, {
-        ...cookieOptions,
-        maxAge: 10 * 60 * 1000 // 10 minutes
-      });
-
-      res.cookie("refreshToken", newRefreshToken, {
-        ...cookieOptions,
-        maxAge: payload.rememberMe ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000 // 7 or 30 days
-      });
+      await login(res, userData, payload.rememberMe);
 
       res.status(200).json({ message: "Token refreshed" });
     } catch (error) {
