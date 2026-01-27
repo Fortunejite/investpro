@@ -65,7 +65,7 @@ import { toast } from "sonner";
 import type { z } from "zod";
 
 import QRCode from "qrcode";
-import { PriceResponse } from "@/types/price";
+import { PriceResponse } from "@/types/market";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 type CreateDepositData = z.infer<typeof createDepositSchema>;
@@ -119,7 +119,7 @@ export default function DepositPage() {
     setPriceError("");
     
     try {
-      const response = await api.get<PriceResponse>(`/prices/${chain}`);
+      const response = await api.get<PriceResponse>(`/market/price/${chain}`);
       setCurrentPrice(response.data.usd);
     } catch (error) {
       console.error("Error fetching price:", error);

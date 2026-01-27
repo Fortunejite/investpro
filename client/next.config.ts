@@ -20,7 +20,16 @@ const checkConfiguration = async () => {
 checkConfiguration();
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.coinlore.com',
+        port: '',
+        pathname: '/img/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

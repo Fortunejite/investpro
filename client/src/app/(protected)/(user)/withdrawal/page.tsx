@@ -51,7 +51,7 @@ import config from "@/lib/config";
 import { TableLoading } from "@/components/Loading";
 import { toast } from "sonner";
 import type { z } from "zod";
-import { PriceResponse } from "@/types/price";
+import { PriceResponse } from "@/types/market";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 type CreateWithdrawalData = z.infer<typeof createWithdrawalSchema>;
@@ -96,7 +96,7 @@ export default function WithdrawalPage() {
     setPriceError("");
     
     try {
-      const response = await api.get<PriceResponse>(`/prices/${chain}`);
+      const response = await api.get<PriceResponse>(`/market/price/${chain}`);
       setCurrentPrice(response.data.usd);
     } catch (error) {
       console.error("Error fetching price:", error);
