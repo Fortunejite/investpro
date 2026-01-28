@@ -14,11 +14,13 @@ import {
   marketRoutes,
   settingsRoutes,
   swapRoutes,
+  traderRoutes,
   tradeSignalRoutes,
   transactionRoutes,
+  userRoutes,
   withdrawalRoutes,
  } from './routes';
-import { authenticate } from './middlewares/auth.middleware';
+import { authenticate, authorize } from './middlewares/auth.middleware';
 import startJobs from './cron';
 import loggerMiddleware from './middlewares/logger.middleware';
 
@@ -48,11 +50,13 @@ app.use('/investment-plans', authenticate, investmentPlanRoutes);
 app.use('/investments', authenticate, investmentRoutes);
 app.use('/deposits', authenticate, depositRoutes);
 app.use('/market', marketRoutes);
+app.use('/traders', traderRoutes);
 app.use('/trading-signals', authenticate, tradeSignalRoutes);
 app.use('/transactions', authenticate, transactionRoutes);
 app.use('/withdrawals', authenticate, withdrawalRoutes);
 app.use('/settings', authenticate, settingsRoutes);
 app.use('/swaps', authenticate, swapRoutes);
+app.use('/users', authenticate, authorize(['admin']), userRoutes);
 
 app.use('/status', (req, res) => {
   res.status(200).json({ running: true });
