@@ -26,3 +26,16 @@ export const updateUserProfile = z.object({
   name: z.string().min(2).optional(),
   telegramUserId: z.string().optional(),
 });
+
+export const createTradingProfileSchema = z.object({
+  userId: z.number(),
+  bio: z.string().max(255),
+  profitSharePercent: z.number().min(0).max(100),
+  totalProfit: z.number().min(0),
+  winRate: z.number().min(0).max(100),
+  totalTrades: z.number().min(0),
+  successfulTrades: z.number().min(0),
+  minCapital: z.number().min(0),
+});
+
+export const updateTradingProfileSchema = createTradingProfileSchema.partial().omit({ userId: true });

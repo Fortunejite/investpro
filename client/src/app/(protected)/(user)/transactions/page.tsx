@@ -37,6 +37,7 @@ import { Transaction } from "@/types/transaction";
 import { TableLoading } from "@/components/Loading";
 import { toast } from "sonner";
 import { AxiosError } from "@/types/api";
+import { formatCurrency, formatDate } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -105,25 +106,6 @@ export default function TransactionsPage() {
     setFilterType("all");
     setFilterStatus("all");
     setPagination(prev => ({ ...prev, page: 1 }));
-  };
-
-  // Format currency
-  const formatCurrency = (amount: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(parseFloat(amount));
-  };
-
-  // Format date
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date(date));
   };
 
   // Get transaction icon

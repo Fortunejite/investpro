@@ -17,6 +17,7 @@ import {
   Shield,
   LineChart,
   ArrowLeftRight,
+  Copy,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -54,6 +55,11 @@ const navItems = [
     name: 'Swap',
     href: '/swap',
     icon: ArrowLeftRight,
+  },
+  {
+    name: 'Copy Trading',
+    href: '/copy-trading',
+    icon: Copy,
   },
   {
     name: 'Deposit',
