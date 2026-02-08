@@ -35,7 +35,7 @@ const AdminNavbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 lg:ml-64 border-b bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/95">
+    <nav className="sticky top-0 lg:ml-64 border-b bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/95 z-10">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Left side - Title */}

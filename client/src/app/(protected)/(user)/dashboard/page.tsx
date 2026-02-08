@@ -26,6 +26,7 @@ import { api, PagedResponse } from "@/lib/api";
 import { TableLoading } from "@/components/Loading";
 import type { Account } from "@/types/account";
 import type { Transaction } from "@/types/transaction";
+import { formatCurrency, formatDate } from "@/lib/utils";
 
 interface DashboardData {
   account: Account;
@@ -91,23 +92,6 @@ export default function DashboardPage() {
 
     fetchDashboardData();
   }, []);
-
-  const formatCurrency = (amount: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(parseFloat(amount));
-  };
-
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(new Date(date));
-  };
 
   const getTransactionIcon = (type: Transaction['type']) => {
     switch (type) {

@@ -5,18 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   TrendingUp,
-  LayoutDashboard,
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  Activity,
   User,
   Settings,
   LogOut,
   Menu,
   Bell,
   Shield,
-  LineChart,
-  ArrowLeftRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -38,44 +32,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { logout } from '@/redux/user.slice';
-
-const navItems = [
-  {
-    name: 'Dashboard',
-    href: '/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    name: 'Markets',
-    href: '/markets',
-    icon: LineChart,
-  },
-  {
-    name: 'Swap',
-    href: '/swap',
-    icon: ArrowLeftRight,
-  },
-  {
-    name: 'Deposit',
-    href: '/deposit',
-    icon: ArrowDownToLine,
-  },
-  {
-    name: 'Withdraw',
-    href: '/withdrawal',
-    icon: ArrowUpFromLine,
-  },
-  {
-    name: 'Invest',
-    href: '/investments',
-    icon: TrendingUp,
-  },
-  {
-    name: 'Trading Signals',
-    href: '/trading-signals',
-    icon: Activity,
-  },
-];
+import { navItems } from '@/lib/navigation';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -105,28 +62,6 @@ export default function Navbar() {
                 InvestPro
               </div>
             </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200',
-                    isActive
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent',
-                  )}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </Link>
-              );
-            })}
           </div>
 
           {/* Right side - User menu and notifications */}

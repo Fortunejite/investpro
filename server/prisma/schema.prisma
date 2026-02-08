@@ -8,6 +8,7 @@ datasource db {
 
 enum Role {
   user
+  trader
   admin
 }
 
@@ -76,6 +77,17 @@ enum TradeSignalDeliveryStatus {
   failed
 }
 
+enum PositionStatus {
+  open
+  closed
+  liquidated
+}
+
+enum PositionSide {
+  BUY
+  SELL
+}
+
 model User {
   id                  Int        @id @default(autoincrement())
   email               String     @unique
@@ -95,8 +107,39 @@ model User {
   signalDeliveries        TradeSignalDeliveries[]
   tradeSignalSubscription TradeSignalSubscription?
   swaps                   Swap[]
+  tradingProfile          TradingProfile?
 
   @@map("users")
+}
+
+model TradingProfile {
+  id                 Int      @id
+  bio                String?
+  profitSharePercent Decimal  @default(0) @db.Decimal(5, 2)
+  totalProfit        Decimal  @default(0) @db.Decimal(18, 8)
+  winRate            Decimal  @default(0) @db.Decimal(5, 2)
+  totalTrades        Int      @default(0)
+  successfulTrades   Int      @default(0)
+  minCapital         Decimal  @default(0) @db.Decimal(18, 8)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user      User             @relation(fields: [id], references: [id])
+  followers TraderFollower[]
+
+  @@map("trading_profiles")
+}
+
+model TraderFollower {
+  id        Int      @id @default(autoincrement())
+  traderId  Int
+  userId    Int
+  createdAt DateTime @default(now())
+
+  trader TradingProfile @relation(fields: [traderId], references: [id])
+
+  @@unique([traderId, userId])
+  @@map("trader_followers")
 }
 
 model Account {
@@ -134,7 +177,7 @@ model Coin {
 }
 
 model Asset {
-  id     Int        @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   userId Int
   coinId String
 
@@ -144,8 +187,8 @@ model Asset {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
-  coin Coin @relation(fields: [coinId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+  coin      Coin   @relation(fields: [coinId], references: [id])
   swapsFrom Swap[] @relation("FromAsset")
   swapsTo   Swap[] @relation("ToAsset")
 
@@ -154,15 +197,15 @@ model Asset {
 }
 
 model Swap {
-  id            String   @id @default(uuid())
-  userId        Int
-  fromAssetId   Int // account for main account
-  toAssetId     Int // account for main account
+  id           String   @id @default(uuid())
+  userId       Int
+  fromAssetId  Int // account for main account
+  toAssetId    Int // account for main account
   amount       Decimal  @db.Decimal(18, 8)
-  exchangeRate  Decimal  @db.Decimal(18, 8)
-  createdAt     DateTime @default(now())
+  exchangeRate Decimal  @db.Decimal(18, 8)
+  createdAt    DateTime @default(now())
 
-  user     User @relation(fields: [userId], references: [id])
+  user      User  @relation(fields: [userId], references: [id])
   fromAsset Asset @relation("FromAsset", fields: [fromAssetId], references: [id])
   toAsset   Asset @relation("ToAsset", fields: [toAssetId], references: [id])
 
@@ -314,4 +357,23 @@ model Settings {
   updatedAt DateTime @updatedAt
 
   @@map("settings")
+}
+
+model Positions {
+  id                   String         @id @default(uuid())
+  userId               Int
+  asset                String
+  side                 PositionSide // BUY = LONG, SELL = SHORT
+  status               PositionStatus @default(open)
+  leverage             Int
+  collateral           Decimal        @db.Decimal(18, 8) // USD locked from user's balance
+  notional             Decimal        @db.Decimal(18, 8) // collateral * leverage
+  entryPrice           Decimal        @db.Decimal(18, 8) // price at open
+  qty                  Decimal        @db.Decimal(18, 8) // notional / entryPrice (for BTC qty)
+  closePrice           Decimal?       @db.Decimal(18, 8)
+  pnl                  Decimal?       @db.Decimal(18, 8)
+  maintenanceMarginPct Decimal?       @db.Decimal(18, 8)
+
+  openAt   DateTime @default(now())
+  expiryAt DateTime
 }

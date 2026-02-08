@@ -15,6 +15,23 @@ class AssetController {
       next(error);
     }
   };
+
+  getAssetById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user.id;
+      const coinId = req.params.id as string;
+      const asset = await prisma.asset.findUnique({
+        where: { userId_coinId: { userId, coinId } },
+        include: { coin: true },
+      });
+      if (!asset) {
+        return res.status(404).json({ error: 'Asset not found' });
+      }
+      res.status(200).json(asset);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default new AssetController();

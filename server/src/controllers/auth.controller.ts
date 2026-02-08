@@ -234,6 +234,9 @@ class AuthController {
       }
 
       const { hashed_password, refreshToken: _, ...userData } = existingUser;
+      if (userData.status !== "active") {
+        return res.status(403).json({ message: "User is not active. Contact admin" });
+      }
       await login(res, userData, payload.rememberMe);
 
       res.status(200).json({ message: "Token refreshed" });
