@@ -1,16 +1,16 @@
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const ThemeSwitch = () => {
-  const getInitialDarkMode = () => {
-    if (typeof window === 'undefined') return false;
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)',
-    ).matches;
-    return savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
-  };
+export const getInitialDarkMode = () => {
+  if (typeof window === 'undefined') return false;
+  const savedTheme = localStorage.getItem('theme');
+  const systemPrefersDark = window.matchMedia(
+    '(prefers-color-scheme: dark)',
+  ).matches;
+  return savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
+};
 
+const ThemeSwitch = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(getInitialDarkMode);
 
   // Sync DOM class with React state

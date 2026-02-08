@@ -591,12 +591,13 @@ export default function TradingSignalsPage() {
                             <TableCell className="font-medium">
                               {signal.currency}
                             </TableCell>
-                            <TableCell>                            <Badge 
-                              variant={signal.action === 'Buy' ? 'default' : 'destructive'}
-                              className={signal.action === 'Buy' ? 'bg-success/10 text-success border-success/20' : 'bg-destructive/10 text-destructive border-destructive/20'}
-                            >
-                              {signal.action}
-                            </Badge>
+                            <TableCell>
+                              <Badge 
+                                variant={signal.action === 'Buy' ? 'default' : 'destructive'}
+                                className={signal.action === 'Buy' ? 'bg-success/90 text-success-foreground' : 'bg-destructive text-destructive-foreground'}
+                              >
+                                {signal.action}
+                              </Badge>
                             </TableCell>
                             <TableCell className="font-mono">
                               ${parseFloat(signal.entryPrice).toFixed(4)}

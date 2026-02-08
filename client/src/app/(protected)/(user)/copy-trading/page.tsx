@@ -388,7 +388,7 @@ const CopyTradingPage = () => {
                           <AlertDialogTitle>Stop Copying Trader</AlertDialogTitle>
                           <AlertDialogDescription>
                             Are you sure you want to stop copying {trader.user?.name}? 
-                            You will no longer receive their trading signals.
+                            You will no longer copy their trades.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
