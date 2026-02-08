@@ -23,6 +23,7 @@ import AdvancedTradingChart from "@/components/AdvancedTradingChart";
 import SimpleTradingChart from "@/components/SimpleTradingChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
+import { Asset } from "@/types/asset";
 
 const TickerDetailsPage = () => {
   const params = useParams();
@@ -35,6 +36,7 @@ const TickerDetailsPage = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [chartType, setChartType] = useState<'simple' | 'advanced'>('simple');
   const [timeframe, setTimeframe] = useState('1h');
+  const [userAsset, setUserAsset] = useState<Asset | null>(null);
 
   const getTicker = useCallback(async () => {
     try {
@@ -55,9 +57,22 @@ const TickerDetailsPage = () => {
     }
   }, [tickerId]);
 
+  const getUserAsset = useCallback(async () => {
+    try {
+      const response = await api.get(`/assets/${tickerId}`);
+      setUserAsset(response.data);
+    } catch (err) {
+      // Asset not found is not an error - user might not own this asset
+      if (isAxiosError(err) && err.response?.status !== 404) {
+        console.error('Error fetching user asset:', err);
+      }
+      setUserAsset(null);
+    }
+  }, [tickerId]);
+
   const handleRefresh = async () => {
     setRefreshing(true);
-    await getTicker();
+    await Promise.all([getTicker(), getUserAsset()]);
   };
 
   const formatCurrency = (value: string | number) => {
@@ -107,8 +122,9 @@ const TickerDetailsPage = () => {
   useEffect(() => {
     if (tickerId) {
       getTicker();
+      getUserAsset();
     }
-  }, [tickerId, getTicker]);
+  }, [tickerId, getTicker, getUserAsset]);
 
   if (loading) {
     return <Loading />;
@@ -173,6 +189,42 @@ const TickerDetailsPage = () => {
           Refresh
         </Button>
       </div>
+
+      {/* User Balance Information */}
+      <Card className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800 shadow-sm">
+        <CardContent className="p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">
+                  {ticker?.name} Balance
+                </h3>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl sm:text-4xl font-bold text-blue-900 dark:text-blue-100 font-mono leading-tight">
+                {userAsset 
+                  ? parseFloat(userAsset.availableBalance).toFixed(6)
+                  : '0.000000'
+                } 
+                <span className="text-xl sm:text-2xl ml-2 text-blue-700 dark:text-blue-300">
+                  {ticker?.symbol.toUpperCase()}
+                </span>
+              </div>
+              <div className="text-lg sm:text-xl text-blue-600 dark:text-blue-400 font-medium mt-1">
+                ≈ {formatCurrency(
+                  userAsset 
+                    ? parseFloat(userAsset.availableBalance) * parseFloat(ticker?.price_usd || '0')
+                    : 0
+                )} USD
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Main Grid Layout */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
