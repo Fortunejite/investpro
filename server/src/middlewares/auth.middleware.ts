@@ -1,6 +1,6 @@
 /// <reference path="../types/express.d.ts" />
 import { Request, Response, NextFunction } from "express";
-import { tokenService } from "@/services/tokenService";
+import { tokenService } from "@/services/token.service";
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.accessToken;
