@@ -1,9 +1,9 @@
 import { startInvestmentCron } from "./investment.cron";
-import { startTradesCron } from "./trades.cron";
+import { startPositionsCron } from "./position.cron";
 
 const startJobs = () => {
   startInvestmentCron();
-  startTradesCron();
+  startPositionsCron();
 };
 
 export default startJobs;

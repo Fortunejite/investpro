@@ -6,6 +6,7 @@ export { default as depositRoutes } from './deposit.routes';
 export { default as investmentRoutes } from './investment.routes';
 export { default as investmentPlanRoutes } from './investmentPlan.routes';
 export { default as marketRoutes } from './market.routes';
+export { default as positionRoutes } from './position.routes';
 export { default as traderRoutes } from './trader.routes';
 export { default as tradeSignalRoutes } from './tradeSignal.routes';
 export { default as transactionRoutes } from './transaction.routes';

@@ -33,6 +33,8 @@ enum TransactionType {
   investment
   profit_payout
   signal_subscription
+  open_position
+  close_position
 }
 
 enum TransactionStatus {
@@ -84,8 +86,8 @@ enum PositionStatus {
 }
 
 enum PositionSide {
-  BUY
-  SELL
+  long
+  short
 }
 
 model User {
@@ -360,20 +362,21 @@ model Settings {
 }
 
 model Positions {
-  id                   String         @id @default(uuid())
-  userId               Int
-  asset                String
-  side                 PositionSide // BUY = LONG, SELL = SHORT
-  status               PositionStatus @default(open)
-  leverage             Int
-  collateral           Decimal        @db.Decimal(18, 8) // USD locked from user's balance
-  notional             Decimal        @db.Decimal(18, 8) // collateral * leverage
-  entryPrice           Decimal        @db.Decimal(18, 8) // price at open
-  qty                  Decimal        @db.Decimal(18, 8) // notional / entryPrice (for BTC qty)
-  closePrice           Decimal?       @db.Decimal(18, 8)
-  pnl                  Decimal?       @db.Decimal(18, 8)
-  maintenanceMarginPct Decimal?       @db.Decimal(18, 8)
+  id                 String         @id @default(uuid())
+  userId             Int
+  coinId             String
+  side               PositionSide // long(buy), short(sell)
+  status             PositionStatus @default(open)
+  leverage           Int
+  margin             Decimal        @db.Decimal(18, 8) // USD locked from user's balance
+  notional           Decimal        @db.Decimal(18, 8) // margin * leverage
+  entryPrice         Decimal        @db.Decimal(18, 8) // price at open
+  size               Decimal        @db.Decimal(18, 8) // notional / entryPrice (for BTC qty)
+  closePrice         Decimal?       @db.Decimal(18, 8)
+  pnl                Decimal?       @db.Decimal(18, 8)
+  originalPositionId String?        @db.Uuid
 
-  openAt   DateTime @default(now())
+  openAt   DateTime  @default(now())
   expiryAt DateTime
+  closedAt DateTime?
 }
