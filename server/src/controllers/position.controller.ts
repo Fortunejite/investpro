@@ -62,11 +62,14 @@ class PositionController {
           where,
           skip,
           take: limit,
+          include: {
+            coin: true,
+          },
         }),
         prisma.positions.count({ where }),
       ]);
 
-      res.json({ positions, pagination: { total, page, limit } });
+      res.json({ data: positions, pagination: { total, page, limit } });
     } catch (error) {
       next(error);
     }
@@ -78,6 +81,9 @@ class PositionController {
     try {
       const position = await prisma.positions.findUnique({
         where: { id },
+        include: {
+          coin: true,
+        },
       });
 
       if (!position) {

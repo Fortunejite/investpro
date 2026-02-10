@@ -110,6 +110,7 @@ model User {
   tradeSignalSubscription TradeSignalSubscription?
   swaps                   Swap[]
   tradingProfile          TradingProfile?
+  positions               Positions[]
 
   @@map("users")
 }
@@ -173,7 +174,8 @@ model Coin {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  assets Asset[]
+  assets    Asset[]
+  positions Positions[]
 
   @@map("coins")
 }
@@ -362,7 +364,7 @@ model Settings {
 }
 
 model Positions {
-  id                 String         @id @default(uuid())
+  id                 String         @id @default(uuid()) @db.Uuid
   userId             Int
   coinId             String
   side               PositionSide // long(buy), short(sell)
@@ -379,4 +381,11 @@ model Positions {
   openAt   DateTime  @default(now())
   expiryAt DateTime
   closedAt DateTime?
+
+  user             User        @relation(fields: [userId], references: [id])
+  coin             Coin        @relation(fields: [coinId], references: [id])
+  originalPosition Positions?  @relation("CopiedPositions", fields: [originalPositionId], references: [id])
+  copiedPositions  Positions[] @relation("CopiedPositions")
+
+  @@map("positions")
 }

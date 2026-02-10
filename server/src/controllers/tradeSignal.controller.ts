@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import z from 'zod';
 import { prisma } from '@/lib/prisma';
 import { TradeSignal, TradeSignalSubscription } from '@prisma/client';
-import queueSignalForDelivery from '@/queues/signalDelivery';
+import queueSignalForDelivery from '@/queues/signal.queue';
 import config from '@/config';
 import { _getSettingsByKey } from './settings.controller';
 
