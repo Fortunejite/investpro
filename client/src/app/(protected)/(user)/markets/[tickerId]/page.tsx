@@ -13,8 +13,7 @@ import {
   Globe,
   RefreshCw,
   LineChart,
-  Activity,
-  ArrowLeftRight
+  Activity
 } from "lucide-react";
 import { Ticker } from "@/types/ticker";
 import Loading from "@/components/Loading";
@@ -24,6 +23,7 @@ import SimpleTradingChart from "@/components/SimpleTradingChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Asset } from "@/types/asset";
+import { TradePanel } from "@/components/TradePanel";
 
 const TickerDetailsPage = () => {
   const params = useParams();
@@ -88,7 +88,7 @@ const TickerDetailsPage = () => {
     } else if (num >= 1) {
       return `$${num.toFixed(2)}`;
     } else {
-      return `$${num.toFixed(6)}`;
+      return `$${num.toFixed(2)}`;
     }
   };
 
@@ -309,36 +309,15 @@ const TickerDetailsPage = () => {
             </CardContent>
           </Card>
 
-          {/* Quick Trading Actions */}
-          <Card className="shadow-sm border-border/40">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                Quick Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg"
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white shadow-sm transition-all duration-200 hover:shadow-md"
-                  onClick={() => router.push(`/trade?symbol=${ticker.symbol.toUpperCase()}USDT`)}
-                >
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Buy {ticker.symbol.toUpperCase()}
-                </Button>
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="flex-1 border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 shadow-sm transition-all duration-200 hover:shadow-md"
-                  onClick={() => router.push(`/swap?from=USDT&to=${ticker.symbol.toUpperCase()}`)}
-                >
-                  <ArrowLeftRight className="h-4 w-4 mr-2" />
-                  Swap to {ticker.symbol.toUpperCase()}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Trade Panel */}
+          <TradePanel 
+            coin={ticker} 
+            currentPrice={ticker.price_usd}
+            onTradeComplete={() => {
+              // Refresh user asset data after trade
+              getUserAsset();
+            }}
+          />
         </div>
 
         {/* Right Column - Market Statistics */}

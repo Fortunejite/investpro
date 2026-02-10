@@ -24,10 +24,10 @@ export const navItems = [
     description: 'Browse cryptocurrency markets',
   },
   {
-    name: 'Trade',
-    href: '/trade',
+    name: 'Trades',
+    href: '/trades',
     icon: BarChart3,
-    description: 'Advanced trading with leverage',
+    description: 'View and manage your trades',
   },
   {
     name: 'Swap',

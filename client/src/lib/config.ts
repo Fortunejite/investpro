@@ -36,6 +36,8 @@ const config = {
     'investment',
     'profit_payout',
     'signal_subscription',
+    'open_position',
+    'close_position',
   ] as const,
   investmentStatuses: ['active', 'inactive', 'expired', 'cancelled'] as const,
   signalDeliveryStatuses: ['queued', 'sent', 'failed'] as const,
