@@ -26,6 +26,7 @@
   ],
   "exclude": [
     "node_modules",
-    "prisma.config.ts"
+    "prisma.config.ts",
+    "ecosystem.config.ts",
   ]
 }

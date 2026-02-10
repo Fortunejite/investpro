@@ -14,6 +14,7 @@ import {
   marketRoutes,
   settingsRoutes,
   swapRoutes,
+  positionRoutes,
   traderRoutes,
   tradeSignalRoutes,
   transactionRoutes,
@@ -50,6 +51,7 @@ app.use('/investment-plans', authenticate, investmentPlanRoutes);
 app.use('/investments', authenticate, investmentRoutes);
 app.use('/deposits', authenticate, depositRoutes);
 app.use('/market', marketRoutes);
+app.use('/positions', authenticate, positionRoutes);
 app.use('/traders', traderRoutes);
 app.use('/trading-signals', authenticate, tradeSignalRoutes);
 app.use('/transactions', authenticate, transactionRoutes);

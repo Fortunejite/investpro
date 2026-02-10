@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { tokenService } from "@/services/tokenService";
+import { tokenService } from "@/services/token.service";
 import { createAccount } from "@/lib/account";
 import queueResetEmailForDelivery from "@/queues/email.queues";
 import { User } from "@prisma/client";
