@@ -1,4 +1,4 @@
-const config = {
+module.exports = {
   apps: [
     {
       name: 'investment-site-server',
@@ -36,5 +36,3 @@ const config = {
     },
   ],
 };
-
-export default config;

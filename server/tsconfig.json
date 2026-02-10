@@ -22,11 +22,11 @@
     }
   },
   "include": [
-    "**/*.ts",
+    "**/*.ts", "ecosystem.config.js",
   ],
   "exclude": [
     "node_modules",
     "prisma.config.ts",
-    "ecosystem.config.ts",
+    "ecosystem.config.js",
   ]
 }

@@ -9,7 +9,7 @@ interface requiredEnv {
 }
 
 const config = {
-  port: process.env.PORT,
+  port: process.env.PORT || 8000,
   clientUrl: process.env.CLIENT_URL!,
   jwtSecret: process.env.JWT_SECRET!,
   refreshToken: process.env.REFRESH_TOKEN!,
