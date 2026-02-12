@@ -18,10 +18,22 @@ export const navItems = [
     description: 'Overview of your portfolio',
   },
   {
+    name: 'Deposit',
+    href: '/deposit',
+    icon: ArrowDownToLine,
+    description: 'Add funds to your account',
+  },
+  {
     name: 'Markets',
     href: '/markets',
     icon: LineChart,
     description: 'Browse cryptocurrency markets',
+  },
+  {
+    name: 'Copy Trading',
+    href: '/copy-trading',
+    icon: Copy,
+    description: 'Follow successful traders',
   },
   {
     name: 'Trades',
@@ -36,12 +48,6 @@ export const navItems = [
     description: 'Exchange cryptocurrencies',
   },
   {
-    name: 'Copy Trading',
-    href: '/copy-trading',
-    icon: Copy,
-    description: 'Follow successful traders',
-  },
-  {
     name: 'Invest',
     href: '/investments',
     icon: TrendingUp,
@@ -52,12 +58,6 @@ export const navItems = [
     href: '/trading-signals',
     icon: Activity,
     description: 'Trading signals and alerts',
-  },
-  {
-    name: 'Deposit',
-    href: '/deposit',
-    icon: ArrowDownToLine,
-    description: 'Add funds to your account',
   },
   {
     name: 'Withdraw',
