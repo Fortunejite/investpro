@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "postinstall": "prisma migrate deploy && prisma generate",
-    "start": "pm2 start ecosystem.config.js",
+    "start": "pm2-runtime start ecosystem.config.js",
     "dev:app": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "dev:worker1": "ts-node -r tsconfig-paths/register src/queues/workers/signal.worker.ts",
     "dev:worker2": "ts-node -r tsconfig-paths/register src/queues/workers/email.worker.ts",
