@@ -159,14 +159,14 @@ export default function Navbar() {
                   <Menu className="h-5 w-5" />
                 </Button>
               </DrawerTrigger>
-              <DrawerContent className="h-full w-80 mt-0 rounded-l-lg rounded-r-none">
-                <DrawerHeader>
+              <DrawerContent className="h-full w-80 mt-0 rounded-l-lg rounded-r-none flex flex-col">
+                <DrawerHeader className="shrink-0">
                   <DrawerTitle className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-primary" />
                     InvestPro
                   </DrawerTitle>
                 </DrawerHeader>
-                <div className="px-4 pb-6 space-y-2">
+                <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-2">
                   {navItems.map((item) => {
                     const isActive = pathname === item.href;
                     return (

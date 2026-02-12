@@ -23,9 +23,11 @@ const UserLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         {/* Main content */}
-        <main className={`flex-1 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} transition-all duration-300`}>
-          <div className="container mx-auto px-4 py-6 max-w-7xl">
-            {children}
+        <main className={`flex-1 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} transition-all duration-300 overflow-x-hidden`}>
+          <div className="container mx-auto px-4 py-6 max-w-6xl w-full">
+            <div className="max-w-full overflow-x-auto">
+              {children}
+            </div>
           </div>
         </main>
       </div>
