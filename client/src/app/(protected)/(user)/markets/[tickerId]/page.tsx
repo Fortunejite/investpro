@@ -5,26 +5,91 @@ import { useParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  TrendingUp, 
-  TrendingDown, 
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  TrendingUp,
+  TrendingDown,
   ArrowLeft,
   BarChart3,
   Globe,
   RefreshCw,
   LineChart,
-  Activity
+  Activity,
+  Layers,
+  Coins,
 } from "lucide-react";
 import { Ticker } from "@/types/ticker";
-import Loading from "@/components/Loading";
 import api, { isAxiosError } from "@/lib/api";
 import AdvancedTradingChart from "@/components/AdvancedTradingChart";
 import SimpleTradingChart from "@/components/SimpleTradingChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
 import { Asset } from "@/types/asset";
 import { TradePanel } from "@/components/TradePanel";
 
+// ─── helpers ────────────────────────────────────────────────────────────────
+const fmt = (v: string | number, digits = 2) => {
+  const n = typeof v === "string" ? parseFloat(v) : v;
+  if (isNaN(n)) return "$0.00";
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(digits)}B`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(digits)}M`;
+  if (n >= 1e3) return `$${(n / 1e3).toFixed(digits)}K`;
+  return `$${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`;
+};
+
+const fmtNum = (v: string | number) => {
+  const n = typeof v === "string" ? parseFloat(v) : v;
+  if (isNaN(n)) return "—";
+  if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(2)}K`;
+  return n.toLocaleString();
+};
+
+const fmtPct = (v: string) => {
+  const n = parseFloat(v);
+  if (isNaN(n)) return "0.00%";
+  return `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
+};
+
+const pctColor = (v: string) => {
+  const n = parseFloat(v);
+  return n >= 0 ? "text-success" : "text-destructive";
+};
+
+// ─── Skeleton ────────────────────────────────────────────────────────────────
+function PageSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-9 w-36" />
+        <Skeleton className="h-9 w-24" />
+      </div>
+      <Skeleton className="h-28 w-full rounded-xl" />
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        <div className="xl:col-span-8 space-y-4">
+          <Skeleton className="h-[500px] rounded-xl" />
+          <Skeleton className="h-64 rounded-xl" />
+        </div>
+        <div className="xl:col-span-4 space-y-4">
+          <Skeleton className="h-64 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── StatRow ─────────────────────────────────────────────────────────────────
+function StatRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between py-2.5 border-b border-border/40 last:border-0">
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="text-sm font-semibold font-mono">{value}</span>
+    </div>
+  );
+}
+
+// ─── Page ────────────────────────────────────────────────────────────────────
 const TickerDetailsPage = () => {
   const params = useParams();
   const router = useRouter();
@@ -34,23 +99,23 @@ const TickerDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [chartType, setChartType] = useState<'simple' | 'advanced'>('simple');
-  const [timeframe, setTimeframe] = useState('1h');
+  const [chartType, setChartType] = useState<"simple" | "advanced">("simple");
+  const [timeframe, setTimeframe] = useState("1h");
   const [userAsset, setUserAsset] = useState<Asset | null>(null);
 
   const getTicker = useCallback(async () => {
     try {
-      setLoading(true);
       setError(null);
-
-      const response = await api.get(`/market/coins/${tickerId}`);
-      setTicker(response.data);
+      const res = await api.get(`/market/coins/${tickerId}`);
+      setTicker(res.data);
     } catch (err) {
-      if (isAxiosError(err)) {
-        setError(err.response?.data?.message || "Failed to fetch ticker data");
-      } else {
-        setError(err instanceof Error ? err.message : "Failed to fetch ticker data");
-      }
+      setError(
+        isAxiosError(err)
+          ? err.response?.data?.message ?? "Failed to fetch ticker data"
+          : err instanceof Error
+          ? err.message
+          : "Failed to fetch ticker data"
+      );
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -59,13 +124,11 @@ const TickerDetailsPage = () => {
 
   const getUserAsset = useCallback(async () => {
     try {
-      const response = await api.get(`/assets/${tickerId}`);
-      setUserAsset(response.data);
+      const res = await api.get(`/assets/${tickerId}`);
+      setUserAsset(res.data);
     } catch (err) {
-      // Asset not found is not an error - user might not own this asset
-      if (isAxiosError(err) && err.response?.status !== 404) {
-        console.error('Error fetching user asset:', err);
-      }
+      if (isAxiosError(err) && err.response?.status !== 404)
+        console.error("Error fetching user asset:", err);
       setUserAsset(null);
     }
   }, [tickerId]);
@@ -75,351 +138,305 @@ const TickerDetailsPage = () => {
     await Promise.all([getTicker(), getUserAsset()]);
   };
 
-  const formatCurrency = (value: string | number) => {
-    const num = typeof value === "string" ? parseFloat(value) : value;
-    if (isNaN(num)) return "$0.00";
-    
-    if (num >= 1e9) {
-      return `$${(num / 1e9).toFixed(2)}B`;
-    } else if (num >= 1e6) {
-      return `$${(num / 1e6).toFixed(2)}M`;
-    } else if (num >= 1000) {
-      return `$${(num / 1000).toFixed(2)}K`;
-    } else if (num >= 1) {
-      return `$${num.toFixed(2)}`;
-    } else {
-      return `$${num.toFixed(2)}`;
-    }
-  };
-
-  const formatPercentage = (value: string) => {
-    const num = parseFloat(value);
-    if (isNaN(num)) return "0.00%";
-    return `${num >= 0 ? "+" : ""}${num.toFixed(2)}%`;
-  };
-
-  const getPercentageColor = (value: string) => {
-    const num = parseFloat(value);
-    if (isNaN(num)) return "text-muted-foreground";
-    return num >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400";
-  };
-
-  const formatNumber = (value: string | number) => {
-    const num = typeof value === "string" ? parseFloat(value) : value;
-    if (isNaN(num)) return "0";
-    
-    if (num >= 1e9) {
-      return `${(num / 1e9).toFixed(2)}B`;
-    } else if (num >= 1e6) {
-      return `${(num / 1e6).toFixed(2)}M`;
-    } else if (num >= 1000) {
-      return `${(num / 1000).toFixed(2)}K`;
-    } else {
-      return num.toLocaleString();
-    }
-  };
-
   useEffect(() => {
     if (tickerId) {
+      setLoading(true);
       getTicker();
       getUserAsset();
     }
   }, [tickerId, getTicker, getUserAsset]);
 
-  if (loading) {
-    return <Loading />;
-  }
+  // ── loading ──────────────────────────────────────────────────────────────
+  if (loading) return <PageSkeleton />;
 
+  // ── error ────────────────────────────────────────────────────────────────
   if (error || !ticker) {
     return (
-      <div>
-        <div className="mb-6">
-          <Button 
-            variant="outline" 
-            onClick={() => router.back()}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Markets
-          </Button>
-        </div>
-        
-        <Card className="border-destructive/50 bg-destructive/10">
-          <CardContent className="p-8 text-center">
-            <div className="flex flex-col items-center gap-4">
-              <TrendingDown className="h-12 w-12 text-destructive" />
-              <div>
-                <h2 className="text-xl font-semibold text-destructive mb-2">
-                  {error || "Cryptocurrency not found"}
-                </h2>
-                <p className="text-muted-foreground mb-4">
-                  We couldn&apos;t load the details for this cryptocurrency.
-                </p>
-                <Button onClick={getTicker} variant="outline">
-                  Try Again
-                </Button>
-              </div>
-            </div>
+      <div className="space-y-6">
+        <Button variant="outline" onClick={() => router.back()} className="gap-2">
+          <ArrowLeft className="h-4 w-4" />
+          Back to Markets
+        </Button>
+        <Card className="border-destructive/30 bg-destructive/5">
+          <CardContent className="p-10 flex flex-col items-center gap-4 text-center">
+            <TrendingDown className="h-12 w-12 text-destructive" />
+            <h2 className="text-xl font-semibold">{error || "Cryptocurrency not found"}</h2>
+            <p className="text-muted-foreground">We couldn&apos;t load data for this asset.</p>
+            <Button onClick={getTicker} variant="outline">Try Again</Button>
           </CardContent>
         </Card>
       </div>
     );
   }
 
+  const priceUp = parseFloat(ticker.percent_change_24h) >= 0;
+
   return (
-    <div>
-      {/* Header with Back Button */}
-      <div className="flex items-center justify-between">
-        <Button 
-          variant="outline" 
-          onClick={() => router.back()}
-          className="flex items-center gap-2 hover:bg-accent"
-        >
+    <div className="space-y-5">
+      {/* ── Top bar ─────────────────────────────────────────────────────── */}
+      <div className="flex items-center justify-between gap-3">
+        <Button variant="outline" size="sm" onClick={() => router.back()} className="gap-2">
           <ArrowLeft className="h-4 w-4" />
-          Back to Markets
+          Markets
         </Button>
-        
-        <Button 
-          onClick={handleRefresh} 
-          variant="outline" 
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRefresh}
           disabled={refreshing}
-          className="flex items-center gap-2 hover:bg-accent"
+          className="gap-2"
         >
           <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
 
-      {/* User Balance Information */}
-      <Card className="bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800 shadow-sm">
-        <CardContent className="p-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                <TrendingUp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+      {/* ── Coin identity + balance hero ─────────────────────────────────── */}
+      <Card className="border-border/60 bg-gradient-to-r from-primary/5 via-background to-background overflow-hidden">
+        <CardContent className="p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+            {/* Left: Identity */}
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="h-14 w-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                {ticker.img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={ticker.img} alt={ticker.name} className="h-9 w-9 object-contain" />
+                ) : (
+                  <Coins className="h-7 w-7 text-primary" />
+                )}
               </div>
-              <div>
-                <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">
-                  {ticker?.name} Balance
-                </h3>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-2xl font-bold text-foreground">{ticker.name}</h1>
+                  <Badge variant="secondary" className="font-mono text-xs">
+                    {ticker.symbol.toUpperCase()}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs">#{ticker.rank}</Badge>
+                </div>
+                <div className="flex items-center gap-3 mt-1">
+                  <span className="text-2xl font-bold font-mono">{fmt(ticker.price_usd)}</span>
+                  <span className={`flex items-center gap-1 text-sm font-semibold ${pctColor(ticker.percent_change_24h)}`}>
+                    {priceUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+                    {fmtPct(ticker.percent_change_24h)}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-3xl sm:text-4xl font-bold text-blue-900 dark:text-blue-100 font-mono leading-tight">
-                {userAsset 
-                  ? parseFloat(userAsset.availableBalance).toFixed(6)
-                  : '0.000000'
-                } 
-                <span className="text-xl sm:text-2xl ml-2 text-blue-700 dark:text-blue-300">
-                  {ticker?.symbol.toUpperCase()}
-                </span>
+
+            {/* Right: user balance */}
+            <div className="shrink-0 sm:text-right rounded-xl bg-background/60 border border-border/40 px-5 py-3">
+              <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">Your Balance</div>
+              <div className="text-xl font-bold font-mono">
+                {userAsset ? parseFloat(userAsset.availableBalance).toFixed(6) : "0.000000"}
+                <span className="text-sm text-muted-foreground ml-1.5">{ticker.symbol.toUpperCase()}</span>
               </div>
-              <div className="text-lg sm:text-xl text-blue-600 dark:text-blue-400 font-medium mt-1">
-                ≈ {formatCurrency(
-                  userAsset 
-                    ? parseFloat(userAsset.availableBalance) * parseFloat(ticker?.price_usd || '0')
-                    : 0
-                )} USD
+              <div className="text-sm text-muted-foreground">
+                ≈ {fmt(userAsset ? parseFloat(userAsset.availableBalance) * parseFloat(ticker.price_usd) : 0)} USD
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        
-        {/* Left Column - Chart and Trading Actions */}
-        <div className="xl:col-span-8 space-y-6">
-          {/* Chart Section with Switcher */}
-          <Card className="shadow-sm border-border/40">
-            <CardHeader className="pb-4">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
+      {/* ── Main grid ────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+
+        {/* Left col */}
+        <div className="xl:col-span-8 space-y-5">
+
+          {/* Chart card */}
+          <Card className="border-border/60 overflow-hidden">
+            <CardHeader className="border-b border-border/40 py-3 px-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+                <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+                  <BarChart3 className="h-4 w-4 text-primary" />
                   Price Chart
                 </CardTitle>
-                
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {/* Timeframe Selector */}
-                  <div className="flex items-center gap-2">
-                    <Label htmlFor="timeframe" className="text-sm font-medium">Timeframe:</Label>
-                    <select
-                      id="timeframe"
-                      value={timeframe}
-                      onChange={(e) => setTimeframe(e.target.value)}
-                      className="px-3 py-1.5 border border-border rounded-md bg-background text-sm hover:border-border/80 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
-                    >
-                      <option value="1m">1m</option>
-                      <option value="5m">5m</option>
-                      <option value="15m">15m</option>
-                      <option value="30m">30m</option>
-                      <option value="1h">1h</option>
-                      <option value="4h">4h</option>
-                      <option value="1d">1d</option>
-                      <option value="1w">1w</option>
-                    </select>
+
+                <div className="flex items-center gap-3 flex-wrap">
+                  {/* Timeframe pills */}
+                  <div className="flex items-center gap-1">
+                    {['1m','5m','15m','1h','4h','1d','1w'].map((tf) => (
+                      <button
+                        key={tf}
+                        onClick={() => setTimeframe(tf)}
+                        className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+                          timeframe === tf
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                        }`}
+                      >
+                        {tf}
+                      </button>
+                    ))}
                   </div>
 
-                  {/* Chart Type Switcher */}
-                  <Tabs value={chartType} onValueChange={(value) => setChartType(value as 'simple' | 'advanced')}>
-                    <TabsList className="grid w-full grid-cols-2 bg-muted/50">
-                      <TabsTrigger value="simple" className="flex items-center gap-1 data-[state=active]:bg-background">
-                        <LineChart className="h-4 w-4" />
-                        <span className="hidden sm:inline">Simple</span>
+                  {/* Chart type toggle */}
+                  <Tabs value={chartType} onValueChange={(v) => setChartType(v as "simple" | "advanced")}>
+                    <TabsList className="h-8 p-0.5 bg-muted/60">
+                      <TabsTrigger value="simple" className="h-7 px-3 text-xs gap-1.5 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                        <LineChart className="h-3.5 w-3.5" />
+                        Simple
                       </TabsTrigger>
-                      <TabsTrigger value="advanced" className="flex items-center gap-1 data-[state=active]:bg-background">
-                        <BarChart3 className="h-4 w-4" />
-                        <span className="hidden sm:inline">Advanced</span>
+                      <TabsTrigger value="advanced" className="h-7 px-3 text-xs gap-1.5 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                        <BarChart3 className="h-3.5 w-3.5" />
+                        Advanced
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>
                 </div>
               </div>
             </CardHeader>
-            
-            <CardContent className="p-4">
-              <div className="w-full h-125">
-                <Tabs value={chartType} onValueChange={(value) => setChartType(value as 'simple' | 'advanced')}>
-                  <TabsContent value="simple" className="mt-0 w-full h-full">
-                    {ticker && (
-                      <div className="w-full h-full rounded-lg overflow-hidden border border-border/20">
-                        <SimpleTradingChart 
-                          coin={ticker} 
-                          exchange="BINANCE" 
-                          timeframe={timeframe}
-                        />
-                      </div>
-                    )}
-                  </TabsContent>
-                  
-                  <TabsContent value="advanced" className="mt-0 w-full h-full">
-                    {ticker && (
-                      <div className="w-full h-full rounded-lg overflow-hidden border border-border/20">
-                        <AdvancedTradingChart 
-                          asset={ticker.symbol.toUpperCase()} 
-                          exchange="binance" 
-                          timeframe={timeframe}
-                        />
-                      </div>
-                    )}
-                  </TabsContent>
-                </Tabs>
-              </div>
+
+            <CardContent className="p-0">
+              <Tabs value={chartType} onValueChange={(v) => setChartType(v as "simple" | "advanced")}>
+                <TabsContent value="simple" className="mt-0">
+                  <SimpleTradingChart
+                    coin={ticker}
+                    exchange="BINANCE"
+                    timeframe={timeframe}
+                    height={480}
+                  />
+                </TabsContent>
+                <TabsContent value="advanced" className="mt-0">
+                  <div className="h-[480px] w-full">
+                    <AdvancedTradingChart
+                      asset={ticker.symbol.toUpperCase()}
+                      exchange="binance"
+                      timeframe={timeframe}
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
 
-          {/* Trade Panel */}
-          <TradePanel 
-            coin={ticker} 
+          {/* Trade panel */}
+          <TradePanel
+            coin={ticker}
             currentPrice={ticker.price_usd}
-            onTradeComplete={() => {
-              // Refresh user asset data after trade
-              getUserAsset();
-            }}
+            onTradeComplete={getUserAsset}
           />
         </div>
 
-        {/* Right Column - Market Statistics */}
-        <div className="xl:col-span-4 space-y-6">
-          {/* Market Statistics */}
-          <Card className="shadow-sm border-border/40">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <BarChart3 className="h-5 w-5 text-primary" />
+        {/* Right col */}
+        <div className="xl:col-span-4 space-y-5">
+
+          {/* 24h changes */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Activity className="h-4 w-4 text-primary" />
+                Price Changes
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <StatRow
+                label="1h Change"
+                value={
+                  <span className={pctColor(ticker.percent_change_1h)}>
+                    {fmtPct(ticker.percent_change_1h)}
+                  </span>
+                }
+              />
+              <StatRow
+                label="24h Change"
+                value={
+                  <span className={pctColor(ticker.percent_change_24h)}>
+                    {fmtPct(ticker.percent_change_24h)}
+                  </span>
+                }
+              />
+              <StatRow
+                label="7d Change"
+                value={
+                  <span className={pctColor(ticker.percent_change_7d)}>
+                    {fmtPct(ticker.percent_change_7d)}
+                  </span>
+                }
+              />
+            </CardContent>
+          </Card>
+
+          {/* Market stats */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <BarChart3 className="h-4 w-4 text-primary" />
                 Market Stats
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Market Cap</div>
-                  <div className="text-lg font-semibold font-mono">
-                    {formatCurrency(ticker.market_cap_usd)}
+            <CardContent>
+              <StatRow label="Market Cap" value={fmt(ticker.market_cap_usd)} />
+              <StatRow label="24h Volume" value={fmt(ticker.volume24)} />
+              <StatRow label="Rank" value={`#${ticker.rank}`} />
+            </CardContent>
+          </Card>
+
+          {/* Supply */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Layers className="h-4 w-4 text-primary" />
+                Supply
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <StatRow label="Circulating" value={fmtNum(ticker.csupply)} />
+              <StatRow label="Total" value={ticker.tsupply ? fmtNum(ticker.tsupply) : "—"} />
+              <StatRow label="Max" value={ticker.msupply ? fmtNum(ticker.msupply) : "∞"} />
+              {ticker.tsupply && ticker.msupply && (
+                <div className="mt-4">
+                  <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
+                    <span>Circulating %</span>
+                    <span>{((parseFloat(ticker.csupply) / parseFloat(ticker.msupply)) * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{
+                        width: `${Math.min(100, (parseFloat(ticker.csupply) / parseFloat(ticker.msupply)) * 100)}%`,
+                      }}
+                    />
                   </div>
                 </div>
-                
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">24h Volume</div>
-                  <div className="text-lg font-semibold font-mono">
-                    {formatCurrency(ticker.volume24)}
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Circulating Supply</div>
-                  <div className="text-lg font-semibold font-mono">
-                    {formatNumber(ticker.csupply)}
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="text-sm text-muted-foreground mb-1">Total Supply</div>
-                  <div className="text-lg font-semibold font-mono">
-                    {ticker.tsupply ? formatNumber(ticker.tsupply) : 'N/A'}
-                  </div>
-                </div>
-              </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quick links */}
+          <Card className="border-border/60">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Globe className="h-4 w-4 text-primary" />
+                Links
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              <a
+                href={`https://coinmarketcap.com/currencies/${ticker.nameId}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Badge variant="secondary" className="cursor-pointer hover:bg-accent transition-colors">CoinMarketCap ↗</Badge>
+              </a>
+              <a
+                href={`https://www.coingecko.com/en/coins/${ticker.nameId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Badge variant="secondary" className="cursor-pointer hover:bg-accent transition-colors">CoinGecko ↗</Badge>
+              </a>
+              <a
+                href={`https://www.tradingview.com/symbols/${ticker.symbol.toUpperCase()}USDT/`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Badge variant="secondary" className="cursor-pointer hover:bg-accent transition-colors">TradingView ↗</Badge>
+              </a>
             </CardContent>
           </Card>
         </div>
-      </div>
-
-      {/* Bottom Section - Additional Details */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="shadow-sm border-border/40">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2">
-              <Globe className="h-5 w-5 text-primary" />
-              Price Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between items-center py-2 border-b border-border/30 last:border-0">
-              <span className="text-muted-foreground">Current Price</span>
-              <span className="font-mono font-semibold">{formatCurrency(ticker.price_usd)}</span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-border/30 last:border-0">
-              <span className="text-muted-foreground">Market Cap Rank</span>
-              <Badge variant="outline" className="font-medium">#{ticker.rank}</Badge>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-muted-foreground">Price Change (24h)</span>
-              <span className={`font-mono font-semibold ${getPercentageColor(ticker.percent_change_24h)}`}>
-                {formatPercentage(ticker.percent_change_24h)}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-sm border-border/40">
-          <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-primary" />
-              Supply Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex justify-between items-center py-2 border-b border-border/30 last:border-0">
-              <span className="text-muted-foreground">Circulating Supply</span>
-              <span className="font-mono font-semibold">
-                {formatNumber(ticker.csupply)}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-border/30 last:border-0">
-              <span className="text-muted-foreground">Total Supply</span>
-              <span className="font-mono font-semibold">
-                {ticker.tsupply ? formatNumber(ticker.tsupply) : 'N/A'}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-muted-foreground">Max Supply</span>
-              <span className="font-mono font-semibold">
-                {ticker.msupply ? formatNumber(ticker.msupply) : 'N/A'}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
