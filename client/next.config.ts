@@ -13,6 +13,7 @@ const checkConfiguration = async () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     console.error("Failed to reach Backend API.");
+    console.error(e);
     process.exit(1);
   }
 };
