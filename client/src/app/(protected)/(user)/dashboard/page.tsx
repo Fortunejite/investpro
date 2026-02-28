@@ -45,21 +45,6 @@ interface UserDashboardData {
 }
 
 // ─── Skeleton helpers ──────────────────────────────────────────────────────────
-function StatSkeleton() {
-  return (
-    <Card className="overflow-hidden">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-8 w-8 rounded-lg" />
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <Skeleton className="h-8 w-36" />
-        <Skeleton className="h-3 w-20" />
-      </CardContent>
-    </Card>
-  );
-}
-
 function TxRowSkeleton() {
   return (
     <div className="flex items-center gap-3 py-3">
@@ -88,12 +73,10 @@ const txConfig: Record<string, { label: string; icon: React.ElementType; bg: str
 
 // ─── Quick actions ─────────────────────────────────────────────────────────────
 const quickActions = [
-  { label: 'Deposit',     icon: ArrowDownToLine, href: '/deposit',         color: 'bg-green-50 dark:bg-green-900/20 text-green-700 border-green-200 dark:border-green-800' },
-  { label: 'Withdraw',    icon: ArrowUpFromLine, href: '/withdrawal',      color: 'bg-red-50 dark:bg-red-900/20 text-red-700 border-red-200 dark:border-red-800' },
-  { label: 'Invest',      icon: TrendingUp,      href: '/investments',     color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 border-blue-200 dark:border-blue-800' },
-  { label: 'Markets',       icon: BarChart3,       href: '/markets',           color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 border-purple-200 dark:border-purple-800' },
-  { label: 'Swap',        icon: ArrowLeftRight,  href: '/swap',            color: 'bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 border-cyan-200 dark:border-cyan-800' },
-  { label: 'Signals',     icon: Activity,        href: '/trading-signals', color: 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 border-orange-200 dark:border-orange-800' },
+  { label: 'Invest',   icon: TrendingUp,      href: '/investments',     color: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 border-blue-200 dark:border-blue-800' },
+  { label: 'Markets',  icon: BarChart3,        href: '/markets',         color: 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 border-purple-200 dark:border-purple-800' },
+  { label: 'Swap',     icon: ArrowLeftRight,   href: '/swap',            color: 'bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 border-cyan-200 dark:border-cyan-800' },
+  { label: 'Signals',  icon: Activity,         href: '/trading-signals', color: 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 border-orange-200 dark:border-orange-800' },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -175,6 +158,10 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <Skeleton className="h-10 w-44" />
                 <Skeleton className="h-3 w-32" />
+                <div className="flex gap-2 pt-2">
+                  <Skeleton className="h-9 w-28 rounded-lg" />
+                  <Skeleton className="h-9 w-28 rounded-lg" />
+                </div>
               </div>
             ) : (
               <>
@@ -187,6 +174,20 @@ export default function DashboardPage() {
                     {showBalance ? formatCurrency(account?.lockedBalance ?? '0') : '••••'}
                   </span>
                 </p>
+                <div className="flex gap-2 mt-4">
+                  <Button asChild size="sm" className="gap-1.5 font-semibold">
+                    <Link href="/deposit">
+                      <ArrowDownToLine className="h-3.5 w-3.5" />
+                      Deposit
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" variant="outline" className="gap-1.5 font-semibold">
+                    <Link href="/withdrawal">
+                      <ArrowUpFromLine className="h-3.5 w-3.5" />
+                      Withdraw
+                    </Link>
+                  </Button>
+                </div>
               </>
             )}
           </CardContent>
@@ -276,7 +277,7 @@ export default function DashboardPage() {
           <CardTitle className="text-base">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {quickActions.map((action) => {
               const Icon = action.icon;
               return (

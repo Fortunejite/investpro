@@ -226,8 +226,8 @@ export default function DepositPage() {
     setProofFile(file);
   };
 
-  // Calculate USD equivalent
-  const usdEquivalent = currentPrice * (watchAmount || 0);
+  // Calculate crypto equivalent (USD to crypto)
+  const cryptoEquivalent = currentPrice > 0 ? (watchAmount || 0) / currentPrice : 0;
 
   // Filter handlers
   const handleChainFilter = (chain: string) => {
@@ -392,21 +392,21 @@ export default function DepositPage() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          Amount ({selectedChain ? config.chainInfo[selectedChain as keyof typeof config.chainInfo]?.symbol : ""})
+                          Amount (USD)
                         </FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input
                               {...field}
                               type="number"
-                              step="0.00000001"
+                              step="0.01"
                               min="0"
                               placeholder="0.00"
                               onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                               className="pr-20"
                             />
                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground text-sm">
-                              {selectedChain ? config.chainInfo[selectedChain as keyof typeof config.chainInfo]?.symbol : ""}
+                              USD
                             </div>
                           </div>
                         </FormControl>
@@ -428,11 +428,11 @@ export default function DepositPage() {
                             ) : currentPrice > 0 ? (
                               <div className="space-y-1">
                                 <div className="text-muted-foreground">
-                                  1 {config.chainInfo[selectedChain as keyof typeof config.chainInfo]?.symbol} ≈ ${currentPrice.toLocaleString()}
+                                  1 USD ≈ {(1 / currentPrice).toFixed(8)} {config.chainInfo[selectedChain as keyof typeof config.chainInfo]?.symbol}
                                 </div>
-                                {usdEquivalent > 0 && (
+                                {cryptoEquivalent > 0 && (
                                   <div className="font-medium text-foreground">
-                                    You&apos;ll receive ≈ ${usdEquivalent.toLocaleString()} USD
+                                    You&apos;ll send ≈ ${cryptoEquivalent.toFixed(6)} {config.chainInfo[selectedChain as keyof typeof config.chainInfo]?.symbol}
                                   </div>
                                 )}
                               </div>
@@ -700,8 +700,8 @@ export default function DepositPage() {
                   <TableRow>
                     <TableHead>Date</TableHead>
                     <TableHead>Cryptocurrency</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>USD Value</TableHead>
+                    <TableHead>USD Amount</TableHead>
+                    <TableHead>Asset Value</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -732,10 +732,10 @@ export default function DepositPage() {
                           </div>
                         </TableCell>
                         <TableCell className="font-mono">
-                          {deposit.amount} {config.chainInfo[deposit.chain].symbol}
+                          {formatCurrency(parseFloat(deposit.amount).toString())}
                         </TableCell>
                         <TableCell>
-                          {formatCurrency((parseFloat(deposit.amount) * parseFloat(deposit.perUsdRate)).toString())}
+                          {(parseFloat(deposit.amount) / parseFloat(deposit.perUsdRate)).toFixed(6)} {config.chainInfo[deposit.chain].symbol}
                         </TableCell>
                         <TableCell>
                           <Badge variant={getStatusBadgeVariant(deposit.status)}>

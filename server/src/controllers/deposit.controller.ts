@@ -245,7 +245,7 @@ class DepositController {
           where: { id: deposit.account.id },
           data: {
             availableBalance: {
-              increment: deposit.amount.mul(deposit.perUsdRate),
+              increment: deposit.amount,
             },
           },
         });
@@ -259,7 +259,7 @@ class DepositController {
           data: {
             accountId: deposit.account.id,
             type: 'deposit',
-            amount: deposit.amount.mul(deposit.perUsdRate),
+            amount: deposit.amount,
             actionId: deposit.id,
             txHash: deposit.txHash,
           },

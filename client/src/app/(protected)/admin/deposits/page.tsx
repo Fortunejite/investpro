@@ -192,10 +192,10 @@ const AdminDepositsPage = () => {
   const formatAmount = (amount: string, perUsdRate: string) => {
     const amountNum = parseFloat(amount);
     const rateNum = parseFloat(perUsdRate);
-    const usdValue = amountNum * rateNum;
+    const cryptoValue = amountNum / rateNum;
     return {
-      crypto: amountNum.toFixed(6),
-      usd: usdValue.toFixed(2),
+      crypto: cryptoValue.toFixed(6),
+      usd: amountNum.toFixed(2),
     };
   };
 
