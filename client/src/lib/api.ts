@@ -12,7 +12,7 @@ export interface PagedResponse<T> {
 }
 
 export const api = axios.create({
-  baseURL: config.api.baseURL,
+  baseURL: "/api",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
